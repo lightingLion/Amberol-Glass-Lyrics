@@ -143,10 +143,7 @@ impl GstBackend {
     }
 
     pub fn set_song_uri(&self, uri: Option<&str>) {
-        // FIXME: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/1124
-        if uri.is_some() {
-            self.gst_player.set_uri(uri);
-        }
+        self.gst_player.set_uri(uri);
     }
 
     pub fn seek(&self, position: u64, duration: u64, offset: u64, direction: SeekDirection) {
