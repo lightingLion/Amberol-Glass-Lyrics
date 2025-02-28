@@ -1,14 +1,14 @@
 # Hungarian translation for amberol.
-# Copyright (C) 2022, 2023 Free Software Foundation, Inc.
+# Copyright (C) 2022, 2023, 2025 Free Software Foundation, Inc.
 # This file is distributed under the same license as the amberol package.
 #
-# Balázs Úr <ur.balazs at fsf dot hu>, 2022, 2023.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2022, 2023, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/issues\n"
-"POT-Creation-Date: 2023-04-24 22:31+0000\n"
-"PO-Revision-Date: 2023-04-26 23:35+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"POT-Creation-Date: 2024-09-24 12:08+0000\n"
+"PO-Revision-Date: 2025-02-28 16:58+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: data/io.bassi.Amberol.desktop.in.in:3
 #: data/io.bassi.Amberol.appdata.xml.in.in:6
@@ -70,7 +70,7 @@ msgstr "megkeverés és ismétlés"
 msgid "MPRIS integration"
 msgstr "MPRIS integráció"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:42
+#: data/io.bassi.Amberol.appdata.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -78,15 +78,15 @@ msgstr "Emmanuele Bassi"
 msgid "Playback in progress"
 msgstr "Lejátszás folyamatban"
 
-#: src/audio/song.rs:325
+#: src/audio/song.rs:317
 msgid "Unknown artist"
 msgstr "Ismeretlen előadó"
 
-#: src/audio/song.rs:332
+#: src/audio/song.rs:324
 msgid "Unknown title"
 msgstr "Ismeretlen cím"
 
-#: src/audio/song.rs:339
+#: src/audio/song.rs:331
 msgid "Unknown album"
 msgstr "Ismeretlen album"
 
@@ -267,13 +267,11 @@ msgid "_ReplayGain"
 msgstr "Ha_ngerő-korrekció"
 
 #: src/gtk/playback-control.ui:183
-#| msgid "_Album"
 msgctxt "replaygain-menu"
 msgid "_Album"
 msgstr "_Album"
 
 #: src/gtk/playback-control.ui:188
-#| msgid "Add _Song"
 msgctxt "replaygain-menu"
 msgid "_Song"
 msgstr "_Dal"
@@ -295,36 +293,59 @@ msgstr "Az Amberol _névjegye"
 msgid "_Quit"
 msgstr "_Kilépés"
 
-#: src/gtk/playlist-view.ui:19
+#: src/gtk/playlist-view.ui:17
+msgid "Search Songs in the Playlist"
+msgstr "Dalok keresése a lejátszási listában"
+
+#: src/gtk/playlist-view.ui:28
 msgid "Playlist"
 msgstr "Lejátszási lista"
 
 #: src/gtk/playlist-view.ui:49
-msgid "Search Songs in the Playlist"
-msgstr "Dalok keresése a lejátszási listában"
-
-#: src/gtk/playlist-view.ui:61
 msgid "Select Songs in the Playlist"
 msgstr "Dalok kijelölése a lejátszási listában"
 
-#: src/gtk/playlist-view.ui:74
+#: src/gtk/playlist-view.ui:58
 msgid "Close the Playlist"
 msgstr "A lejátszási lista bezárása"
 
-#: src/gtk/playlist-view.ui:135
+#: src/gtk/playlist-view.ui:67
+msgid "Search songs"
+msgstr "Dalok keresése"
+
+#: src/gtk/playlist-view.ui:70
+msgctxt "a11y"
+msgid "Search"
+msgstr "Keresés"
+
+#: src/gtk/playlist-view.ui:71
+msgctxt "a11y"
+msgid "Type to search songs"
+msgstr "Gépeljen a dalok kereséséhez"
+
+#: src/gtk/playlist-view.ui:117
 msgid "Select All Songs"
 msgstr "Összes dal kijelölése"
 
-#: src/gtk/playlist-view.ui:148
+#: src/gtk/playlist-view.ui:130
 msgid "Remove Selected Songs"
 msgstr "Kijelölt dalok eltávolítása"
 
-#: src/gtk/window.ui:12
-#| msgid "Drop a song to add it to the queue"
+#: src/gtk/queue-row.ui:27
+msgctxt "a11y"
+msgid "No cover available"
+msgstr "Nem érhető el borító"
+
+#: src/gtk/queue-row.ui:84
+msgctxt "a11y"
+msgid "Currently playing"
+msgstr "Jelenleg játszott"
+
+#: src/gtk/window.ui:13
 msgid "Drop a song to add it to the playlist"
 msgstr "Húzzon ide egy dalt a lejátszási listához való hozzáadáshoz"
 
-#: src/gtk/window.ui:49
+#: src/gtk/window.ui:43
 msgid ""
 "Select a file or a folder, or drag files from your file manager to the "
 "application window to add songs to the playlist"
@@ -332,115 +353,109 @@ msgstr ""
 "Válasszon egy fájlt vagy mappát, vagy húzza a fájlokat a fájlkezelőből az "
 "alkalmazás ablakába, hogy dalokat adjon hozzá a lejátszási listához."
 
-#: src/gtk/window.ui:58
+#: src/gtk/window.ui:52
 msgid "Restore Playlist"
 msgstr "Lejátszási lista visszaállítása"
 
-#: src/gtk/window.ui:68
+#: src/gtk/window.ui:62
 msgid "Add Folder"
 msgstr "Mappa hozzáadása"
 
-#: src/gtk/window.ui:77
+#: src/gtk/window.ui:71
 msgid "Add Song"
 msgstr "Dal hozzáadása"
 
-#: src/gtk/window.ui:161
+#: src/gtk/window.ui:148
 msgctxt "a11y"
 msgid "Elapsed time"
 msgstr "Eltelt idő"
 
-#: src/gtk/window.ui:173
+#: src/gtk/window.ui:160
 msgctxt "a11y"
 msgid "Remaining time"
 msgstr "Hátralévő idő"
 
 #. Translators: Replace "translator-credits" with your names, one name per line
-#: src/application.rs:227
+#: src/application.rs:243
 msgid "translator-credits"
 msgstr "Úr Balázs <ur dot balazs at fsf dot hu>, 2022."
 
-#: src/application.rs:239
+#: src/application.rs:255
 msgid "Amberol needs to run in the background to play music"
 msgstr "Az Amberolnak a háttérben kell futnia a zene lejátszásához"
 
+#: src/cover_picture.rs:75
+msgid "Cover image"
+msgstr "Borítókép"
+
 #: src/playback_control.rs:118
-#| msgid "Select All Songs"
 msgid "Repeat All Songs"
 msgstr "Összes dal ismétlése"
 
 #: src/playback_control.rs:122
-#| msgid "Repeat the Current Track"
 msgid "Repeat the Current Song"
 msgstr "A jelenlegi dal ismétlése"
 
-#: src/window.rs:403
-msgid "_Add Song"
-msgstr "Dal _hozzáadása"
-
-#: src/window.rs:404 src/window.rs:444
-msgid "_Cancel"
-msgstr "_Mégse"
-
-#: src/window.rs:406
-msgid "Open File"
-msgstr "Fájl megnyitása"
-
-#: src/window.rs:413
+#: src/window.rs:145
 msgid "Audio files"
 msgstr "Hangfájlok"
 
-#: src/window.rs:422 src/window.rs:1315
+#: src/window.rs:150
+msgid "_Add Song"
+msgstr "Dal _hozzáadása"
+
+#: src/window.rs:153
+msgid "Open File"
+msgstr "Fájl megnyitása"
+
+#: src/window.rs:158 src/window.rs:174 src/window.rs:1462
 msgid "Unable to access files"
 msgstr "Nem lehet hozzáférni a fájlokhoz"
 
-#: src/window.rs:443
+#: src/window.rs:167
 msgid "_Add Folder"
 msgstr "Mappa _hozzáadása"
 
-#: src/window.rs:446
+#: src/window.rs:169
 msgid "Open Folder"
 msgstr "Mappa megnyitása"
 
-#: src/window.rs:457
-msgid "Unable to access folders"
-msgstr "Nem lehet hozzáférni a mappákhoz"
-
-#: src/window.rs:475
+#: src/window.rs:488
 msgid "No available song found"
 msgstr "Nem található elérhető dal"
 
-#: src/window.rs:532
+#: src/window.rs:549
 msgid "No songs found"
 msgstr "Nem találhatók dalok"
 
-#: src/window.rs:562
+#: src/window.rs:582
 msgid "Added a new song"
 msgstr "Új dal hozzáadva"
 
-#: src/window.rs:563
+#: src/window.rs:583
 msgid "Play"
 msgstr "Lejátszás"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:572
+#: src/window.rs:592
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "Egy dal hozzáadva"
 msgstr[1] "{} dal hozzáadva"
 
-#: src/window.rs:1062
+#: src/window.rs:1222
 msgid "Unable to access dropped files"
 msgstr "Nem lehet hozzáférni a behúzott fájlokhoz"
 
-#: src/window.rs:1152
+#: src/window.rs:1316
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} perc"
 msgstr[1] "{} perc"
 
-#: src/window.rs:1163
+#: src/window.rs:1327
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "{hours} óra {minutes} van hátra"
@@ -449,19 +464,19 @@ msgstr[1] "{hours} óra {minutes} van hátra"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1173
+#: src/window.rs:1337
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "{} perc van hátra"
 msgstr[1] "{} perc van hátra"
 
-#: src/window.rs:1295
+#: src/window.rs:1441
 msgid "No song selected"
 msgstr "Nincs dal kijelölve"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1300
+#: src/window.rs:1446
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "{} dal kijelölve"
@@ -470,6 +485,6 @@ msgstr[1] "{} dal kijelölve"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1353
+#: src/window.rs:1502
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Jelenleg játszott: „{artist}” – „{title}”"
