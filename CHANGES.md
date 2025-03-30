@@ -12,6 +12,24 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
+## [2025.1] - 2025-03-30
+
+### Added
+
+- Add Malayalam translation
+- Add Slovak translation
+
+### Changed
+
+- Update dependencies [!176]
+- Documentation fixes [!174]
+- Require GTK 4.16 [!173]
+- Translation updates
+
+### Fixed
+
+- Clear the cover cache alongside the queue
+
 ## [2024.2] - 2024-10-25
 
 ### Added

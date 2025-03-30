@@ -63,6 +63,15 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release version="2025.1" date="2025-03-30">
+      <description>
+        <ul>
+          <li>Update the metadata parsing library</li>
+          <li>Release more resources when clearing the playlist</li>
+          <li>Translation updates</li>
+        </ul>
+      </description>
+    </release>
     <release version="2024.2" date="2024-10-25">
       <description>
         <ul>
