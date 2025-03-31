@@ -38,7 +38,7 @@ dependencies = [
  "mpris-server",
  "once_cell",
  "pretty_env_logger",
- "rand 0.8.5",
+ "rand 0.9.0",
  "regex",
  "serde_json",
  "sha2",
