@@ -35,13 +35,9 @@ Checklist for a release.
   - [ ] New `<release>` element
   - [ ] *Optional*: new screenshots
 - [ ] `git commit -m 'Release Amberol $VERSION'`
-- [ ] `meson dist`
 - [ ] `git tag -s $VERSION` (use the change log entry)
 - [ ] Bump up the project version in [`meson.build`](./meson.build)
 - [ ] `git push origin HEAD && git push origin $VERSION`
-- [ ] Create a new release on [GitLab](https://gitlab.gnome.org/World/amberol/-/releases)
-  - [ ] Copy the `CHANGES.md` entry
-  - [ ] Attach the release tarball and the SHA256 checksum files
 
 Flathub
 -------
