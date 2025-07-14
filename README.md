@@ -58,7 +58,7 @@ Amberol is translated on the [GNOME translation platform](https://l10n.gnome.org
 You should contact the coordinator of [the localization team for your language](https://l10n.gnome.org/teams/)
 if you have questions.
 
-For more information, please see the [GNOME Translation Project wiki](https://wiki.gnome.org/TranslationProject).
+For more information, please see the [GNOME Translation Project Welcome page](https://welcome.gnome.org/team/translation/).
 
 Code of conduct
 ---------------
