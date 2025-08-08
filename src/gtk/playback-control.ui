@@ -151,6 +151,10 @@
         <attribute name="label" translatable="yes">Copy</attribute>
         <attribute name="action">win.copy</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Open Directory</attribute>
+        <attribute name="action">win.open-directory</attribute>
+      </item>
     </section>
     <section>
       <item>
