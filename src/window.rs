@@ -3,7 +3,9 @@
 
 use std::{
     cell::{Cell, RefCell},
+    path::PathBuf,
     rc::Rc,
+    str::FromStr,
     time::Instant,
 };
 
@@ -33,6 +35,8 @@ pub enum WindowMode {
     InitialView,
     MainView,
 }
+
+const ATTRIBUTE_HOST_PATH: &str = "xattr::document-portal.host-path";
 
 mod imp {
     use glib::{ParamSpec, ParamSpecBoolean, ParamSpecEnum, Value};
@@ -196,6 +200,10 @@ mod imp {
             klass.install_action("win.copy", None, move |win, _, _| {
                 debug!("Window::win.copy()");
                 win.copy_song();
+            });
+            klass.install_action_async("win.open-directory", None, async move |win, _, _| {
+                debug!("Window::win.open-directory()");
+                win.open_song_directory().await
             });
             klass.install_action("queue.clear", None, move |win, _, _| {
                 debug!("Window::queue.clear()");
@@ -1515,6 +1523,45 @@ impl Window {
                     &[("title", &song.title()), ("artist", &song.artist())],
                 );
                 self.clipboard().set_text(&s);
+            }
+        }
+    }
+
+    async fn open_song_directory(&self) {
+        if let Some(player) = self.player() {
+            let state = player.state();
+
+            if let Some(song) = state.current_song() {
+                let file = song.file();
+
+                match file
+                    .query_info_future(
+                        &ATTRIBUTE_HOST_PATH,
+                        gio::FileQueryInfoFlags::NONE,
+                        glib::Priority::DEFAULT,
+                    )
+                    .await
+                {
+                    Err(err) => debug!("Unable to get host-path attribute: {err}"),
+                    Ok(info) => {
+                        let host_path = info
+                            .attribute_as_string(&ATTRIBUTE_HOST_PATH)
+                            .and_then(|x| PathBuf::from_str(x.as_str()).ok());
+
+                        if let Some(path) = host_path.or_else(|| file.path()) {
+                            let launcher = gtk::FileLauncher::new(Some(&gio::File::for_path(path)));
+                            match launcher
+                                .open_containing_folder_future(Some(
+                                    self.upcast_ref::<gtk::Window>(),
+                                ))
+                                .await
+                            {
+                                Err(_e) => self.add_toast(i18n("Unable to open folder")),
+                                Ok(()) => {}
+                            }
+                        }
+                    }
+                }
             }
         }
     }
