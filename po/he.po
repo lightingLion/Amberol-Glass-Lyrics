@@ -7,71 +7,71 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2024-09-24 12:08+0000\n"
-"PO-Revision-Date: 2024-09-25 17:25+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2025-08-11 14:37+0000\n"
+"PO-Revision-Date: 2025-08-14 11:44+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3)\n"
-"X-Generator: Gtranslator 46.1\n"
+"2 : 3);\n"
+"X-Generator: Poedit 3.6\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
-#: data/io.bassi.Amberol.appdata.xml.in.in:6
+#: data/io.bassi.Amberol.desktop.in.in:2
+#: data/io.bassi.Amberol.metainfo.xml.in.in:6
 msgid "Amberol"
 msgstr "אמברול"
 
-#: data/io.bassi.Amberol.desktop.in.in:4
+#: data/io.bassi.Amberol.desktop.in.in:3
 msgid "Music Player"
 msgstr "נגן מוזיקה"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:12
+#: data/io.bassi.Amberol.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr ""
 "מוזיקה;מוסיקה;שמע;צליל;נגן;מדיה;אודיו;רשימת השמעה;רשימות השמעה;פליליסט;"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:7
+#: data/io.bassi.Amberol.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "ניגון מוזיקה, ושום דבר מעבר לכך"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:9
+#: data/io.bassi.Amberol.metainfo.xml.in.in:9
 msgid ""
 "Amberol is a music player with no delusions of grandeur. If you just want to "
 "play music available on your local system then Amberol is the music player "
 "you are looking for."
 msgstr ""
 "אמברול הוא נגן מוזיקה ללא שגעון גדלות. אם ברצונך רק להשמיע מוזיקה הזמינה "
-"במערכת המקומית שלך, אמברול הוא נגן המוזיקה בשבילך. "
+"במערכת המקומית שלך, אמברול הוא נגן המוזיקה בשבילך."
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:14
+#: data/io.bassi.Amberol.metainfo.xml.in.in:14
 msgid "Current features:"
 msgstr "תכונות נוכחיות:"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:16
+#: data/io.bassi.Amberol.metainfo.xml.in.in:16
 msgid "adaptive UI"
 msgstr "ממשק משתמש משתנה ומותאם"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:17
+#: data/io.bassi.Amberol.metainfo.xml.in.in:17
 msgid "UI recoloring using the album art"
 msgstr "צביעת ממשק המשתמש בהתאם לכיסוי האלבום"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:18
+#: data/io.bassi.Amberol.metainfo.xml.in.in:18
 msgid "drag and drop support to queue songs"
 msgstr "תמיכה בגרירה ושחרור להכנסת שירים לתור"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:19
+#: data/io.bassi.Amberol.metainfo.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "ערבוב וחזרה"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:20
+#: data/io.bassi.Amberol.metainfo.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "שילוב MPRIS"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:48
+#: data/io.bassi.Amberol.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -243,93 +243,97 @@ msgstr "תפריט עיקרי"
 msgid "Copy"
 msgstr "העתקה"
 
-#: src/gtk/playback-control.ui:157
+#: src/gtk/playback-control.ui:155
+msgid "Open Directory"
+msgstr "פתיחת תיקייה"
+
+#: src/gtk/playback-control.ui:161
 msgid "Add _Song"
 msgstr "הוספת _שיר"
 
-#: src/gtk/playback-control.ui:161
+#: src/gtk/playback-control.ui:165
 msgid "Add _Folder"
 msgstr "הוספת _תיקייה"
 
-#: src/gtk/playback-control.ui:165
+#: src/gtk/playback-control.ui:169
 msgid "Clear"
 msgstr "ניקוי"
 
-#: src/gtk/playback-control.ui:171
+#: src/gtk/playback-control.ui:175
 msgid "_Match Cover Art"
 msgstr "ה_תאמת כיסוי אלבום"
 
-#: src/gtk/playback-control.ui:175
+#: src/gtk/playback-control.ui:179
 msgid "_Background Playback"
 msgstr "ניגון ב_רקע"
 
-#: src/gtk/playback-control.ui:181
+#: src/gtk/playback-control.ui:185
 msgid "_ReplayGain"
 msgstr "_ReplayGain"
 
-#: src/gtk/playback-control.ui:183
+#: src/gtk/playback-control.ui:187
 msgctxt "replaygain-menu"
 msgid "_Album"
 msgstr "_אלבום"
 
-#: src/gtk/playback-control.ui:188
+#: src/gtk/playback-control.ui:192
 msgctxt "replaygain-menu"
 msgid "_Song"
 msgstr "_שיר"
 
-#: src/gtk/playback-control.ui:193
+#: src/gtk/playback-control.ui:197
 msgctxt "replaygain-menu"
 msgid "_Disabled"
 msgstr "_מושבת"
 
-#: src/gtk/playback-control.ui:201
+#: src/gtk/playback-control.ui:205
 msgid "_Keyboard Shortcuts"
 msgstr "_צירופי מקשים"
 
-#: src/gtk/playback-control.ui:205
+#: src/gtk/playback-control.ui:209
 msgid "_About Amberol"
 msgstr "_על אמברול"
 
-#: src/gtk/playback-control.ui:209
+#: src/gtk/playback-control.ui:213
 msgid "_Quit"
 msgstr "_יציאה"
 
-#: src/gtk/playlist-view.ui:17
+#: src/gtk/playlist-view.ui:14
 msgid "Search Songs in the Playlist"
 msgstr "חיפוש שירים ברשימת ההשמעה"
 
-#: src/gtk/playlist-view.ui:28
+#: src/gtk/playlist-view.ui:24
 msgid "Playlist"
 msgstr "רשימת השמעה"
 
-#: src/gtk/playlist-view.ui:49
-msgid "Select Songs in the Playlist"
-msgstr "בחירת שירים ברשימת ההשמעה"
-
-#: src/gtk/playlist-view.ui:58
+#: src/gtk/playlist-view.ui:46
 msgid "Close the Playlist"
 msgstr "סגירת רשימת ההשמעה"
 
-#: src/gtk/playlist-view.ui:67
+#: src/gtk/playlist-view.ui:54
+msgid "Select Songs in the Playlist"
+msgstr "בחירת שירים ברשימת ההשמעה"
+
 # msgctxt "a11y"
+#: src/gtk/playlist-view.ui:63
 msgid "Search songs"
 msgstr "חיפוש שירים"
 
-#: src/gtk/playlist-view.ui:70
+#: src/gtk/playlist-view.ui:66
 msgctxt "a11y"
 msgid "Search"
 msgstr "חיפוש"
 
-#: src/gtk/playlist-view.ui:71
+#: src/gtk/playlist-view.ui:67
 msgctxt "a11y"
 msgid "Type to search songs"
 msgstr "יש להקליד לחיפוש שירים"
 
-#: src/gtk/playlist-view.ui:117
+#: src/gtk/playlist-view.ui:113
 msgid "Select All Songs"
 msgstr "בחירת כל השירים"
 
-#: src/gtk/playlist-view.ui:130
+#: src/gtk/playlist-view.ui:126
 msgid "Remove Selected Songs"
 msgstr "הסרת השירים הנבחרים"
 
@@ -400,50 +404,50 @@ msgstr "חזרה על כל השירים"
 msgid "Repeat the Current Song"
 msgstr "חזרה על השיר הנוכחי"
 
-#: src/window.rs:145
+#: src/window.rs:149
 msgid "Audio files"
 msgstr "קובצי שמע"
 
-#: src/window.rs:150
+#: src/window.rs:159
 msgid "_Add Song"
 msgstr "_הוספת שיר"
 
-#: src/window.rs:153
+#: src/window.rs:163
 msgid "Open File"
-msgstr "פתיחת קבוץ"
+msgstr "פתיחת קובץ"
 
-#: src/window.rs:158 src/window.rs:174 src/window.rs:1462
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1482
 msgid "Unable to access files"
 msgstr "לא ניתן לגשת לקבצים"
 
-#: src/window.rs:167
+#: src/window.rs:182
 msgid "_Add Folder"
 msgstr "הו_ספת תיקייה"
 
-#: src/window.rs:169
+#: src/window.rs:185
 msgid "Open Folder"
 msgstr "פתיחת תיקיה"
 
-#: src/window.rs:488
+#: src/window.rs:508
 msgid "No available song found"
 msgstr "לא נמצא שיר זמין"
 
-#: src/window.rs:549
+#: src/window.rs:569
 msgid "No songs found"
 msgstr "לא נמצאו שירים"
 
-#: src/window.rs:582
+#: src/window.rs:602
 msgid "Added a new song"
 msgstr "נוסף שיר חדש"
 
-#: src/window.rs:583
+#: src/window.rs:603
 msgid "Play"
 msgstr "ניגון"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:592
+#: src/window.rs:612
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "נוסף שיר אחד"
@@ -451,11 +455,11 @@ msgstr[1] "נוספו {} שירים"
 msgstr[2] "נוספו שני שירים"
 msgstr[3] "נוספו {} שירים"
 
-#: src/window.rs:1222
+#: src/window.rs:1242
 msgid "Unable to access dropped files"
 msgstr "לא ניתן לגשת לקבצים שנזרקו"
 
-#: src/window.rs:1316
+#: src/window.rs:1336
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "דקה"
@@ -463,18 +467,18 @@ msgstr[1] "{} דקות"
 msgstr[2] "שתי דקות"
 msgstr[3] "{} דקות"
 
-#: src/window.rs:1327
+#: src/window.rs:1347
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
-msgstr[0] "נותרה שעת אחת ו־{minutes} דקות"
-msgstr[1] "נותרו {hours} שעות ו־{minutes} דקות"
-msgstr[2] "נותרו שעתיים ו־{minutes} דקות"
+msgstr[0] "נותרו שעה ו־{minutes} דקות"
+msgstr[1] "נותרו שעתיים ו־{minutes} דקות"
+msgstr[2] "נותרו {hours} שעות ו־{minutes} דקות"
 msgstr[3] "נותרו {hours} שעות ו־{minutes} דקות"
 
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1337
+#: src/window.rs:1357
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "נותרה דקה אחת"
@@ -482,13 +486,13 @@ msgstr[1] "נותרו {} דקות"
 msgstr[2] "נותרו {} דקות"
 msgstr[3] "נותרו {} דקות"
 
-#: src/window.rs:1441
+#: src/window.rs:1461
 msgid "No song selected"
 msgstr "לא נבחרו שירים"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1446
+#: src/window.rs:1466
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "נבחר שיר אחד"
@@ -499,15 +503,16 @@ msgstr[3] "נבחרו {} שירים"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1502
+#: src/window.rs:1522
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "מתנגן כעת „{title}” בביצוע „{artist}”"
 
+#: src/window.rs:1559
+msgid "Unable to open folder"
+msgstr "לא ניתן לפתוח תיקייה"
+
 #~ msgid "_Cancel"
 #~ msgstr "_ביטול"
-
-#~ msgid "Unable to access folders"
-#~ msgstr "לא ניתן לגשת לתיקיות"
 
 #~ msgid "_Track"
 #~ msgstr "_רצועה"
