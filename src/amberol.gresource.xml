@@ -20,7 +20,6 @@
     <file alias="view-queue-symbolic.svg">assets/icons/view-queue-symbolic.svg</file>
   </gresource>
   <gresource prefix="/io/bassi/Amberol">
-    <file alias="style-dark.css">gtk/style-dark.css</file>
     <file alias="style.css">gtk/style.css</file>
     <!-- All UI files are generated in the builddir/src/gtk directory -->
     <file preprocess="xml-stripblanks">playback-control.ui</file>
