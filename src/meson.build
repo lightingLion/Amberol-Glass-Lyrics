@@ -1,11 +1,14 @@
 # SPDX-FileCopyrightText: 2022  Emmanuele Bassi
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+subdir('gtk')
+
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 
 gnome.compile_resources('amberol',
   'amberol.gresource.xml',
   gresource_bundle: true,
+  dependencies: blueprints,
   install: true,
   install_dir: pkgdatadir,
 )

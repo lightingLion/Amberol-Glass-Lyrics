@@ -171,7 +171,7 @@ run_typos() {
 #
 # This assumes the following:
 #   - POTFILES.in is located at 'po/POTFILES.in'
-#   - UI (Glade) files are located in 'src/gtk/' and use 'translatable="yes"'
+#   - BLP (Blueprint) files are located in 'src/gtk/' and use 'C_()' or '_()'
 #   - Rust files are located in 'src' and use 'i18n' methods or macros
 check_potfiles() {
     [ $tap -eq 0 ] && echo -e "$Checking po/POTFILES.in…"
@@ -185,7 +185,7 @@ check_potfiles() {
                 echo -e "$error File '$line' in POTFILES does not exist"
                 ret=1
             fi
-            if [[ ${line:(-3):3} == '.ui' ]]; then
+            if [[ ${line:(-4):4} == '.blp' ]]; then
                 ui_potfiles+=($line)
             elif [[ ${line:(-3):3} == '.rs' ]]; then
                 rs_potfiles+=($line)
@@ -204,11 +204,10 @@ check_potfiles() {
         fi
     fi
 
-    # Get UI files with 'translatable="yes"'.
-    ui_files=(`grep -lIr 'translatable="yes"' src/gtk/*.ui`)
+    ui_files=(`/usr/bin/grep -lIrE '[C]?_\(' src/gtk/*.blp`)
 
     # Get Rust files with regex 'i18n[!]?\('.
-    rs_files=(`grep -lIrE 'i18n[!]?\(' --exclude=src/i18n.rs src/*`)
+    rs_files=(`/usr/bin/grep -lIrE 'i18n[!]?\(' --exclude=src/i18n.rs src/*`)
 
     # Remove common files
     to_diff1=("${ui_potfiles[@]}")

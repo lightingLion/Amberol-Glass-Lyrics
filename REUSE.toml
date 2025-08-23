@@ -1,0 +1,130 @@
+version = 1
+SPDX-PackageName = "amberol"
+SPDX-PackageSupplier = "Emmanuele Bassi"
+SPDX-PackageDownloadLocation = "https://gitlab.gnome.org/ebassi/amberol"
+
+[[annotations]]
+path = ".gitignore"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ".gitlab-ci.yml"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "amberol.doap"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Sophie Herold"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "Cargo.lock"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["README.md", "CONTRIBUTING.md", "CHANGES.md", "RELEASING.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "io.bassi.Amberol.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "io.bassi.Amberol.Devel.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/io.bassi.Amberol.metainfo.xml.in.in"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/io.bassi.Amberol.desktop.in.in"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/io.bassi.Amberol.gschema.xml"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/io.bassi.Amberol.service.in"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/screenshots/**.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "data/icons/hicolor/scalable/apps/io.bassi.Amberol.**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Jakub Steiner"
+SPDX-License-Identifier = "CC-BY-SA-3.0"
+
+[[annotations]]
+path = "data/icons/hicolor/symbolic/apps/io.bassi.Amberol.**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Jakub Steiner"
+SPDX-License-Identifier = "CC-BY-SA-3.0"
+
+[[annotations]]
+path = "**.svg"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC-BY-SA-3.0"
+
+[[annotations]]
+path = ["po/POTFILES.in", "po/LINGUAS"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "po/**.po"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Translation authors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "src/amberol.gresource.xml"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "src/gtk/**.blp"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "src/gtk/style.css"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022  Emmanuele Bassi"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "subprojects/blueprint-compiler.wrap"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025  Emmanuele Bassi"
+SPDX-License-Identifier = "CC0-1.0"
