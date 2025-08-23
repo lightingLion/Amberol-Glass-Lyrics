@@ -20,15 +20,16 @@
     <file alias="view-queue-symbolic.svg">assets/icons/view-queue-symbolic.svg</file>
   </gresource>
   <gresource prefix="/io/bassi/Amberol">
-    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
-    <file alias="playback-control.ui" preprocess="xml-stripblanks">gtk/playback-control.ui</file>
-    <file alias="playlist-view.ui" preprocess="xml-stripblanks">gtk/playlist-view.ui</file>
-    <file alias="queue-row.ui" preprocess="xml-stripblanks">gtk/queue-row.ui</file>
-    <file alias="song-cover.ui" preprocess="xml-stripblanks">gtk/song-cover.ui</file>
-    <file alias="song-details.ui" preprocess="xml-stripblanks">gtk/song-details.ui</file>
     <file alias="style-dark.css">gtk/style-dark.css</file>
     <file alias="style.css">gtk/style.css</file>
-    <file alias="volume-control.ui" preprocess="xml-stripblanks">gtk/volume-control.ui</file>
-    <file alias="window.ui" preprocess="xml-stripblanks">gtk/window.ui</file>
+    <!-- All UI files are generated in the builddir/src/gtk directory -->
+    <file preprocess="xml-stripblanks" alias="gtk/help-overlay.ui">help-overlay.ui</file>
+    <file preprocess="xml-stripblanks">playback-control.ui</file>
+    <file preprocess="xml-stripblanks">playlist-view.ui</file>
+    <file preprocess="xml-stripblanks">queue-row.ui</file>
+    <file preprocess="xml-stripblanks">song-cover.ui</file>
+    <file preprocess="xml-stripblanks">song-details.ui</file>
+    <file preprocess="xml-stripblanks">volume-control.ui</file>
+    <file preprocess="xml-stripblanks">window.ui</file>
   </gresource>
 </gresources>
