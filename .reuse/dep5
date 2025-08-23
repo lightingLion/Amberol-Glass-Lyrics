@@ -75,14 +75,14 @@ Files: src/amberol.gresource.xml
 Copyright: 2022  Emmanuele Bassi
 License: GPL-3.0-or-later
 
-Files: src/gtk/*.ui
+Files: src/gtk/*.blp
 Copyright: 2022  Emmanuele Bassi
 License: GPL-3.0-or-later
 
-Files: src/gtk/style.css src/gtk/style-hc.css
+Files: src/gtk/style.css
 Copyright: 2022  Emmanuele Bassi
 License: GPL-3.0-or-later
 
-Files: src/gtk/style-dark.css
-Copyright: 2024  Alice Mikhaylenko
-License: GPL-3.0-or-later
+Files: subprojects/blueprint-compiler.wrap
+Copyright: 2025  Emmanuele Bassi
+License: CC0-1.0
