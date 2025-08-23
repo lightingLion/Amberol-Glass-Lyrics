@@ -23,10 +23,10 @@
     <file alias="style-dark.css">gtk/style-dark.css</file>
     <file alias="style.css">gtk/style.css</file>
     <!-- All UI files are generated in the builddir/src/gtk directory -->
-    <file preprocess="xml-stripblanks" alias="gtk/help-overlay.ui">help-overlay.ui</file>
     <file preprocess="xml-stripblanks">playback-control.ui</file>
     <file preprocess="xml-stripblanks">playlist-view.ui</file>
     <file preprocess="xml-stripblanks">queue-row.ui</file>
+    <file preprocess="xml-stripblanks">shortcuts-dialog.ui</file>
     <file preprocess="xml-stripblanks">song-cover.ui</file>
     <file preprocess="xml-stripblanks">song-details.ui</file>
     <file preprocess="xml-stripblanks">volume-control.ui</file>
