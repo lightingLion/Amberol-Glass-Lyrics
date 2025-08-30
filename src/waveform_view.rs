@@ -352,7 +352,7 @@ mod imp {
 glib::wrapper! {
     pub struct WaveformView(ObjectSubclass<imp::WaveformView>)
         @extends gtk::Widget,
-        @implements gtk::Accessible;
+        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 fn ease_out_cubic(t: f64) -> f64 {
