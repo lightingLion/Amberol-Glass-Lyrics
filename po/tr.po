@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-08-27 15:43+0000\n"
-"PO-Revision-Date: 2025-08-28 21:56+0300\n"
+"POT-Creation-Date: 2025-09-13 19:36+0000\n"
+"PO-Revision-Date: 2025-09-20 11:32+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: data/io.bassi.Amberol.desktop.in.in:2
 #: data/io.bassi.Amberol.metainfo.xml.in.in:6
@@ -33,8 +33,8 @@ msgstr "Müzik Çalar"
 #: data/io.bassi.Amberol.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr ""
-"music;player;media;audio;playlist;müzik;oynatıcı;çalıcı;çalar;müzik çalar;"
-"müzik oynatıcı;medya;ortam;ses;oynatma listesi;çalma listesi;"
+"music;player;media;audio;playlist;müzik;oynatıcı;çalıcı;çalar;müzik "
+"çalar;müzik oynatıcı;medya;ortam;ses;oynatma listesi;çalma listesi;"
 
 #: data/io.bassi.Amberol.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
@@ -184,7 +184,7 @@ msgstr "_Albüm"
 #: src/gtk/playback-control.blp:202
 msgctxt "replaygain-menu"
 msgid "_Song"
-msgstr "_Şarkı"
+msgstr "Şar_kı"
 
 #: src/gtk/playback-control.blp:208
 msgctxt "replaygain-menu"
@@ -201,7 +201,7 @@ msgstr "Amberol _Hakkında"
 
 #: src/gtk/playback-control.blp:227
 msgid "_Quit"
-msgstr "_Çık"
+msgstr "Çı_k"
 
 #: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
