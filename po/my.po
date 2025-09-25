@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/issues\n"
 "POT-Creation-Date: 2024-01-09 11:28+0000\n"
-"PO-Revision-Date: 2024-02-03 13:16+0630\n"
+"PO-Revision-Date: 2024-02-15 22:04+0630\n"
 "Last-Translator: Zayar Lwin <zyl.pol.mm@zohomail.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
 "Language: my\n"
@@ -19,8 +19,7 @@ msgstr ""
 "X-Generator: Poedit 3.4.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
-#: data/io.bassi.Amberol.appdata.xml.in.in:6
+#: data/io.bassi.Amberol.desktop.in.in:3 data/io.bassi.Amberol.appdata.xml.in.in:6
 msgid "Amberol"
 msgstr "အန်ဘာရော"
 
@@ -39,12 +38,10 @@ msgstr "သီချင်းဖွင့်ပေးယုံကလွဲပြ
 
 #: data/io.bassi.Amberol.appdata.xml.in.in:9
 msgid ""
-"Amberol is a music player with no delusions of grandeur. If you just want to "
-"play music available on your local system then Amberol is the music player "
-"you are looking for."
+"Amberol is a music player with no delusions of grandeur. If you just want to play music available on your "
+"local system then Amberol is the music player you are looking for."
 msgstr ""
-"အန်ဘာရောသည် ဟိတ်ကြီးဟန်ကြီးမရှိသော သီချင်းဖွင့်ကိရိယာတစ်ခုဖြစ်သည်။ သင့်စက်တွင်းမှာရှိသော "
-"တေးသီးချင်းများကိုသာ နားဆင်လိုပါက အန်ဘာရောကိုသာ အသုံးပြုလိုက်ပါ။"
+"အန်ဘာရောသည် ဟိတ်ကြီးဟန်ကြီးမရှိသော သီချင်းဖွင့်ကိရိယာတစ်ခုဖြစ်သည်။ သင့်စက်တွင်းမှာရှိသော တေးသီးချင်းများကိုသာ နားဆင်လိုပါက အန်ဘာရောကိုသာ အသုံးပြုလိုက်ပါ။"
 
 #: data/io.bassi.Amberol.appdata.xml.in.in:14
 msgid "Current features:"
@@ -323,11 +320,10 @@ msgstr "သီချင်းစာရင်းသို့ထည့်ရန်
 
 #: src/gtk/window.ui:43
 msgid ""
-"Select a file or a folder, or drag files from your file manager to the "
-"application window to add songs to the playlist"
+"Select a file or a folder, or drag files from your file manager to the application window to add songs to the "
+"playlist"
 msgstr ""
-"ဖိုင် သို့ ဖိုင်တွဲကိုရွေးပါ သို့မဟုတ် ဖိုင်မန်နေဂျာမှတဆင့် ဖိုင်များကို ဆွဲယူ၍ အပ္ပလီကေးရှင်းဝင်းဒိုးထဲ့သို့ "
-"ပစ်ချခြင်းအားဖြင့် သီချင်းစာရင်းသို့ သီချင်းများထည့်နိုင်သည်"
+"ဖိုင် သို့ ဖိုင်တွဲကိုရွေးပါ သို့မဟုတ် ဖိုင်မန်နေဂျာမှတဆင့် ဖိုင်များကို ဆွဲယူ၍ အပ္ပလီကေးရှင်းဝင်းဒိုးထဲ့သို့ ပစ်ချခြင်းအားဖြင့် သီချင်းစာရင်းသို့ သီချင်းများထည့်နိုင်သည်"
 
 #: src/gtk/window.ui:52
 msgid "Restore Playlist"
