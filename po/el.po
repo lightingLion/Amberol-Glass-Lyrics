@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/issues\n"
-"POT-Creation-Date: 2024-01-05 14:52+0000\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"POT-Creation-Date: 2024-09-24 12:08+0000\n"
 "PO-Revision-Date: 2024-01-05 22:02+0200\n"
-"Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
+"Last-Translator: Giannis Antypas <gianni.antypas@gmail.com>\n"
 "Language-Team: Greek <gnome-el-list@gnome.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr "τυχαία σειρά και επανάληψη"
 msgid "MPRIS integration"
 msgstr "Ενσωμάτωση MPRIS"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:44
+#: data/io.bassi.Amberol.appdata.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -79,15 +79,15 @@ msgstr "Emmanuele Bassi"
 msgid "Playback in progress"
 msgstr "Αναπαραγωγή σε εξέλιξη"
 
-#: src/audio/song.rs:325
+#: src/audio/song.rs:317
 msgid "Unknown artist"
 msgstr "Άγνωστος καλλιτέχνης"
 
-#: src/audio/song.rs:332
+#: src/audio/song.rs:324
 msgid "Unknown title"
 msgstr "Άγνωστος τίτλος"
 
-#: src/audio/song.rs:339
+#: src/audio/song.rs:331
 msgid "Unknown album"
 msgstr "Άγνωστο άλμπουμ"
 
@@ -294,29 +294,53 @@ msgstr "_Περί του Amberol"
 msgid "_Quit"
 msgstr "Έ_ξοδος"
 
-#: src/gtk/playlist-view.ui:18
+#: src/gtk/playlist-view.ui:17
+msgid "Search Songs in the Playlist"
+msgstr "Αναζήτηση τραγουδιών στη λίστα αναπαραγωγής"
+
+#: src/gtk/playlist-view.ui:28
 msgid "Playlist"
 msgstr "Λίστα αναπαραγωγής"
 
 #: src/gtk/playlist-view.ui:49
-msgid "Search Songs in the Playlist"
-msgstr "Αναζήτηση τραγουδιών στη λίστα αναπαραγωγής"
-
-#: src/gtk/playlist-view.ui:61
 msgid "Select Songs in the Playlist"
 msgstr "Επιλογή τραγουδιών στη λίστα αναπαραγωγής"
 
-#: src/gtk/playlist-view.ui:74
+#: src/gtk/playlist-view.ui:58
 msgid "Close the Playlist"
 msgstr "Κλείσιμο λίστας αναπαραγωγής"
 
-#: src/gtk/playlist-view.ui:133
+#: src/gtk/playlist-view.ui:67
+msgid "Search songs"
+msgstr "Αναζήτηση τραγουδιών"
+
+#: src/gtk/playlist-view.ui:70
+msgctxt "a11y"
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: src/gtk/playlist-view.ui:71
+msgctxt "a11y"
+msgid "Type to search songs"
+msgstr "Πληκτρολόγηση για αναζήτηση τραγουδιών"
+
+#: src/gtk/playlist-view.ui:117
 msgid "Select All Songs"
 msgstr "Επιλογή όλων των τραγουδιών"
 
-#: src/gtk/playlist-view.ui:146
+#: src/gtk/playlist-view.ui:130
 msgid "Remove Selected Songs"
 msgstr "Αφαίρεση επιλεγμένων τραγουδιών"
+
+#: src/gtk/queue-row.ui:27
+msgctxt "a11y"
+msgid "No cover available"
+msgstr "Μη διαθέσιμο εξώφυλλο"
+
+#: src/gtk/queue-row.ui:84
+msgctxt "a11y"
+msgid "Currently playing"
+msgstr "Παίζει τώρα"
 
 #: src/gtk/window.ui:13
 msgid "Drop a song to add it to the playlist"
@@ -354,7 +378,7 @@ msgid "Remaining time"
 msgstr "Υπόλοιπος χρόνος"
 
 #. Translators: Replace "translator-credits" with your names, one name per line
-#: src/application.rs:229
+#: src/application.rs:243
 msgid "translator-credits"
 msgstr ""
 "Ελληνική μεταφραστική ομάδα GNOME\n"
@@ -363,10 +387,14 @@ msgstr ""
 "Για περισσότερες πληροφορίες, επισκεφθείτε τη σελίδα\n"
 "http://gnome.gr/"
 
-#: src/application.rs:241
+#: src/application.rs:255
 msgid "Amberol needs to run in the background to play music"
 msgstr ""
 "Το Amberol χρειάζεται να εκτελείται στο παρασκήνιο για να αναπαράγει μουσική"
+
+#: src/cover_picture.rs:75
+msgid "Cover image"
+msgstr "Εικόνα εξωφύλλου"
 
 #: src/playback_control.rs:118
 msgid "Repeat All Songs"
@@ -376,66 +404,66 @@ msgstr "Επανάληψη όλων των τραγουδιών"
 msgid "Repeat the Current Song"
 msgstr "Επανάληψη του τρέχοντος τραγουδιού"
 
-#: src/window.rs:432
+#: src/window.rs:145
 msgid "Audio files"
 msgstr "Αρχεία ήχου"
 
-#: src/window.rs:437
+#: src/window.rs:150
 msgid "_Add Song"
 msgstr "_Προσθήκη τραγουδιού"
 
-#: src/window.rs:440
+#: src/window.rs:153
 msgid "Open File"
 msgstr "Άνοιγμα αρχείου"
 
-#: src/window.rs:445 src/window.rs:465 src/window.rs:1354
+#: src/window.rs:158 src/window.rs:174 src/window.rs:1462
 msgid "Unable to access files"
 msgstr "Αδυναμία πρόσβασης στα αρχεία"
 
-#: src/window.rs:457
+#: src/window.rs:167
 msgid "_Add Folder"
 msgstr "_Προσθήκη φακέλου"
 
-#: src/window.rs:459
+#: src/window.rs:169
 msgid "Open Folder"
 msgstr "Άνοιγμα φακέλου"
 
-#: src/window.rs:482
+#: src/window.rs:488
 msgid "No available song found"
 msgstr "Δεν βρέθηκαν διαθέσιμα τραγούδια"
 
-#: src/window.rs:537
+#: src/window.rs:549
 msgid "No songs found"
 msgstr "Δεν βρέθηκαν τραγούδια"
 
-#: src/window.rs:567
+#: src/window.rs:582
 msgid "Added a new song"
 msgstr "Προστέθηκε νέο τραγούδι"
 
-#: src/window.rs:568
+#: src/window.rs:583
 msgid "Play"
 msgstr "Aναπαραγωγή"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:577
+#: src/window.rs:592
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "Προστέθηκε ένα τραγούδι"
 msgstr[1] "Προστέθηκαν {} τραγούδια"
 
-#: src/window.rs:1118
+#: src/window.rs:1222
 msgid "Unable to access dropped files"
 msgstr "Αδυναμία πρόσβασης στα αρχεία που εναποτέθησαν"
 
-#: src/window.rs:1212
+#: src/window.rs:1316
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} λεπτό"
 msgstr[1] "{} λεπτά"
 
-#: src/window.rs:1223
+#: src/window.rs:1327
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "Απομένει {hours} ώρα και {minutes} λεπτά"
@@ -444,19 +472,19 @@ msgstr[1] "Απομένουν {hours} ώρες και {minutes} λεπτά"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1233
+#: src/window.rs:1337
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "Απομένει {} λεπτό"
 msgstr[1] "Απομένουν {} λεπτά"
 
-#: src/window.rs:1333
+#: src/window.rs:1441
 msgid "No song selected"
 msgstr "Δεν επιλέχθηκε τραγούδι"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1338
+#: src/window.rs:1446
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "{} τραγούδι επιλέχθηκε"
@@ -465,7 +493,7 @@ msgstr[1] "{} τραγούδια επιλέχθηκαν"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1392
+#: src/window.rs:1502
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Αυτή τη στιγμή παίζει το “{title}” από τον/την “{artist}”"
 
