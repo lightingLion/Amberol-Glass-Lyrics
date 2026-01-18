@@ -21,10 +21,11 @@ flatpak:
     RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
 
 rust-fmt:
-  image: "registry.gitlab.com/alatiera/rustfmt-oci-image/rustfmt:stable"
+  image: "rust:slim"
   stage: "check"
   needs: []
   script:
+    - rustup component add rustfmt
     - echo -e "" > src/config.rs
     - rustc -Vv && cargo -Vv
     - cargo --version
