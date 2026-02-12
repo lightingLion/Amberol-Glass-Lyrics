@@ -1,23 +1,23 @@
 # Hebrew translation for amberol.
 # Copyright (C) 2022 amberol's COPYRIGHT HOLDER
 # This file is distributed under the same license as the amberol package.
-# Yosef Or Boczko <yoseforb@gmail.com>, 2022-2024.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2022-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-08-11 14:37+0000\n"
-"PO-Revision-Date: 2025-08-14 11:44+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2025-10-02 15:14+0000\n"
+"PO-Revision-Date: 2026-02-12 23:53+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"Language-Team: Hebrew\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
-"X-Generator: Poedit 3.6\n"
+"2 : 3)\n"
+"X-Generator: Gtranslator 49.0\n"
 
 #: data/io.bassi.Amberol.desktop.in.in:2
 #: data/io.bassi.Amberol.metainfo.xml.in.in:6
@@ -75,6 +75,307 @@ msgstr "שילוב MPRIS"
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
+#: src/gtk/playback-control.blp:21
+msgid "Play the Previous Song"
+msgstr "ניגון השיר הקודם"
+
+#: src/gtk/playback-control.blp:28
+msgctxt "a11y"
+msgid "Skip backwards"
+msgstr "דילוג לאחור"
+
+#: src/gtk/playback-control.blp:36
+msgid "Toggle Play"
+msgstr "ניגון/השהיה"
+
+#: src/gtk/playback-control.blp:44
+msgctxt "a11y"
+msgid "Toggle play"
+msgstr "ניגון/השהיה"
+
+#: src/gtk/playback-control.blp:52
+msgid "Play the Next Song"
+msgstr "ניגון השיר הבא"
+
+#: src/gtk/playback-control.blp:59
+msgctxt "a11y"
+msgid "Skip forward"
+msgstr "דילוג קדימה"
+
+#: src/gtk/playback-control.blp:79
+msgid "Toggle Playlist"
+msgstr "הצגה/הסתרת רשימת ההשמעה"
+
+#: src/gtk/playback-control.blp:86
+msgctxt "a11y"
+msgid "Toggle playlist"
+msgstr "הצגה/הסתרת רשימת ההשמעה"
+
+#: src/gtk/playback-control.blp:94
+msgid "Shuffle the Playlist"
+msgstr "ערבוב רשימת ההשמעה"
+
+#: src/gtk/playback-control.blp:97
+msgctxt "a11y"
+msgid "Shuffle"
+msgstr "ערבוב"
+
+#: src/gtk/playback-control.blp:116 src/playback_control.rs:115
+msgid "Enable Repeat"
+msgstr "לאפשר חזרה"
+
+#: src/gtk/playback-control.blp:123
+msgctxt "a11y"
+msgid "Repeat"
+msgstr "חזרה"
+
+#: src/gtk/playback-control.blp:133
+msgid "Main Menu"
+msgstr "תפריט ראשי"
+
+#: src/gtk/playback-control.blp:141
+msgctxt "a11y"
+msgid "Primary menu"
+msgstr "תפריט עיקרי"
+
+#: src/gtk/playback-control.blp:152
+msgid "Copy"
+msgstr "העתקה"
+
+#: src/gtk/playback-control.blp:157
+msgid "Open Directory"
+msgstr "פתיחת תיקייה"
+
+#: src/gtk/playback-control.blp:164
+msgid "Add _Song"
+msgstr "הוספת _שיר"
+
+#: src/gtk/playback-control.blp:169
+msgid "Add _Folder"
+msgstr "הוספת _תיקייה"
+
+#: src/gtk/playback-control.blp:174
+msgid "Clear"
+msgstr "ניקוי"
+
+#: src/gtk/playback-control.blp:181
+msgid "_Match Cover Art"
+msgstr "ה_תאמת כיסוי אלבום"
+
+#: src/gtk/playback-control.blp:186
+msgid "_Background Playback"
+msgstr "ניגון ב_רקע"
+
+#: src/gtk/playback-control.blp:193
+msgid "_ReplayGain"
+msgstr "_ReplayGain"
+
+#: src/gtk/playback-control.blp:196
+msgctxt "replaygain-menu"
+msgid "_Album"
+msgstr "_אלבום"
+
+#: src/gtk/playback-control.blp:202
+msgctxt "replaygain-menu"
+msgid "_Song"
+msgstr "_שיר"
+
+#: src/gtk/playback-control.blp:208
+msgctxt "replaygain-menu"
+msgid "_Disabled"
+msgstr "_מושבת"
+
+#: src/gtk/playback-control.blp:217
+msgid "_Keyboard Shortcuts"
+msgstr "_צירופי מקשים"
+
+#: src/gtk/playback-control.blp:222
+msgid "_About Amberol"
+msgstr "_על אמברול"
+
+#: src/gtk/playback-control.blp:227
+msgid "_Quit"
+msgstr "_יציאה"
+
+#: src/gtk/playlist-view.blp:16
+msgid "Search Songs in the Playlist"
+msgstr "חיפוש שירים ברשימת ההשמעה"
+
+#: src/gtk/playlist-view.blp:25
+msgid "Playlist"
+msgstr "רשימת השמעה"
+
+#: src/gtk/playlist-view.blp:47
+msgid "Close the Playlist"
+msgstr "סגירת רשימת ההשמעה"
+
+#: src/gtk/playlist-view.blp:55
+msgid "Select Songs in the Playlist"
+msgstr "בחירת שירים ברשימת ההשמעה"
+
+# msgctxt "a11y"
+#: src/gtk/playlist-view.blp:62
+msgid "Search songs"
+msgstr "חיפוש שירים"
+
+#: src/gtk/playlist-view.blp:66
+msgctxt "a11y"
+msgid "Search"
+msgstr "חיפוש"
+
+#: src/gtk/playlist-view.blp:67
+msgctxt "a11y"
+msgid "Type to search songs"
+msgstr "יש להקליד לחיפוש שירים"
+
+#: src/gtk/playlist-view.blp:110
+msgid "Select All Songs"
+msgstr "בחירת כל השירים"
+
+#: src/gtk/playlist-view.blp:123
+msgid "Remove Selected Songs"
+msgstr "הסרת השירים הנבחרים"
+
+#: src/gtk/queue-row.blp:27
+msgctxt "a11y"
+msgid "No cover available"
+msgstr "אין עטיפה זמינה"
+
+#: src/gtk/queue-row.blp:81
+msgctxt "a11y"
+msgid "Currently playing"
+msgstr "כרגע מנגן"
+
+#: src/gtk/shortcuts-dialog.blp:10
+msgctxt "shortcut window"
+msgid "General"
+msgstr "כללי"
+
+#: src/gtk/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "Toggle primary menu"
+msgstr "החלפת תצוגת התפריט העיקרי"
+
+#: src/gtk/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Copy song details to the clipboard"
+msgstr "העתקת פרטי שיר ללוח הגזירים"
+
+#: src/gtk/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "Show shortcuts"
+msgstr "הצגת צירופי מקשים"
+
+#: src/gtk/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "יציאה"
+
+#: src/gtk/shortcuts-dialog.blp:34
+msgctxt "shortcut window"
+msgid "Playlist"
+msgstr "רשימת השמעה"
+
+#: src/gtk/shortcuts-dialog.blp:37
+msgctxt "shortcut window"
+msgid "Add a song to the playlist"
+msgstr "הוספת שיר לרשימת ההשמעה"
+
+#: src/gtk/shortcuts-dialog.blp:42
+msgctxt "shortcut window"
+msgid "Add a folder to the playlist"
+msgstr "הוספת תיקייה לרשימת ההשמעה"
+
+#: src/gtk/shortcuts-dialog.blp:47
+msgctxt "shortcut window"
+msgid "Clear the playlist"
+msgstr "ניקוי רשימת ההשמעה"
+
+#: src/gtk/shortcuts-dialog.blp:52
+msgctxt "shortcut window"
+msgid "Toggle the playlist pane"
+msgstr "הצגה/הסתרת רשימת ההשמעה הצדית"
+
+#: src/gtk/shortcuts-dialog.blp:57
+msgctxt "shortcut window"
+msgid "Toggle shuffling songs"
+msgstr "ערבוב/ביטול ערבוב שירים"
+
+#: src/gtk/shortcuts-dialog.blp:63
+msgctxt "shortcut window"
+msgid "Playback"
+msgstr "ניגון"
+
+#: src/gtk/shortcuts-dialog.blp:66
+msgctxt "shortcut window"
+msgid "Toggle play/pause"
+msgstr "ניגון/השהייה"
+
+#: src/gtk/shortcuts-dialog.blp:71
+msgctxt "shortcut window"
+msgid "Previous song"
+msgstr "שיר קודם"
+
+#: src/gtk/shortcuts-dialog.blp:76
+msgctxt "shortcut window"
+msgid "Next song"
+msgstr "שיר הבא"
+
+#: src/gtk/shortcuts-dialog.blp:81
+msgctxt "shortcut window"
+msgid "Seek backwards in the current song"
+msgstr "דילוג לאחור בשיר הנוכחי"
+
+#: src/gtk/shortcuts-dialog.blp:86
+msgctxt "shortcut window"
+msgid "Seek forward in the current song"
+msgstr "דילוג קדימה בשיר הנוכחי"
+
+#: src/gtk/window.blp:15
+msgid "Drop a song to add it to the playlist"
+msgstr "יש לגרור שיר להוספה לרשימת ההשמעה"
+
+#: src/gtk/window.blp:39
+msgid ""
+"Select a file or a folder, or drag files from your file manager to the "
+"application window to add songs to the playlist"
+msgstr ""
+"להוספת שירים לרשימת ההשמעה יש לבחור קובץ או תיקייה, או לגרור קבצים ממנהל "
+"הקבצים שלך לחלון היישום"
+
+#: src/gtk/window.blp:48
+msgid "Restore Playlist"
+msgstr "שחזור רשימת השמעה"
+
+#: src/gtk/window.blp:58
+msgid "Add Folder"
+msgstr "הוספת תיקייה"
+
+#: src/gtk/window.blp:67
+msgid "Add Song"
+msgstr "הוספת שיר"
+
+#: src/gtk/window.blp:128
+msgctxt "a11y"
+msgid "Elapsed time"
+msgstr "זמן שעבר"
+
+#: src/gtk/window.blp:142
+msgctxt "a11y"
+msgid "Remaining time"
+msgstr "זמן שנותר"
+
+#. Translators: Replace "translator-credits" with your names, one name per line
+#: src/application.rs:243
+msgid "translator-credits"
+msgstr ""
+"יוסף אור בוצ׳קו <yoseforb@gmail.com>\n"
+"מיזם תרגום GNOME לעברית https://l10n.gnome.org/teams/he/"
+
+#: src/application.rs:255
+msgid "Amberol needs to run in the background to play music"
+msgstr "אמברול צריך לפעול ברקע על מנת לנגן מוזיקה"
+
 #: src/audio/inhibit_controller.rs:40
 msgid "Playback in progress"
 msgstr "בתהליך ניגון"
@@ -91,316 +392,15 @@ msgstr "כותרת לא ידועה"
 msgid "Unknown album"
 msgstr "אלבום לא ידוע"
 
-#: src/gtk/help-overlay.ui:11
-msgctxt "shortcut window"
-msgid "General"
-msgstr "כללי"
-
-#: src/gtk/help-overlay.ui:14
-msgctxt "shortcut window"
-msgid "Toggle primary menu"
-msgstr "החלפת תצוגת התפריט העיקרי"
-
-#: src/gtk/help-overlay.ui:20
-msgctxt "shortcut window"
-msgid "Copy song details to the clipboard"
-msgstr "העתקת פרטי שיר ללוח הגזירים"
-
-#: src/gtk/help-overlay.ui:26
-msgctxt "shortcut window"
-msgid "Show shortcuts"
-msgstr "הצגת צירופי מקשים"
-
-#: src/gtk/help-overlay.ui:32
-msgctxt "shortcut window"
-msgid "Quit"
-msgstr "יציאה"
-
-#: src/gtk/help-overlay.ui:40
-msgctxt "shortcut window"
-msgid "Playlist"
-msgstr "רשימת השמעה"
-
-#: src/gtk/help-overlay.ui:43
-msgctxt "shortcut window"
-msgid "Add a song to the playlist"
-msgstr "הוספת שיר לרשימת ההשמעה"
-
-#: src/gtk/help-overlay.ui:49
-msgctxt "shortcut window"
-msgid "Add a folder to the playlist"
-msgstr "הוספת תיקייה לרשימת ההשמעה"
-
-#: src/gtk/help-overlay.ui:55
-msgctxt "shortcut window"
-msgid "Clear the playlist"
-msgstr "ניקוי רשימת ההשמעה"
-
-#: src/gtk/help-overlay.ui:61
-msgctxt "shortcut window"
-msgid "Toggle the playlist pane"
-msgstr "הצגה/הסתרת רשימת ההשמעה הצדית"
-
-#: src/gtk/help-overlay.ui:67
-msgctxt "shortcut window"
-msgid "Toggle shuffling songs"
-msgstr "ערבוב/ביטול ערבוב שירים"
-
-#: src/gtk/help-overlay.ui:75
-msgctxt "shortcut window"
-msgid "Playback"
-msgstr "ניגון"
-
-#: src/gtk/help-overlay.ui:78
-msgctxt "shortcut window"
-msgid "Toggle play/pause"
-msgstr "ניגון/השהייה"
-
-#: src/gtk/help-overlay.ui:84
-msgctxt "shortcut window"
-msgid "Previous song"
-msgstr "שיר קודם"
-
-#: src/gtk/help-overlay.ui:90
-msgctxt "shortcut window"
-msgid "Next song"
-msgstr "שיר הבא"
-
-#: src/gtk/help-overlay.ui:96
-msgctxt "shortcut window"
-msgid "Seek backwards in the current song"
-msgstr "דילוג לאחור בשיר הנוכחי"
-
-#: src/gtk/help-overlay.ui:102
-msgctxt "shortcut window"
-msgid "Seek forward in the current song"
-msgstr "דילוג קדימה בשיר הנוכחי"
-
-#: src/gtk/playback-control.ui:21
-msgid "Play the Previous Song"
-msgstr "ניגון השיר הקודם"
-
-#: src/gtk/playback-control.ui:26
-msgctxt "a11y"
-msgid "Skip backwards"
-msgstr "דילוג לאחור"
-
-#: src/gtk/playback-control.ui:35
-msgid "Toggle Play"
-msgstr "ניגון/השהיה"
-
-#: src/gtk/playback-control.ui:41
-msgctxt "a11y"
-msgid "Toggle play"
-msgstr "ניגון/השהיה"
-
-#: src/gtk/playback-control.ui:50
-msgid "Play the Next Song"
-msgstr "ניגון השיר הבא"
-
-#: src/gtk/playback-control.ui:55
-msgctxt "a11y"
-msgid "Skip forward"
-msgstr "דילוג קדימה"
-
-#: src/gtk/playback-control.ui:78
-msgid "Toggle Playlist"
-msgstr "הצגה/הסתרת רשימת ההשמעה"
-
-#: src/gtk/playback-control.ui:83
-msgctxt "a11y"
-msgid "Toggle playlist"
-msgstr "הצגה/הסתרת רשימת ההשמעה"
-
-#: src/gtk/playback-control.ui:92
-msgid "Shuffle the Playlist"
-msgstr "ערבוב רשימת ההשמעה"
-
-#: src/gtk/playback-control.ui:94
-msgctxt "a11y"
-msgid "Shuffle"
-msgstr "ערבוב"
-
-#: src/gtk/playback-control.ui:113 src/playback_control.rs:114
-msgid "Enable Repeat"
-msgstr "לאפשר חזרה"
-
-#: src/gtk/playback-control.ui:118
-msgctxt "a11y"
-msgid "Repeat"
-msgstr "חזרה"
-
-#: src/gtk/playback-control.ui:129
-msgid "Main Menu"
-msgstr "תפריט ראשי"
-
-#: src/gtk/playback-control.ui:135
-msgctxt "a11y"
-msgid "Primary menu"
-msgstr "תפריט עיקרי"
-
-#: src/gtk/playback-control.ui:151
-msgid "Copy"
-msgstr "העתקה"
-
-#: src/gtk/playback-control.ui:155
-msgid "Open Directory"
-msgstr "פתיחת תיקייה"
-
-#: src/gtk/playback-control.ui:161
-msgid "Add _Song"
-msgstr "הוספת _שיר"
-
-#: src/gtk/playback-control.ui:165
-msgid "Add _Folder"
-msgstr "הוספת _תיקייה"
-
-#: src/gtk/playback-control.ui:169
-msgid "Clear"
-msgstr "ניקוי"
-
-#: src/gtk/playback-control.ui:175
-msgid "_Match Cover Art"
-msgstr "ה_תאמת כיסוי אלבום"
-
-#: src/gtk/playback-control.ui:179
-msgid "_Background Playback"
-msgstr "ניגון ב_רקע"
-
-#: src/gtk/playback-control.ui:185
-msgid "_ReplayGain"
-msgstr "_ReplayGain"
-
-#: src/gtk/playback-control.ui:187
-msgctxt "replaygain-menu"
-msgid "_Album"
-msgstr "_אלבום"
-
-#: src/gtk/playback-control.ui:192
-msgctxt "replaygain-menu"
-msgid "_Song"
-msgstr "_שיר"
-
-#: src/gtk/playback-control.ui:197
-msgctxt "replaygain-menu"
-msgid "_Disabled"
-msgstr "_מושבת"
-
-#: src/gtk/playback-control.ui:205
-msgid "_Keyboard Shortcuts"
-msgstr "_צירופי מקשים"
-
-#: src/gtk/playback-control.ui:209
-msgid "_About Amberol"
-msgstr "_על אמברול"
-
-#: src/gtk/playback-control.ui:213
-msgid "_Quit"
-msgstr "_יציאה"
-
-#: src/gtk/playlist-view.ui:14
-msgid "Search Songs in the Playlist"
-msgstr "חיפוש שירים ברשימת ההשמעה"
-
-#: src/gtk/playlist-view.ui:24
-msgid "Playlist"
-msgstr "רשימת השמעה"
-
-#: src/gtk/playlist-view.ui:46
-msgid "Close the Playlist"
-msgstr "סגירת רשימת ההשמעה"
-
-#: src/gtk/playlist-view.ui:54
-msgid "Select Songs in the Playlist"
-msgstr "בחירת שירים ברשימת ההשמעה"
-
-# msgctxt "a11y"
-#: src/gtk/playlist-view.ui:63
-msgid "Search songs"
-msgstr "חיפוש שירים"
-
-#: src/gtk/playlist-view.ui:66
-msgctxt "a11y"
-msgid "Search"
-msgstr "חיפוש"
-
-#: src/gtk/playlist-view.ui:67
-msgctxt "a11y"
-msgid "Type to search songs"
-msgstr "יש להקליד לחיפוש שירים"
-
-#: src/gtk/playlist-view.ui:113
-msgid "Select All Songs"
-msgstr "בחירת כל השירים"
-
-#: src/gtk/playlist-view.ui:126
-msgid "Remove Selected Songs"
-msgstr "הסרת השירים הנבחרים"
-
-#: src/gtk/queue-row.ui:27
-msgctxt "a11y"
-msgid "No cover available"
-msgstr "אין עטיפה זמינה"
-
-#: src/gtk/queue-row.ui:84
-msgctxt "a11y"
-msgid "Currently playing"
-msgstr "כרגע מנגן"
-
-#: src/gtk/window.ui:13
-msgid "Drop a song to add it to the playlist"
-msgstr "יש לגרור שיר להוספה לרשימת ההשמעה"
-
-#: src/gtk/window.ui:43
-msgid ""
-"Select a file or a folder, or drag files from your file manager to the "
-"application window to add songs to the playlist"
-msgstr ""
-"להוספת שירים לרשימת ההשמעה יש לבחור קובץ או תיקייה, או לגרור קבצים ממנהל "
-"הקבצים שלך לחלון היישום"
-
-#: src/gtk/window.ui:52
-msgid "Restore Playlist"
-msgstr "שחזור רשימת השמעה"
-
-#: src/gtk/window.ui:62
-msgid "Add Folder"
-msgstr "הוספת תיקייה"
-
-#: src/gtk/window.ui:71
-msgid "Add Song"
-msgstr "הוספת שיר"
-
-#: src/gtk/window.ui:148
-msgctxt "a11y"
-msgid "Elapsed time"
-msgstr "זמן שעבר"
-
-#: src/gtk/window.ui:160
-msgctxt "a11y"
-msgid "Remaining time"
-msgstr "זמן שנותר"
-
-#. Translators: Replace "translator-credits" with your names, one name per line
-#: src/application.rs:243
-msgid "translator-credits"
-msgstr ""
-"יוסף אור בוצ׳קו <yoseforb@gmail.com>\n"
-"מיזם תרגום GNOME לעברית https://l10n.gnome.org/teams/he/"
-
-#: src/application.rs:255
-msgid "Amberol needs to run in the background to play music"
-msgstr "אמברול צריך לפעול ברקע על מנת לנגן מוזיקה"
-
 #: src/cover_picture.rs:75
 msgid "Cover image"
 msgstr "תמונת עטיפה"
 
-#: src/playback_control.rs:118
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "חזרה על כל השירים"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
 msgstr "חזרה על השיר הנוכחי"
 
@@ -416,7 +416,7 @@ msgstr "_הוספת שיר"
 msgid "Open File"
 msgstr "פתיחת קובץ"
 
-#: src/window.rs:168 src/window.rs:190 src/window.rs:1482
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1483
 msgid "Unable to access files"
 msgstr "לא ניתן לגשת לקבצים"
 
@@ -428,46 +428,49 @@ msgstr "הו_ספת תיקייה"
 msgid "Open Folder"
 msgstr "פתיחת תיקיה"
 
-#: src/window.rs:508
+#: src/window.rs:509
 msgid "No available song found"
 msgstr "לא נמצא שיר זמין"
 
-#: src/window.rs:569
+#: src/window.rs:570
 msgid "No songs found"
 msgstr "לא נמצאו שירים"
 
-#: src/window.rs:602
+#: src/window.rs:603
 msgid "Added a new song"
 msgstr "נוסף שיר חדש"
 
-#: src/window.rs:603
+#: src/window.rs:604
 msgid "Play"
 msgstr "ניגון"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:612
+#: src/window.rs:613
+#, rust-format
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "נוסף שיר אחד"
 msgstr[1] "נוספו {} שירים"
-msgstr[2] "נוספו שני שירים"
+msgstr[2] "נוספו {} שירים"
 msgstr[3] "נוספו {} שירים"
 
-#: src/window.rs:1242
+#: src/window.rs:1243
 msgid "Unable to access dropped files"
 msgstr "לא ניתן לגשת לקבצים שנזרקו"
 
-#: src/window.rs:1336
+#: src/window.rs:1337
+#, rust-format
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "דקה"
 msgstr[1] "{} דקות"
-msgstr[2] "שתי דקות"
+msgstr[2] "{} דקות"
 msgstr[3] "{} דקות"
 
-#: src/window.rs:1347
+#: src/window.rs:1348
+#, rust-format
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "נותרו שעה ו־{minutes} דקות"
@@ -478,7 +481,8 @@ msgstr[3] "נותרו {hours} שעות ו־{minutes} דקות"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1357
+#: src/window.rs:1358
+#, rust-format
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "נותרה דקה אחת"
@@ -486,28 +490,30 @@ msgstr[1] "נותרו {} דקות"
 msgstr[2] "נותרו {} דקות"
 msgstr[3] "נותרו {} דקות"
 
-#: src/window.rs:1461
+#: src/window.rs:1462
 msgid "No song selected"
 msgstr "לא נבחרו שירים"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1466
+#: src/window.rs:1467
+#, rust-format
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "נבחר שיר אחד"
 msgstr[1] "נבחרו {} שירים"
-msgstr[2] "נבחרו שני שירים"
+msgstr[2] "נבחרו {} שירים"
 msgstr[3] "נבחרו {} שירים"
 
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1522
+#: src/window.rs:1523
+#, rust-format
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "מתנגן כעת „{title}” בביצוע „{artist}”"
 
-#: src/window.rs:1559
+#: src/window.rs:1560
 msgid "Unable to open folder"
 msgstr "לא ניתן לפתוח תיקייה"
 
