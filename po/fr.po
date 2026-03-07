@@ -9,28 +9,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-03-15 14:50+0000\n"
-"PO-Revision-Date: 2025-03-23 22:04+0900\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"POT-Creation-Date: 2025-10-02 15:14+0000\n"
+"PO-Revision-Date: 2026-03-07 09:00+0100\n"
+"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Gtranslator 47.1\n"
+"X-Generator: Poedit 3.8\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
+#: data/io.bassi.Amberol.desktop.in.in:2
 #: data/io.bassi.Amberol.metainfo.xml.in.in:6
 msgid "Amberol"
 msgstr "Amberol"
 
-#: data/io.bassi.Amberol.desktop.in.in:4
+#: data/io.bassi.Amberol.desktop.in.in:3
 msgid "Music Player"
 msgstr "Lecteur de musique"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:12
+#: data/io.bassi.Amberol.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr "musique;son;lecteur;média;audio;liste de lecture;"
 
@@ -80,278 +80,266 @@ msgstr "intégration MPRIS"
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
-#: src/audio/inhibit_controller.rs:40
-msgid "Playback in progress"
-msgstr "Écoute en cours"
-
-#: src/audio/song.rs:317
-msgid "Unknown artist"
-msgstr "Artiste inconnu(e)"
-
-#: src/audio/song.rs:324
-msgid "Unknown title"
-msgstr "Titre inconnu"
-
-#: src/audio/song.rs:331
-msgid "Unknown album"
-msgstr "Album inconnu"
-
-#: src/gtk/help-overlay.ui:11
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Général"
-
-#: src/gtk/help-overlay.ui:14
-msgctxt "shortcut window"
-msgid "Toggle primary menu"
-msgstr "Basculer le menu principal"
-
-#: src/gtk/help-overlay.ui:20
-msgctxt "shortcut window"
-msgid "Copy song details to the clipboard"
-msgstr "Copier les informations du morceau dans le presse-papiers"
-
-#: src/gtk/help-overlay.ui:26
-msgctxt "shortcut window"
-msgid "Show shortcuts"
-msgstr "Afficher les raccourcis clavier"
-
-#: src/gtk/help-overlay.ui:32
-msgctxt "shortcut window"
-msgid "Quit"
-msgstr "Quitter"
-
-#: src/gtk/help-overlay.ui:40
-msgctxt "shortcut window"
-msgid "Playlist"
-msgstr "Liste de lecture"
-
-#: src/gtk/help-overlay.ui:43
-msgctxt "shortcut window"
-msgid "Add a song to the playlist"
-msgstr "Ajouter un morceau à la liste de lecture"
-
-#: src/gtk/help-overlay.ui:49
-msgctxt "shortcut window"
-msgid "Add a folder to the playlist"
-msgstr "Ajouter un dossier à la liste de lecture"
-
-#: src/gtk/help-overlay.ui:55
-msgctxt "shortcut window"
-msgid "Clear the playlist"
-msgstr "Effacer la liste de lecture"
-
-#: src/gtk/help-overlay.ui:61
-msgctxt "shortcut window"
-msgid "Toggle the playlist pane"
-msgstr "Basculer le panneau de la liste de lecture"
-
-#: src/gtk/help-overlay.ui:67
-msgctxt "shortcut window"
-msgid "Toggle shuffling songs"
-msgstr "Basculer le mélange de morceaux"
-
-#: src/gtk/help-overlay.ui:75
-msgctxt "shortcut window"
-msgid "Playback"
-msgstr "Lecture"
-
-#: src/gtk/help-overlay.ui:78
-msgctxt "shortcut window"
-msgid "Toggle play/pause"
-msgstr "Basculer la lecture / pause"
-
-#: src/gtk/help-overlay.ui:84
-msgctxt "shortcut window"
-msgid "Previous song"
-msgstr "Morceau précédent"
-
-#: src/gtk/help-overlay.ui:90
-msgctxt "shortcut window"
-msgid "Next song"
-msgstr "Morceau suivant"
-
-#: src/gtk/help-overlay.ui:96
-msgctxt "shortcut window"
-msgid "Seek backwards in the current song"
-msgstr "Reculer dans le morceau actuel"
-
-#: src/gtk/help-overlay.ui:102
-msgctxt "shortcut window"
-msgid "Seek forward in the current song"
-msgstr "Avancer dans le morceau actuel"
-
-#: src/gtk/playback-control.ui:21
+#: src/gtk/playback-control.blp:21
 msgid "Play the Previous Song"
 msgstr "Écouter le morceau précédent"
 
-#: src/gtk/playback-control.ui:26
+#: src/gtk/playback-control.blp:28
 msgctxt "a11y"
 msgid "Skip backwards"
 msgstr "Reculer"
 
-#: src/gtk/playback-control.ui:35
+#: src/gtk/playback-control.blp:36
 msgid "Toggle Play"
 msgstr "Lancer la lecture"
 
-#: src/gtk/playback-control.ui:41
+#: src/gtk/playback-control.blp:44
 msgctxt "a11y"
 msgid "Toggle play"
 msgstr "Basculer la lecture"
 
-#: src/gtk/playback-control.ui:50
+#: src/gtk/playback-control.blp:52
 msgid "Play the Next Song"
 msgstr "Lire le morceau suivant"
 
-#: src/gtk/playback-control.ui:55
+#: src/gtk/playback-control.blp:59
 msgctxt "a11y"
 msgid "Skip forward"
 msgstr "Avancer"
 
-#: src/gtk/playback-control.ui:78
+#: src/gtk/playback-control.blp:79
 msgid "Toggle Playlist"
 msgstr "Basculer la liste de lecture"
 
-#: src/gtk/playback-control.ui:83
+#: src/gtk/playback-control.blp:86
 msgctxt "a11y"
 msgid "Toggle playlist"
 msgstr "Basculer la liste de lecture"
 
-#: src/gtk/playback-control.ui:92
+#: src/gtk/playback-control.blp:94
 msgid "Shuffle the Playlist"
 msgstr "Mélanger la liste de lecture"
 
-#: src/gtk/playback-control.ui:94
+#: src/gtk/playback-control.blp:97
 msgctxt "a11y"
 msgid "Shuffle"
 msgstr "Mélanger"
 
-#: src/gtk/playback-control.ui:113 src/playback_control.rs:114
+#: src/gtk/playback-control.blp:116 src/playback_control.rs:115
 msgid "Enable Repeat"
 msgstr "Activer la répétition"
 
-#: src/gtk/playback-control.ui:118
+#: src/gtk/playback-control.blp:123
 msgctxt "a11y"
 msgid "Repeat"
 msgstr "Répéter"
 
-#: src/gtk/playback-control.ui:129
+#: src/gtk/playback-control.blp:133
 msgid "Main Menu"
 msgstr "Menu principal"
 
-#: src/gtk/playback-control.ui:135
+#: src/gtk/playback-control.blp:141
 msgctxt "a11y"
 msgid "Primary menu"
 msgstr "Menu principal"
 
-#: src/gtk/playback-control.ui:151
+#: src/gtk/playback-control.blp:152
 msgid "Copy"
 msgstr "Copier"
 
-#: src/gtk/playback-control.ui:157
+#: src/gtk/playback-control.blp:157
+msgid "Open Directory"
+msgstr "Ouvrir un répertoire"
+
+#: src/gtk/playback-control.blp:164
 msgid "Add _Song"
 msgstr "Ajouter un _morceau"
 
-#: src/gtk/playback-control.ui:161
+#: src/gtk/playback-control.blp:169
 msgid "Add _Folder"
 msgstr "Ajouter un _dossier"
 
-#: src/gtk/playback-control.ui:165
+#: src/gtk/playback-control.blp:174
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/gtk/playback-control.ui:171
+#: src/gtk/playback-control.blp:181
 msgid "_Match Cover Art"
 msgstr "_Accorder aux couleurs de l’album"
 
-#: src/gtk/playback-control.ui:175
+#: src/gtk/playback-control.blp:186
 msgid "_Background Playback"
 msgstr "Lecture en arrière _plan"
 
-#: src/gtk/playback-control.ui:181
+#: src/gtk/playback-control.blp:193
 msgid "_ReplayGain"
 msgstr "_ReplayGain"
 
-#: src/gtk/playback-control.ui:183
+#: src/gtk/playback-control.blp:196
 msgctxt "replaygain-menu"
 msgid "_Album"
 msgstr "_Album"
 
-#: src/gtk/playback-control.ui:188
+#: src/gtk/playback-control.blp:202
 msgctxt "replaygain-menu"
 msgid "_Song"
 msgstr "_Morceau"
 
-#: src/gtk/playback-control.ui:193
+#: src/gtk/playback-control.blp:208
 msgctxt "replaygain-menu"
 msgid "_Disabled"
 msgstr "_Désactivé"
 
-#: src/gtk/playback-control.ui:201
+#: src/gtk/playback-control.blp:217
 msgid "_Keyboard Shortcuts"
 msgstr "_Raccourcis clavier"
 
-#: src/gtk/playback-control.ui:205
+#: src/gtk/playback-control.blp:222
 msgid "_About Amberol"
 msgstr "À _propos d’Amberol"
 
-#: src/gtk/playback-control.ui:209
+#: src/gtk/playback-control.blp:227
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: src/gtk/playlist-view.ui:14
+#: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
 msgstr "Rechercher des morceaux dans la liste de lecture"
 
-#: src/gtk/playlist-view.ui:24
+#: src/gtk/playlist-view.blp:25
 msgid "Playlist"
 msgstr "Liste de lecture"
 
-#: src/gtk/playlist-view.ui:46
+#: src/gtk/playlist-view.blp:47
 msgid "Close the Playlist"
 msgstr "Fermer la liste de lecture"
 
-#: src/gtk/playlist-view.ui:54
+#: src/gtk/playlist-view.blp:55
 msgid "Select Songs in the Playlist"
 msgstr "Sélectionner des morceaux dans la liste de lecture"
 
-#: src/gtk/playlist-view.ui:63
+#: src/gtk/playlist-view.blp:62
 msgid "Search songs"
 msgstr "Rechercher des chansons"
 
-#: src/gtk/playlist-view.ui:66
+#: src/gtk/playlist-view.blp:66
 msgctxt "a11y"
 msgid "Search"
 msgstr "Rechercher"
 
-#: src/gtk/playlist-view.ui:67
+#: src/gtk/playlist-view.blp:67
 msgctxt "a11y"
 msgid "Type to search songs"
 msgstr "Saisissez pour rechercher des chansons"
 
-#: src/gtk/playlist-view.ui:113
+#: src/gtk/playlist-view.blp:110
 msgid "Select All Songs"
 msgstr "Retirer tous les morceaux"
 
-#: src/gtk/playlist-view.ui:126
+#: src/gtk/playlist-view.blp:123
 msgid "Remove Selected Songs"
 msgstr "Retirer les morceaux sélectionnés"
 
-#: src/gtk/queue-row.ui:27
+#: src/gtk/queue-row.blp:27
 msgctxt "a11y"
 msgid "No cover available"
 msgstr "Aucune couverture disponible"
 
-#: src/gtk/queue-row.ui:84
+#: src/gtk/queue-row.blp:81
 msgctxt "a11y"
 msgid "Currently playing"
 msgstr "En cours de lecture"
 
-#: src/gtk/window.ui:13
+#: src/gtk/shortcuts-dialog.blp:10
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Général"
+
+#: src/gtk/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "Toggle primary menu"
+msgstr "Basculer le menu principal"
+
+#: src/gtk/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Copy song details to the clipboard"
+msgstr "Copier les informations du morceau dans le presse-papiers"
+
+#: src/gtk/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "Show shortcuts"
+msgstr "Afficher les raccourcis clavier"
+
+#: src/gtk/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Quitter"
+
+#: src/gtk/shortcuts-dialog.blp:34
+msgctxt "shortcut window"
+msgid "Playlist"
+msgstr "Liste de lecture"
+
+#: src/gtk/shortcuts-dialog.blp:37
+msgctxt "shortcut window"
+msgid "Add a song to the playlist"
+msgstr "Ajouter un morceau à la liste de lecture"
+
+#: src/gtk/shortcuts-dialog.blp:42
+msgctxt "shortcut window"
+msgid "Add a folder to the playlist"
+msgstr "Ajouter un dossier à la liste de lecture"
+
+#: src/gtk/shortcuts-dialog.blp:47
+msgctxt "shortcut window"
+msgid "Clear the playlist"
+msgstr "Effacer la liste de lecture"
+
+#: src/gtk/shortcuts-dialog.blp:52
+msgctxt "shortcut window"
+msgid "Toggle the playlist pane"
+msgstr "Basculer le panneau de la liste de lecture"
+
+#: src/gtk/shortcuts-dialog.blp:57
+msgctxt "shortcut window"
+msgid "Toggle shuffling songs"
+msgstr "Basculer le mélange de morceaux"
+
+#: src/gtk/shortcuts-dialog.blp:63
+msgctxt "shortcut window"
+msgid "Playback"
+msgstr "Lecture"
+
+#: src/gtk/shortcuts-dialog.blp:66
+msgctxt "shortcut window"
+msgid "Toggle play/pause"
+msgstr "Basculer la lecture / pause"
+
+#: src/gtk/shortcuts-dialog.blp:71
+msgctxt "shortcut window"
+msgid "Previous song"
+msgstr "Morceau précédent"
+
+#: src/gtk/shortcuts-dialog.blp:76
+msgctxt "shortcut window"
+msgid "Next song"
+msgstr "Morceau suivant"
+
+#: src/gtk/shortcuts-dialog.blp:81
+msgctxt "shortcut window"
+msgid "Seek backwards in the current song"
+msgstr "Reculer dans le morceau actuel"
+
+#: src/gtk/shortcuts-dialog.blp:86
+msgctxt "shortcut window"
+msgid "Seek forward in the current song"
+msgstr "Avancer dans le morceau actuel"
+
+#: src/gtk/window.blp:15
 msgid "Drop a song to add it to the playlist"
 msgstr "Glissez et déposez un morceau pour l’ajouter à la liste de lecture"
 
-#: src/gtk/window.ui:43
+#: src/gtk/window.blp:39
 msgid ""
 "Select a file or a folder, or drag files from your file manager to the "
 "application window to add songs to the playlist"
@@ -360,24 +348,24 @@ msgstr ""
 "depuis votre gestionnaire de fichiers vers la fenêtre de l’application pour "
 "les ajouter à la liste de lecture"
 
-#: src/gtk/window.ui:52
+#: src/gtk/window.blp:48
 msgid "Restore Playlist"
 msgstr "Restaurer la liste de lecture"
 
-#: src/gtk/window.ui:62
+#: src/gtk/window.blp:58
 msgid "Add Folder"
 msgstr "Ajouter un dossier"
 
-#: src/gtk/window.ui:71
+#: src/gtk/window.blp:67
 msgid "Add Song"
 msgstr "Ajouter un morceau"
 
-#: src/gtk/window.ui:148
+#: src/gtk/window.blp:128
 msgctxt "a11y"
 msgid "Elapsed time"
 msgstr "Temps écoulé"
 
-#: src/gtk/window.ui:160
+#: src/gtk/window.blp:142
 msgctxt "a11y"
 msgid "Remaining time"
 msgstr "Temps restant"
@@ -394,78 +382,94 @@ msgstr ""
 msgid "Amberol needs to run in the background to play music"
 msgstr "Amberol doit être executé en tâche de fond pour lire de la musique"
 
+#: src/audio/inhibit_controller.rs:40
+msgid "Playback in progress"
+msgstr "Écoute en cours"
+
+#: src/audio/song.rs:317
+msgid "Unknown artist"
+msgstr "Artiste inconnu(e)"
+
+#: src/audio/song.rs:324
+msgid "Unknown title"
+msgstr "Titre inconnu"
+
+#: src/audio/song.rs:331
+msgid "Unknown album"
+msgstr "Album inconnu"
+
 #: src/cover_picture.rs:75
 msgid "Cover image"
 msgstr "Image de couverture"
 
-#: src/playback_control.rs:118
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "Répéter tous les morceaux"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
 msgstr "Répéter le morceau actuel"
 
-#: src/window.rs:145
+#: src/window.rs:149
 msgid "Audio files"
 msgstr "Fichiers audios"
 
-#: src/window.rs:155
+#: src/window.rs:159
 msgid "_Add Song"
 msgstr "_Ajouter un morceau"
 
-#: src/window.rs:159
+#: src/window.rs:163
 msgid "Open File"
 msgstr "Ouvrir un fichier"
 
-#: src/window.rs:164 src/window.rs:186 src/window.rs:1474
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1483
 msgid "Unable to access files"
 msgstr "Impossible d’accéder aux fichiers"
 
-#: src/window.rs:178
+#: src/window.rs:182
 msgid "_Add Folder"
 msgstr "_Ajouter un dossier"
 
-#: src/window.rs:181
+#: src/window.rs:185
 msgid "Open Folder"
 msgstr "Ouvrir un dossier"
 
-#: src/window.rs:500
+#: src/window.rs:509
 msgid "No available song found"
 msgstr "Aucun morceau disponible trouvé"
 
-#: src/window.rs:561
+#: src/window.rs:570
 msgid "No songs found"
 msgstr "Aucun morceau trouvé"
 
-#: src/window.rs:594
+#: src/window.rs:603
 msgid "Added a new song"
 msgstr "Nouveau morceau ajouté"
 
-#: src/window.rs:595
+#: src/window.rs:604
 msgid "Play"
 msgstr "Lire"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:604
+#: src/window.rs:613
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "Un morceau ajouté"
 msgstr[1] "{} morceaux ajoutés"
 
-#: src/window.rs:1234
+#: src/window.rs:1243
 msgid "Unable to access dropped files"
 msgstr "Impossible d’accéder aux fichiers déposés"
 
-#: src/window.rs:1328
+#: src/window.rs:1337
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} minute"
 msgstr[1] "{} minutes"
 
-#: src/window.rs:1339
+#: src/window.rs:1348
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "{hours} heure {minutes} restante"
@@ -474,19 +478,19 @@ msgstr[1] "{hours} heures {minutes} restantes"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1349
+#: src/window.rs:1358
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "{} minute restante"
 msgstr[1] "{} minutes restantes"
 
-#: src/window.rs:1453
+#: src/window.rs:1462
 msgid "No song selected"
 msgstr "Aucun morceau sélectionné"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1458
+#: src/window.rs:1467
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "{} morceau sélectionné"
@@ -495,6 +499,10 @@ msgstr[1] "{} morceaux sélectionnés"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1514
+#: src/window.rs:1523
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Lecture de « {title} » par « {artist} »"
+
+#: src/window.rs:1560
+msgid "Unable to open folder"
+msgstr "Impossible d’ouvrir le dossier"
