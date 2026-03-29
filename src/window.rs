@@ -493,6 +493,9 @@ impl Window {
         let imp = self.imp();
 
         if search != imp.playlist_search.replace(search) {
+            if search {
+                self.set_playlist_visible(true);
+            }
             imp.playlist_view.set_search(search);
             self.notify("playlist-search");
         }
