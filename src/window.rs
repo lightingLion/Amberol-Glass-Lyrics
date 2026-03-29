@@ -517,6 +517,7 @@ impl Window {
         self.action_set_enabled("queue.add-folder", false);
         self.action_set_enabled("queue.clear", false);
 
+        self.set_playlist_visible(true);
         self.imp().playlist_view.begin_loading();
 
         // Begin the trace
