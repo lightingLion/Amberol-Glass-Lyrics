@@ -8,7 +8,19 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Update dependencies [!171, !184, !187]
+- Switch to Blueprint for UI definition files
+- Use AdwShortcutsDialog instead of GtkShortcutsWindow
+
 ### Fixed
+
+- Allow opening the containing folder of the current song [#156]
+- Handle errors when parsing a cached waveform [#416]
+- Do not crash on folder enumeration [#417]
+- Show playlist when queuing songs [#232]
+- Show playlist when triggering a search [#424]
+- Add Ctrl+F to the keyboard shortcuts list [#423]
+- Fix wording of the repeat button tooltip [#326]
 
 ### Removed
 

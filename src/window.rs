@@ -493,6 +493,9 @@ impl Window {
         let imp = self.imp();
 
         if search != imp.playlist_search.replace(search) {
+            if search {
+                self.set_playlist_visible(true);
+            }
             imp.playlist_view.set_search(search);
             self.notify("playlist-search");
         }
@@ -517,6 +520,7 @@ impl Window {
         self.action_set_enabled("queue.add-folder", false);
         self.action_set_enabled("queue.clear", false);
 
+        self.set_playlist_visible(true);
         self.imp().playlist_view.begin_loading();
 
         // Begin the trace
