@@ -3,21 +3,23 @@
 # This file is distributed under the same license as the amberol package.
 # Piotr Drąg <piotrdrag@gmail.com>, 2022-2025.
 # Aviary.pl <community-poland@mozilla.org>, 2022-2025.
+# Victoria Niedzielska <victorian@gnome.org>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: amberol\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-08-25 14:59+0000\n"
-"PO-Revision-Date: 2025-08-27 14:28+0200\n"
-"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <community-poland@mozilla.org>\n"
+"POT-Creation-Date: 2026-03-29 14:16+0000\n"
+"PO-Revision-Date: 2026-03-30 11:27+0200\n"
+"Last-Translator: Victoria Niedzielska <victorian@gnome.org>\n"
+"Language-Team: Polish <https://l10n.gnome.org/teams/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Gtranslator 50.0\n"
 
 #: data/io.bassi.Amberol.desktop.in.in:2
 #: data/io.bassi.Amberol.metainfo.xml.in.in:6
@@ -71,7 +73,7 @@ msgstr "mieszanie i powtarzanie"
 
 #: data/io.bassi.Amberol.metainfo.xml.in.in:20
 msgid "MPRIS integration"
-msgstr "integracja ze standardem MPRIS"
+msgstr "integracja z MPRIS"
 
 #: data/io.bassi.Amberol.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
@@ -106,23 +108,23 @@ msgstr "Przejdź do przodu"
 
 #: src/gtk/playback-control.blp:79
 msgid "Toggle Playlist"
-msgstr "Przełącza listę odtwarzania"
+msgstr "Przełącza playlistę"
 
 #: src/gtk/playback-control.blp:86
 msgctxt "a11y"
 msgid "Toggle playlist"
-msgstr "Przełącz listę odtwarzania"
+msgstr "Przełącz playlistę"
 
 #: src/gtk/playback-control.blp:94
 msgid "Shuffle the Playlist"
-msgstr "Miesza listę odtwarzania"
+msgstr "Miesza playlistę"
 
 #: src/gtk/playback-control.blp:97
 msgctxt "a11y"
 msgid "Shuffle"
 msgstr "Wymieszaj"
 
-#: src/gtk/playback-control.blp:116 src/playback_control.rs:114
+#: src/gtk/playback-control.blp:116
 msgid "Enable Repeat"
 msgstr "Włącza powtarzanie"
 
@@ -201,19 +203,19 @@ msgstr "Za_kończ"
 
 #: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
-msgstr "Wyszukuje utwory na liście odtwarzania"
+msgstr "Wyszukuje utwory na playliście"
 
 #: src/gtk/playlist-view.blp:25
 msgid "Playlist"
-msgstr "Lista odtwarzania"
+msgstr "Playlista"
 
 #: src/gtk/playlist-view.blp:47
 msgid "Close the Playlist"
-msgstr "Zamyka listę odtwarzania"
+msgstr "Zamyka playlistę"
 
 #: src/gtk/playlist-view.blp:55
 msgid "Select Songs in the Playlist"
-msgstr "Zaznacza utwory na liście odtwarzania"
+msgstr "Zaznacza utwory na playliście"
 
 #: src/gtk/playlist-view.blp:62
 msgid "Search songs"
@@ -275,66 +277,71 @@ msgstr "Zakończenie działania"
 #: src/gtk/shortcuts-dialog.blp:34
 msgctxt "shortcut window"
 msgid "Playlist"
-msgstr "Lista odtwarzania"
+msgstr "Playlista"
 
 #: src/gtk/shortcuts-dialog.blp:37
 msgctxt "shortcut window"
 msgid "Add a song to the playlist"
-msgstr "Dodanie utworu do listy odtwarzania"
+msgstr "Dodanie utworu do playlisty"
 
 #: src/gtk/shortcuts-dialog.blp:42
 msgctxt "shortcut window"
 msgid "Add a folder to the playlist"
-msgstr "Dodanie katalogu do listy odtwarzania"
+msgstr "Dodanie katalogu do playlisty"
 
 #: src/gtk/shortcuts-dialog.blp:47
 msgctxt "shortcut window"
 msgid "Clear the playlist"
-msgstr "Wyczyszczenie listy odtwarzania"
+msgstr "Wyczyszczenie playlisty"
 
 #: src/gtk/shortcuts-dialog.blp:52
 msgctxt "shortcut window"
 msgid "Toggle the playlist pane"
-msgstr "Przełączenie panelu listy odtwarzania"
+msgstr "Przełączenie panelu playlisty"
 
 #: src/gtk/shortcuts-dialog.blp:57
+msgctxt "shortcut window"
+msgid "Search the playlist"
+msgstr "Przeszukanie playlisty"
+
+#: src/gtk/shortcuts-dialog.blp:62
 msgctxt "shortcut window"
 msgid "Toggle shuffling songs"
 msgstr "Przełączenie mieszania utworów"
 
-#: src/gtk/shortcuts-dialog.blp:63
+#: src/gtk/shortcuts-dialog.blp:68
 msgctxt "shortcut window"
 msgid "Playback"
 msgstr "Odtwarzanie"
 
-#: src/gtk/shortcuts-dialog.blp:66
+#: src/gtk/shortcuts-dialog.blp:71
 msgctxt "shortcut window"
 msgid "Toggle play/pause"
 msgstr "Przełączenie odtwarzania/wstrzymania"
 
-#: src/gtk/shortcuts-dialog.blp:71
+#: src/gtk/shortcuts-dialog.blp:76
 msgctxt "shortcut window"
 msgid "Previous song"
 msgstr "Poprzedni utwór"
 
-#: src/gtk/shortcuts-dialog.blp:76
+#: src/gtk/shortcuts-dialog.blp:81
 msgctxt "shortcut window"
 msgid "Next song"
 msgstr "Następny utwór"
 
-#: src/gtk/shortcuts-dialog.blp:81
+#: src/gtk/shortcuts-dialog.blp:86
 msgctxt "shortcut window"
 msgid "Seek backwards in the current song"
 msgstr "Przewinięcie do tyłu w obecnym utworze"
 
-#: src/gtk/shortcuts-dialog.blp:86
+#: src/gtk/shortcuts-dialog.blp:91
 msgctxt "shortcut window"
 msgid "Seek forward in the current song"
 msgstr "Przewinięcie do przodu w obecnym utworze"
 
 #: src/gtk/window.blp:15
 msgid "Drop a song to add it to the playlist"
-msgstr "Przeciągnięcie utworu doda go do listy odtwarzania"
+msgstr "Przeciągnięcie utworu doda go do playlisty"
 
 #: src/gtk/window.blp:39
 msgid ""
@@ -342,11 +349,11 @@ msgid ""
 "application window to add songs to the playlist"
 msgstr ""
 "Wybranie pliku lub katalogu albo przeciągnięcie plików z menedżera plików do "
-"okna programu doda utwory do listy odtwarzania"
+"okna programu doda utwory do playlisty"
 
 #: src/gtk/window.blp:48
 msgid "Restore Playlist"
-msgstr "Przywróć listę odtwarzania"
+msgstr "Przywróć playlistę"
 
 #: src/gtk/window.blp:58
 msgid "Add Folder"
@@ -371,7 +378,8 @@ msgstr "Pozostały czas"
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2022-2025\n"
-"Aviary.pl <community-poland@mozilla.org>, 2022-2025"
+"Aviary.pl <community-poland@mozilla.org>, 2022-2025\n"
+"Victoria Niedzielska <victorian@gnome.org>, 2026"
 
 #: src/application.rs:255
 msgid "Amberol needs to run in the background to play music"
@@ -381,15 +389,15 @@ msgstr "Amberol musi działać w tle, aby odtwarzać muzykę"
 msgid "Playback in progress"
 msgstr "Trwa odtwarzanie"
 
-#: src/audio/song.rs:317
+#: src/audio/song.rs:339
 msgid "Unknown artist"
-msgstr "Nieznany wykonawca"
+msgstr "Nieznana osoba wykonująca"
 
-#: src/audio/song.rs:324
+#: src/audio/song.rs:346
 msgid "Unknown title"
 msgstr "Nieznany tytuł"
 
-#: src/audio/song.rs:331
+#: src/audio/song.rs:353
 msgid "Unknown album"
 msgstr "Nieznany album"
 
@@ -397,11 +405,15 @@ msgstr "Nieznany album"
 msgid "Cover image"
 msgstr "Okładka"
 
-#: src/playback_control.rs:118
+#: src/playback_control.rs:115
+msgid "Do Not Repeat"
+msgstr "Bez powtarzania"
+
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "Powtarza wszystkie utwory"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
 msgstr "Powtarza obecny utwór"
 
@@ -417,7 +429,7 @@ msgstr "_Dodaj utwór"
 msgid "Open File"
 msgstr "Otwarcie pliku"
 
-#: src/window.rs:168 src/window.rs:190 src/window.rs:1482
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1487
 msgid "Unable to access files"
 msgstr "Nie można otworzyć plików"
 
@@ -429,44 +441,47 @@ msgstr "_Dodaj katalog"
 msgid "Open Folder"
 msgstr "Otwarcie katalogu"
 
-#: src/window.rs:508
+#: src/window.rs:512
 msgid "No available song found"
 msgstr "Nie odnaleziono dostępnego utworu"
 
-#: src/window.rs:569
+#: src/window.rs:574
 msgid "No songs found"
 msgstr "Nie odnaleziono żadnych utworów"
 
-#: src/window.rs:602
+#: src/window.rs:607
 msgid "Added a new song"
 msgstr "Dodano nowy utwór"
 
-#: src/window.rs:603
+#: src/window.rs:608
 msgid "Play"
 msgstr "Odtwórz"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:612
+#: src/window.rs:617
+#, rust-format
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "Dodano jeden utwór"
 msgstr[1] "Dodano {} utwory"
 msgstr[2] "Dodano {} utworów"
 
-#: src/window.rs:1242
+#: src/window.rs:1247
 msgid "Unable to access dropped files"
 msgstr "Nie można otworzyć przeciągniętych plików"
 
-#: src/window.rs:1336
+#: src/window.rs:1341
+#, rust-format
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} minuta"
 msgstr[1] "{} minuty"
 msgstr[2] "{} minut"
 
-#: src/window.rs:1347
+#: src/window.rs:1352
+#, rust-format
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "Pozostała {hours} godzina i {minutes}"
@@ -476,20 +491,22 @@ msgstr[2] "Pozostało {hours} godzin i {minutes}"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1357
+#: src/window.rs:1362
+#, rust-format
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "Pozostała {} minuta"
 msgstr[1] "Pozostały {} minuty"
 msgstr[2] "Pozostało {} minut"
 
-#: src/window.rs:1461
+#: src/window.rs:1466
 msgid "No song selected"
 msgstr "Nie zaznaczono żadnego utworu"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1466
+#: src/window.rs:1471
+#, rust-format
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "Zaznaczono {} utwór"
@@ -499,10 +516,11 @@ msgstr[2] "Zaznaczono {} utworów"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1522
+#: src/window.rs:1527
+#, rust-format
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Odtwarzanie utworu „{title}” — {artist}"
 
-#: src/window.rs:1559
+#: src/window.rs:1564
 msgid "Unable to open folder"
 msgstr "Nie można otworzyć katalogu"
