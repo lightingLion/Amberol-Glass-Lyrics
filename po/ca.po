@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-08-15 11:36+0000\n"
-"PO-Revision-Date: 2025-08-16 17:16+0200\n"
+"POT-Creation-Date: 2026-03-29 14:16+0000\n"
+"PO-Revision-Date: 2026-03-30 13:22+0200\n"
 "Last-Translator: maite guix <maite.guix@me.com>\n"
 "Language-Team: Catalan <gnome@llistes.softcatala.org>\n"
 "Language: ca\n"
@@ -76,282 +76,271 @@ msgstr "Integració MPRIS"
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
-#: src/audio/inhibit_controller.rs:40
-msgid "Playback in progress"
-msgstr "Reproducció en curs"
-
-#: src/audio/song.rs:317
-msgid "Unknown artist"
-msgstr "Artista desconegut"
-
-#: src/audio/song.rs:324
-msgid "Unknown title"
-msgstr "Títol desconegut"
-
-#: src/audio/song.rs:331
-msgid "Unknown album"
-msgstr "Àlbum desconegut"
-
-#: src/gtk/help-overlay.ui:11
-msgctxt "shortcut window"
-msgid "General"
-msgstr "General"
-
-#: src/gtk/help-overlay.ui:14
-msgctxt "shortcut window"
-msgid "Toggle primary menu"
-msgstr "Commuta el menú principal"
-
-#: src/gtk/help-overlay.ui:20
-msgctxt "shortcut window"
-msgid "Copy song details to the clipboard"
-msgstr "Copia els detalls de la cançó al porta-retalls"
-
-#: src/gtk/help-overlay.ui:26
-msgctxt "shortcut window"
-msgid "Show shortcuts"
-msgstr "Mostra les dreceres"
-
-#: src/gtk/help-overlay.ui:32
-msgctxt "shortcut window"
-msgid "Quit"
-msgstr "Surt"
-
-#: src/gtk/help-overlay.ui:40
-msgctxt "shortcut window"
-msgid "Playlist"
-msgstr "Llista de reproducció"
-
-#: src/gtk/help-overlay.ui:43
-msgctxt "shortcut window"
-msgid "Add a song to the playlist"
-msgstr "Afegeix una cançó a la llista de reproducció"
-
-#: src/gtk/help-overlay.ui:49
-msgctxt "shortcut window"
-msgid "Add a folder to the playlist"
-msgstr "Afegeix una carpeta a la llista de reproducció"
-
-#: src/gtk/help-overlay.ui:55
-msgctxt "shortcut window"
-msgid "Clear the playlist"
-msgstr "Neteja la llista de reproducció"
-
-#: src/gtk/help-overlay.ui:61
-msgctxt "shortcut window"
-msgid "Toggle the playlist pane"
-msgstr "Commuta la subfinestra de llista de reproducció"
-
-#: src/gtk/help-overlay.ui:67
-msgctxt "shortcut window"
-msgid "Toggle shuffling songs"
-msgstr "Commuta a reproducció aleatòria de cançons"
-
-#: src/gtk/help-overlay.ui:75
-msgctxt "shortcut window"
-msgid "Playback"
-msgstr "Reproducció"
-
-#: src/gtk/help-overlay.ui:78
-msgctxt "shortcut window"
-msgid "Toggle play/pause"
-msgstr "Commuta reproducció/pausa"
-
-#: src/gtk/help-overlay.ui:84
-msgctxt "shortcut window"
-msgid "Previous song"
-msgstr "Cançó anterior"
-
-#: src/gtk/help-overlay.ui:90
-msgctxt "shortcut window"
-msgid "Next song"
-msgstr "Cançó següent"
-
-#: src/gtk/help-overlay.ui:96
-msgctxt "shortcut window"
-msgid "Seek backwards in the current song"
-msgstr "Busca cap enrere de la cançó actual"
-
-#: src/gtk/help-overlay.ui:102
-msgctxt "shortcut window"
-msgid "Seek forward in the current song"
-msgstr "Buscar cap endavant de la cançó actual"
-
-#: src/gtk/playback-control.ui:21
+#: src/gtk/playback-control.blp:21
 msgid "Play the Previous Song"
 msgstr "Reprodueix la cançó anterior"
 
-#: src/gtk/playback-control.ui:26
+#: src/gtk/playback-control.blp:28
 msgctxt "a11y"
 msgid "Skip backwards"
 msgstr "Salta enrere"
 
-#: src/gtk/playback-control.ui:35
+#: src/gtk/playback-control.blp:36
 msgid "Toggle Play"
 msgstr "Commuta la reproducció"
 
-#: src/gtk/playback-control.ui:41
+#: src/gtk/playback-control.blp:44
 msgctxt "a11y"
 msgid "Toggle play"
 msgstr "Commuta la reproducció"
 
-#: src/gtk/playback-control.ui:50
+#: src/gtk/playback-control.blp:52
 msgid "Play the Next Song"
 msgstr "Reprodueix la cançó següent"
 
-#: src/gtk/playback-control.ui:55
+#: src/gtk/playback-control.blp:59
 msgctxt "a11y"
 msgid "Skip forward"
 msgstr "Salta endavant"
 
-#: src/gtk/playback-control.ui:78
+#: src/gtk/playback-control.blp:79
 msgid "Toggle Playlist"
 msgstr "Commuta la llista de reproducció"
 
-#: src/gtk/playback-control.ui:83
+#: src/gtk/playback-control.blp:86
 msgctxt "a11y"
 msgid "Toggle playlist"
 msgstr "Commuta la llista de reproducció"
 
-#: src/gtk/playback-control.ui:92
+#: src/gtk/playback-control.blp:94
 msgid "Shuffle the Playlist"
 msgstr "Llista de reproducció aleatòria"
 
-#: src/gtk/playback-control.ui:94
+#: src/gtk/playback-control.blp:97
 msgctxt "a11y"
 msgid "Shuffle"
 msgstr "Aleatori"
 
-#: src/gtk/playback-control.ui:113 src/playback_control.rs:114
+#: src/gtk/playback-control.blp:116
 msgid "Enable Repeat"
 msgstr "Habilita la repetició"
 
-#: src/gtk/playback-control.ui:118
+#: src/gtk/playback-control.blp:123
 msgctxt "a11y"
 msgid "Repeat"
 msgstr "Repetició"
 
-#: src/gtk/playback-control.ui:129
+#: src/gtk/playback-control.blp:133
 msgid "Main Menu"
 msgstr "Menú principal"
 
-#: src/gtk/playback-control.ui:135
+#: src/gtk/playback-control.blp:141
 msgctxt "a11y"
 msgid "Primary menu"
 msgstr "Menú primari"
 
-#: src/gtk/playback-control.ui:151
+#: src/gtk/playback-control.blp:152
 msgid "Copy"
 msgstr "Copia"
 
-#: src/gtk/playback-control.ui:155
+#: src/gtk/playback-control.blp:157
 msgid "Open Directory"
 msgstr "Obre el directori"
 
-#: src/gtk/playback-control.ui:161
+#: src/gtk/playback-control.blp:164
 msgid "Add _Song"
 msgstr "Afegeix _cançó"
 
-#: src/gtk/playback-control.ui:165
+#: src/gtk/playback-control.blp:169
 msgid "Add _Folder"
 msgstr "Afegeix _carpeta"
 
-#: src/gtk/playback-control.ui:169
+#: src/gtk/playback-control.blp:174
 msgid "Clear"
 msgstr "Neteja"
 
-#: src/gtk/playback-control.ui:175
+#: src/gtk/playback-control.blp:181
 msgid "_Match Cover Art"
 msgstr "_Coincidència de caràtula"
 
-#: src/gtk/playback-control.ui:179
+#: src/gtk/playback-control.blp:186
 msgid "_Background Playback"
 msgstr "Reproducció de _fons"
 
-#: src/gtk/playback-control.ui:185
+#: src/gtk/playback-control.blp:193
 msgid "_ReplayGain"
 msgstr "_ReplayGain"
 
-#: src/gtk/playback-control.ui:187
+#: src/gtk/playback-control.blp:196
 msgctxt "replaygain-menu"
 msgid "_Album"
 msgstr "_Àlbum"
 
-#: src/gtk/playback-control.ui:192
+#: src/gtk/playback-control.blp:202
 msgctxt "replaygain-menu"
 msgid "_Song"
 msgstr "_Cançó"
 
-#: src/gtk/playback-control.ui:197
+#: src/gtk/playback-control.blp:208
 msgctxt "replaygain-menu"
 msgid "_Disabled"
 msgstr "_Inhabilitat"
 
-#: src/gtk/playback-control.ui:205
+#: src/gtk/playback-control.blp:217
 msgid "_Keyboard Shortcuts"
 msgstr "_Dreceres de teclat"
 
-#: src/gtk/playback-control.ui:209
+#: src/gtk/playback-control.blp:222
 msgid "_About Amberol"
 msgstr "_Quant a l'Amberol"
 
-#: src/gtk/playback-control.ui:213
+#: src/gtk/playback-control.blp:227
 msgid "_Quit"
 msgstr "_Surt"
 
-#: src/gtk/playlist-view.ui:14
+#: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
 msgstr "Cerca cançons de la llista de reproducció"
 
-#: src/gtk/playlist-view.ui:24
+#: src/gtk/playlist-view.blp:25
 msgid "Playlist"
 msgstr "Llista de reproducció"
 
-#: src/gtk/playlist-view.ui:46
+#: src/gtk/playlist-view.blp:47
 msgid "Close the Playlist"
 msgstr "Tanca la llista de reproducció"
 
-#: src/gtk/playlist-view.ui:54
+#: src/gtk/playlist-view.blp:55
 msgid "Select Songs in the Playlist"
 msgstr "Selecciona cançons a la llista de reproducció"
 
-#: src/gtk/playlist-view.ui:63
+#: src/gtk/playlist-view.blp:62
 msgid "Search songs"
 msgstr "Cerqueu cançons"
 
-#: src/gtk/playlist-view.ui:66
+#: src/gtk/playlist-view.blp:66
 msgctxt "a11y"
 msgid "Search"
 msgstr "Cerca"
 
-#: src/gtk/playlist-view.ui:67
+#: src/gtk/playlist-view.blp:67
 msgctxt "a11y"
 msgid "Type to search songs"
 msgstr "Escriviu per a cercar cançons"
 
-#: src/gtk/playlist-view.ui:113
+#: src/gtk/playlist-view.blp:110
 msgid "Select All Songs"
 msgstr "Selecciona totes les cançons"
 
-#: src/gtk/playlist-view.ui:126
+#: src/gtk/playlist-view.blp:123
 msgid "Remove Selected Songs"
 msgstr "Suprimeix les cançons seleccionades"
 
-#: src/gtk/queue-row.ui:27
+#: src/gtk/queue-row.blp:27
 msgctxt "a11y"
 msgid "No cover available"
 msgstr "No hi ha cap caràtula disponible"
 
-#: src/gtk/queue-row.ui:84
+#: src/gtk/queue-row.blp:81
 msgctxt "a11y"
 msgid "Currently playing"
 msgstr "S'està reproduint"
 
-#: src/gtk/window.ui:13
+#: src/gtk/shortcuts-dialog.blp:10
+msgctxt "shortcut window"
+msgid "General"
+msgstr "General"
+
+#: src/gtk/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "Toggle primary menu"
+msgstr "Commuta el menú principal"
+
+#: src/gtk/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Copy song details to the clipboard"
+msgstr "Copia els detalls de la cançó al porta-retalls"
+
+#: src/gtk/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "Show shortcuts"
+msgstr "Mostra les dreceres"
+
+#: src/gtk/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Surt"
+
+#: src/gtk/shortcuts-dialog.blp:34
+msgctxt "shortcut window"
+msgid "Playlist"
+msgstr "Llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:37
+msgctxt "shortcut window"
+msgid "Add a song to the playlist"
+msgstr "Afegeix una cançó a la llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:42
+msgctxt "shortcut window"
+msgid "Add a folder to the playlist"
+msgstr "Afegeix una carpeta a la llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:47
+msgctxt "shortcut window"
+msgid "Clear the playlist"
+msgstr "Neteja la llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:52
+msgctxt "shortcut window"
+msgid "Toggle the playlist pane"
+msgstr "Commuta la subfinestra de llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:57
+msgctxt "shortcut window"
+msgid "Search the playlist"
+msgstr "Cerca la llista de reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:62
+msgctxt "shortcut window"
+msgid "Toggle shuffling songs"
+msgstr "Commuta a reproducció aleatòria de cançons"
+
+#: src/gtk/shortcuts-dialog.blp:68
+msgctxt "shortcut window"
+msgid "Playback"
+msgstr "Reproducció"
+
+#: src/gtk/shortcuts-dialog.blp:71
+msgctxt "shortcut window"
+msgid "Toggle play/pause"
+msgstr "Commuta reproducció/pausa"
+
+#: src/gtk/shortcuts-dialog.blp:76
+msgctxt "shortcut window"
+msgid "Previous song"
+msgstr "Cançó anterior"
+
+#: src/gtk/shortcuts-dialog.blp:81
+msgctxt "shortcut window"
+msgid "Next song"
+msgstr "Cançó següent"
+
+#: src/gtk/shortcuts-dialog.blp:86
+msgctxt "shortcut window"
+msgid "Seek backwards in the current song"
+msgstr "Busca cap enrere de la cançó actual"
+
+#: src/gtk/shortcuts-dialog.blp:91
+msgctxt "shortcut window"
+msgid "Seek forward in the current song"
+msgstr "Buscar cap endavant de la cançó actual"
+
+#: src/gtk/window.blp:15
 msgid "Drop a song to add it to the playlist"
 msgstr "Deixa anar una cançó per a afegir-la a la llista"
 
-#: src/gtk/window.ui:43
+#: src/gtk/window.blp:39
 msgid ""
 "Select a file or a folder, or drag files from your file manager to the "
 "application window to add songs to the playlist"
@@ -360,24 +349,24 @@ msgstr ""
 "fitxers a la finestra de l'aplicació per a afegir cançons a la llista de "
 "reproducció"
 
-#: src/gtk/window.ui:52
+#: src/gtk/window.blp:48
 msgid "Restore Playlist"
 msgstr "Restaura la llista de reproducció"
 
-#: src/gtk/window.ui:62
+#: src/gtk/window.blp:58
 msgid "Add Folder"
 msgstr "Afegeix una carpeta"
 
-#: src/gtk/window.ui:71
+#: src/gtk/window.blp:67
 msgid "Add Song"
 msgstr "Afegeix una cançó"
 
-#: src/gtk/window.ui:148
+#: src/gtk/window.blp:128
 msgctxt "a11y"
 msgid "Elapsed time"
 msgstr "Temps transcorregut"
 
-#: src/gtk/window.ui:160
+#: src/gtk/window.blp:142
 msgctxt "a11y"
 msgid "Remaining time"
 msgstr "Temps restant"
@@ -394,15 +383,35 @@ msgstr ""
 msgid "Amberol needs to run in the background to play music"
 msgstr "L'Amberol necessita córrer en segon pla per a reproduir música"
 
+#: src/audio/inhibit_controller.rs:40
+msgid "Playback in progress"
+msgstr "Reproducció en curs"
+
+#: src/audio/song.rs:339
+msgid "Unknown artist"
+msgstr "Artista desconegut"
+
+#: src/audio/song.rs:346
+msgid "Unknown title"
+msgstr "Títol desconegut"
+
+#: src/audio/song.rs:353
+msgid "Unknown album"
+msgstr "Àlbum desconegut"
+
 #: src/cover_picture.rs:75
 msgid "Cover image"
 msgstr "Imatge de caràtula"
 
-#: src/playback_control.rs:118
+#: src/playback_control.rs:115
+msgid "Do Not Repeat"
+msgstr "No repeteixis"
+
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "Repeteix totes les cançons"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
 msgstr "Repeteix la cançó actual"
 
@@ -418,7 +427,7 @@ msgstr "_Afegeix cançó"
 msgid "Open File"
 msgstr "Obre el fitxer"
 
-#: src/window.rs:168 src/window.rs:190 src/window.rs:1482
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1487
 msgid "Unable to access files"
 msgstr "No es pot accedir als fitxers"
 
@@ -430,42 +439,42 @@ msgstr "_Afegeix una carpeta"
 msgid "Open Folder"
 msgstr "Obre la carpeta"
 
-#: src/window.rs:508
+#: src/window.rs:512
 msgid "No available song found"
 msgstr "No s'ha trobat cap cançó disponible"
 
-#: src/window.rs:569
+#: src/window.rs:574
 msgid "No songs found"
 msgstr "No s'ha trobat cap cançó"
 
-#: src/window.rs:602
+#: src/window.rs:607
 msgid "Added a new song"
 msgstr "S'ha afegit una cançó nova"
 
-#: src/window.rs:603
+#: src/window.rs:608
 msgid "Play"
 msgstr "Reproduir"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:612
+#: src/window.rs:617
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "S'ha afegit una cançó"
 msgstr[1] "S'han afegit {} cançons"
 
-#: src/window.rs:1242
+#: src/window.rs:1247
 msgid "Unable to access dropped files"
 msgstr "No s'ha pogut accedir als fitxers que s'han deixat anar"
 
-#: src/window.rs:1336
+#: src/window.rs:1341
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} minut restant"
 msgstr[1] "{} minuts restants"
 
-#: src/window.rs:1347
+#: src/window.rs:1352
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "{hours} hora i {minutes} min restants"
@@ -474,19 +483,19 @@ msgstr[1] "{hours} hores i {minutes} min restants"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1357
+#: src/window.rs:1362
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "{} minut restant"
 msgstr[1] "{} minuts restants"
 
-#: src/window.rs:1461
+#: src/window.rs:1466
 msgid "No song selected"
 msgstr "No s'ha seleccionat cap cançó"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1466
+#: src/window.rs:1471
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "{} cançó seleccionada"
@@ -495,11 +504,11 @@ msgstr[1] "{} cançons seleccionades"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1522
+#: src/window.rs:1527
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "S'està reproduint «{title}» de «{artist}»"
 
-#: src/window.rs:1559
+#: src/window.rs:1564
 msgid "Unable to open folder"
 msgstr "No es pot obrir la carpeta"
 
