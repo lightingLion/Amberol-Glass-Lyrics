@@ -2,15 +2,15 @@
 # Copyright (C) 2023 amberol's COPYRIGHT HOLDER
 # This file is distributed under the same license as the amberol package.
 # Florentina Mușat <florentina.musat.28@gmail.com>, 2023.
+# Antonio Marin <gnmer.6qxyg@slmail.me>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/issues\n"
-"POT-Creation-Date: 2023-09-12 05:49+0000\n"
-"PO-Revision-Date: 2023-10-10 13:05+0300\n"
-"Last-Translator: Florentina Mușat <florentina [dot] musat [dot] 28 [at] "
-"gmail [dot] com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"POT-Creation-Date: 2026-03-29 14:16+0000\n"
+"PO-Revision-Date: 2026-03-31 23:23+0200\n"
+"Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -18,421 +18,463 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Gtranslator 48.0\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
-#: data/io.bassi.Amberol.appdata.xml.in.in:6
+#: data/io.bassi.Amberol.desktop.in.in:2
+#: data/io.bassi.Amberol.metainfo.xml.in.in:6
 msgid "Amberol"
 msgstr "Amberol"
 
-#: data/io.bassi.Amberol.desktop.in.in:4
+#: data/io.bassi.Amberol.desktop.in.in:3
 msgid "Music Player"
-msgstr "Player muzică"
+msgstr "Ascultă muzică"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:12
+#: data/io.bassi.Amberol.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr "music;player;media;audio;playlist;muzică;listă de redare;"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:7
+#: data/io.bassi.Amberol.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "Redă muzică și nimic altceva"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:9
+#: data/io.bassi.Amberol.metainfo.xml.in.in:9
 msgid ""
 "Amberol is a music player with no delusions of grandeur. If you just want to "
 "play music available on your local system then Amberol is the music player "
 "you are looking for."
 msgstr ""
-"Amberol este un player de muzică fără iluzii de grandoare. Dacă doriți doar "
-"să redați muzica disponibilă pe sistemul local, atunci Amberol este playerul "
-"de muzică pe care îl căutați."
+"Amberol este o aplicație simplă de redat muzică. Dacă se dorește doar "
+"ascultarea muzicii disponibile local, atunci Amberol este aplicația "
+"potrivită."
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:14
+#: data/io.bassi.Amberol.metainfo.xml.in.in:14
 msgid "Current features:"
-msgstr "Caracteristici actuale:"
+msgstr "Caracteristicile actuale:"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:16
+#: data/io.bassi.Amberol.metainfo.xml.in.in:16
 msgid "adaptive UI"
-msgstr "UI adaptiv"
+msgstr "interfață adaptabilă"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:17
+#: data/io.bassi.Amberol.metainfo.xml.in.in:17
 msgid "UI recoloring using the album art"
-msgstr "Recolorare UI utilizând arta albumului"
+msgstr "Recolorează interfața utilizând culoarea albumului"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:18
+#: data/io.bassi.Amberol.metainfo.xml.in.in:18
 msgid "drag and drop support to queue songs"
-msgstr "suport pentru tragere și plasare pentru a pune melodiile în coadă"
+msgstr "melodiile pot fi trase și așezate pentru a fi punse în coadă"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:19
+#: data/io.bassi.Amberol.metainfo.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "amestecă și repetă"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:20
+#: data/io.bassi.Amberol.metainfo.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "Integrare MPRIS"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:44
+#: data/io.bassi.Amberol.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
-#: src/audio/inhibit_controller.rs:40
-msgid "Playback in progress"
-msgstr "Redare în progres"
-
-#: src/audio/song.rs:325
-msgid "Unknown artist"
-msgstr "Artist necunoscut"
-
-#: src/audio/song.rs:332
-msgid "Unknown title"
-msgstr "Titlu necunoscut"
-
-#: src/audio/song.rs:339
-msgid "Unknown album"
-msgstr "Album necunoscut"
-
-#: src/gtk/help-overlay.ui:11
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Generale"
-
-#: src/gtk/help-overlay.ui:14
-msgctxt "shortcut window"
-msgid "Toggle primary menu"
-msgstr "Comună meniul principal"
-
-#: src/gtk/help-overlay.ui:20
-msgctxt "shortcut window"
-msgid "Copy song details to the clipboard"
-msgstr "Copiază detaliile melodiei în clipboard"
-
-#: src/gtk/help-overlay.ui:26
-msgctxt "shortcut window"
-msgid "Show shortcuts"
-msgstr "Arată scurtăturile"
-
-#: src/gtk/help-overlay.ui:32
-msgctxt "shortcut window"
-msgid "Quit"
-msgstr "Ieși"
-
-#: src/gtk/help-overlay.ui:40
-msgctxt "shortcut window"
-msgid "Playlist"
-msgstr "Listă de redare"
-
-#: src/gtk/help-overlay.ui:43
-msgctxt "shortcut window"
-msgid "Add a song to the playlist"
-msgstr "Adaugă o melodie la lista de redare"
-
-#: src/gtk/help-overlay.ui:49
-msgctxt "shortcut window"
-msgid "Add a folder to the playlist"
-msgstr "Adaugă un dosar la lista de redare"
-
-#: src/gtk/help-overlay.ui:55
-msgctxt "shortcut window"
-msgid "Clear the playlist"
-msgstr "Curăță lista de redare"
-
-#: src/gtk/help-overlay.ui:61
-msgctxt "shortcut window"
-msgid "Toggle the playlist pane"
-msgstr "Comută panoul listei de redare"
-
-#: src/gtk/help-overlay.ui:67
-msgctxt "shortcut window"
-msgid "Toggle shuffling songs"
-msgstr "Comută amestecarea melodiilor"
-
-#: src/gtk/help-overlay.ui:75
-msgctxt "shortcut window"
-msgid "Playback"
-msgstr "Redare"
-
-#: src/gtk/help-overlay.ui:78
-msgctxt "shortcut window"
-msgid "Toggle play/pause"
-msgstr "Comută redare/pauză"
-
-#: src/gtk/help-overlay.ui:84
-msgctxt "shortcut window"
-msgid "Previous song"
-msgstr "Melodia anterioară"
-
-#: src/gtk/help-overlay.ui:90
-msgctxt "shortcut window"
-msgid "Next song"
-msgstr "Melodia următoare"
-
-#: src/gtk/help-overlay.ui:96
-msgctxt "shortcut window"
-msgid "Seek backwards in the current song"
-msgstr "Caută înapoi în melodia curentă"
-
-#: src/gtk/help-overlay.ui:102
-msgctxt "shortcut window"
-msgid "Seek forward in the current song"
-msgstr "Caută înainte în melodia curentă"
-
-#: src/gtk/playback-control.ui:21
+#: src/gtk/playback-control.blp:21
 msgid "Play the Previous Song"
-msgstr "Redă melodia anterioară"
+msgstr "Redă melodia precedentă"
 
-#: src/gtk/playback-control.ui:26
+#: src/gtk/playback-control.blp:28
 msgctxt "a11y"
 msgid "Skip backwards"
-msgstr "Omite înapoi"
+msgstr "Salt înapoi"
 
-#: src/gtk/playback-control.ui:35
+#: src/gtk/playback-control.blp:36
 msgid "Toggle Play"
-msgstr "Comută redarea"
+msgstr "Redă/Pauză"
 
-#: src/gtk/playback-control.ui:41
+#: src/gtk/playback-control.blp:44
 msgctxt "a11y"
 msgid "Toggle play"
-msgstr "Comută redarea"
+msgstr "Redă/Pauză"
 
-#: src/gtk/playback-control.ui:50
+#: src/gtk/playback-control.blp:52
 msgid "Play the Next Song"
 msgstr "Redă melodia următoare"
 
-#: src/gtk/playback-control.ui:55
+#: src/gtk/playback-control.blp:59
 msgctxt "a11y"
 msgid "Skip forward"
-msgstr "Omite înainte"
+msgstr "Salt înainte"
 
-#: src/gtk/playback-control.ui:78
+#: src/gtk/playback-control.blp:79
 msgid "Toggle Playlist"
-msgstr "Comută de lista de redare"
+msgstr "Arată/Ascunde Lista de redare"
 
-#: src/gtk/playback-control.ui:83
+#: src/gtk/playback-control.blp:86
 msgctxt "a11y"
 msgid "Toggle playlist"
-msgstr "Comută lista de redare"
+msgstr "Arată/Ascunde Lista de redare"
 
-#: src/gtk/playback-control.ui:92
+#: src/gtk/playback-control.blp:94
 msgid "Shuffle the Playlist"
 msgstr "Amestecă lista de redare"
 
-#: src/gtk/playback-control.ui:94
+#: src/gtk/playback-control.blp:97
 msgctxt "a11y"
 msgid "Shuffle"
 msgstr "Amestecă"
 
-#: src/gtk/playback-control.ui:113 src/playback_control.rs:114
+#: src/gtk/playback-control.blp:116
 msgid "Enable Repeat"
 msgstr "Activează repetarea"
 
-#: src/gtk/playback-control.ui:118
+#: src/gtk/playback-control.blp:123
 msgctxt "a11y"
 msgid "Repeat"
 msgstr "Repetă"
 
-#: src/gtk/playback-control.ui:129
+#: src/gtk/playback-control.blp:133
 msgid "Main Menu"
-msgstr "Meniu principal"
+msgstr "Opțiuni"
 
-#: src/gtk/playback-control.ui:135
+#: src/gtk/playback-control.blp:141
 msgctxt "a11y"
 msgid "Primary menu"
-msgstr "Meniu principal"
+msgstr "Opțiuni"
 
-#: src/gtk/playback-control.ui:151
+#: src/gtk/playback-control.blp:152
 msgid "Copy"
 msgstr "Copiază"
 
-#: src/gtk/playback-control.ui:157
-msgid "Add _Song"
-msgstr "Adaugă o mel_odie"
+#: src/gtk/playback-control.blp:157
+msgid "Open Directory"
+msgstr "Deschide dosarul"
 
-#: src/gtk/playback-control.ui:161
+#: src/gtk/playback-control.blp:164
+msgid "Add _Song"
+msgstr "Adaugă o _melodie"
+
+#: src/gtk/playback-control.blp:169
 msgid "Add _Folder"
 msgstr "Adaugă un _dosar"
 
-#: src/gtk/playback-control.ui:165
+#: src/gtk/playback-control.blp:174
 msgid "Clear"
-msgstr "Curăță"
+msgstr "Șterge"
 
-#: src/gtk/playback-control.ui:171
+#: src/gtk/playback-control.blp:181
 msgid "_Match Cover Art"
-msgstr "_Potrivește arta copertei"
+msgstr "_Potrivește cu coperta"
 
-#: src/gtk/playback-control.ui:175
+#: src/gtk/playback-control.blp:186
 msgid "_Background Playback"
-msgstr "Redare pe f_undal"
+msgstr "Redare în asc_uns"
 
-#: src/gtk/playback-control.ui:181
+#: src/gtk/playback-control.blp:193
 msgid "_ReplayGain"
 msgstr "_ReplayGain"
 
-#: src/gtk/playback-control.ui:183
+#: src/gtk/playback-control.blp:196
 msgctxt "replaygain-menu"
 msgid "_Album"
 msgstr "_Album"
 
-#: src/gtk/playback-control.ui:188
+#: src/gtk/playback-control.blp:202
 msgctxt "replaygain-menu"
 msgid "_Song"
-msgstr "Mel_odie"
+msgstr "_Melodie"
 
-#: src/gtk/playback-control.ui:193
+#: src/gtk/playback-control.blp:208
 msgctxt "replaygain-menu"
 msgid "_Disabled"
 msgstr "_Dezactivat"
 
-#: src/gtk/playback-control.ui:201
+#: src/gtk/playback-control.blp:217
 msgid "_Keyboard Shortcuts"
-msgstr "Scurtături de _tastatură"
+msgstr "Scur_tături"
 
-#: src/gtk/playback-control.ui:205
+#: src/gtk/playback-control.blp:222
 msgid "_About Amberol"
 msgstr "_Despre Amberol"
 
-#: src/gtk/playback-control.ui:209
+#: src/gtk/playback-control.blp:227
 msgid "_Quit"
-msgstr "_Ieși"
+msgstr "Înch_ide"
 
-#: src/gtk/playlist-view.ui:18
-msgid "Playlist"
-msgstr "Listă de redare"
-
-#: src/gtk/playlist-view.ui:49
+#: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
 msgstr "Caută melodii în lista de redare"
 
-#: src/gtk/playlist-view.ui:61
-msgid "Select Songs in the Playlist"
-msgstr "Selectează melodii în lista de redare"
+#: src/gtk/playlist-view.blp:25
+msgid "Playlist"
+msgstr "Lista de redare"
 
-#: src/gtk/playlist-view.ui:74
+#: src/gtk/playlist-view.blp:47
 msgid "Close the Playlist"
 msgstr "Închide lista de redare"
 
-#: src/gtk/playlist-view.ui:133
+#: src/gtk/playlist-view.blp:55
+msgid "Select Songs in the Playlist"
+msgstr "Alege melodii din lista de redare"
+
+#: src/gtk/playlist-view.blp:62
+msgid "Search songs"
+msgstr "Caută melodii"
+
+#: src/gtk/playlist-view.blp:66
+msgctxt "a11y"
+msgid "Search"
+msgstr "Caută"
+
+#: src/gtk/playlist-view.blp:67
+msgctxt "a11y"
+msgid "Type to search songs"
+msgstr "Scrie pentru a căuta melodii"
+
+#: src/gtk/playlist-view.blp:110
 msgid "Select All Songs"
-msgstr "Selectează toate melodiile"
+msgstr "Selecționează toate melodiile"
 
-#: src/gtk/playlist-view.ui:146
+#: src/gtk/playlist-view.blp:123
 msgid "Remove Selected Songs"
-msgstr "Elimină melodiile selectate"
+msgstr "Elimină melodiile selecționate"
 
-#: src/gtk/window.ui:13
+#: src/gtk/queue-row.blp:27
+msgctxt "a11y"
+msgid "No cover available"
+msgstr "Nicio copertă disponibilă"
+
+#: src/gtk/queue-row.blp:81
+msgctxt "a11y"
+msgid "Currently playing"
+msgstr "Melodia actuală"
+
+#: src/gtk/shortcuts-dialog.blp:10
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Generale"
+
+#: src/gtk/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "Toggle primary menu"
+msgstr "Arată/Ascunde Opțiunile"
+
+#: src/gtk/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Copy song details to the clipboard"
+msgstr "Copiază detaliile melodiei"
+
+#: src/gtk/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "Show shortcuts"
+msgstr "Arată scurtăturile"
+
+#: src/gtk/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Închide"
+
+#: src/gtk/shortcuts-dialog.blp:34
+msgctxt "shortcut window"
+msgid "Playlist"
+msgstr "Lista de redare"
+
+#: src/gtk/shortcuts-dialog.blp:37
+msgctxt "shortcut window"
+msgid "Add a song to the playlist"
+msgstr "Adaugă o melodie în lista de redare"
+
+#: src/gtk/shortcuts-dialog.blp:42
+msgctxt "shortcut window"
+msgid "Add a folder to the playlist"
+msgstr "Adaugă un dosar în lista de redare"
+
+#: src/gtk/shortcuts-dialog.blp:47
+msgctxt "shortcut window"
+msgid "Clear the playlist"
+msgstr "Șterge lista de redare"
+
+#: src/gtk/shortcuts-dialog.blp:52
+msgctxt "shortcut window"
+msgid "Toggle the playlist pane"
+msgstr "Arată/Ascunde Panoul listei de redare"
+
+#: src/gtk/shortcuts-dialog.blp:57
+msgctxt "shortcut window"
+msgid "Search the playlist"
+msgstr "Caută în lista de redare"
+
+#: src/gtk/shortcuts-dialog.blp:62
+msgctxt "shortcut window"
+msgid "Toggle shuffling songs"
+msgstr "Activează/Dezactivează amestecarea melodiilor"
+
+#: src/gtk/shortcuts-dialog.blp:68
+msgctxt "shortcut window"
+msgid "Playback"
+msgstr "Redare"
+
+#: src/gtk/shortcuts-dialog.blp:71
+msgctxt "shortcut window"
+msgid "Toggle play/pause"
+msgstr "Redare/Pauză"
+
+#: src/gtk/shortcuts-dialog.blp:76
+msgctxt "shortcut window"
+msgid "Previous song"
+msgstr "Melodia precedentă"
+
+#: src/gtk/shortcuts-dialog.blp:81
+msgctxt "shortcut window"
+msgid "Next song"
+msgstr "Melodia următoare"
+
+#: src/gtk/shortcuts-dialog.blp:86
+msgctxt "shortcut window"
+msgid "Seek backwards in the current song"
+msgstr "Derulează înapoi în melodia actuală"
+
+#: src/gtk/shortcuts-dialog.blp:91
+msgctxt "shortcut window"
+msgid "Seek forward in the current song"
+msgstr "Derulează înainte în melodia actuală"
+
+#: src/gtk/window.blp:15
 msgid "Drop a song to add it to the playlist"
-msgstr "Plasează o melodie pentru a o adăuga la lista de redare"
+msgstr "Așează o melodie pentru a o adăuga în lista de redare"
 
-#: src/gtk/window.ui:43
+#: src/gtk/window.blp:39
 msgid ""
 "Select a file or a folder, or drag files from your file manager to the "
 "application window to add songs to the playlist"
 msgstr ""
-"Selectați un fișier sau un dosar sau trageți fișiere de la gestionarul de "
-"fișiere la fereastra aplicației pentru a adăuga melodii la lista de redare"
+"Alege un fișier sau un dosar sau trage fișiere din administratorul de "
+"fișiere în fereastra aplicației pentru a adăuga melodii în lista de redare"
 
-#: src/gtk/window.ui:52
+#: src/gtk/window.blp:48
 msgid "Restore Playlist"
-msgstr "Restaurează lista de redare"
+msgstr "Restabilește lista de redare"
 
-#: src/gtk/window.ui:62
+#: src/gtk/window.blp:58
 msgid "Add Folder"
 msgstr "Adaugă un dosar"
 
-#: src/gtk/window.ui:71
+#: src/gtk/window.blp:67
 msgid "Add Song"
 msgstr "Adaugă o melodie"
 
-#: src/gtk/window.ui:148
+#: src/gtk/window.blp:128
 msgctxt "a11y"
 msgid "Elapsed time"
-msgstr "Timp scurs"
+msgstr "Timpul scurs"
 
-#: src/gtk/window.ui:160
+#: src/gtk/window.blp:142
 msgctxt "a11y"
 msgid "Remaining time"
-msgstr "Timp rămas"
+msgstr "Timpul rămas"
 
 #. Translators: Replace "translator-credits" with your names, one name per line
-#: src/application.rs:229
+#: src/application.rs:243
 msgid "translator-credits"
 msgstr ""
-"Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, 2023"
+"Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>\n"
+"Antonio Marin <gnmer.6qxyg@slmail.me>"
 
-#: src/application.rs:241
+#: src/application.rs:255
 msgid "Amberol needs to run in the background to play music"
-msgstr "Amberol trebuie să ruleze pe fundal pentru a reda muzică"
+msgstr "Amberol trebuie să poată funcționa în ascuns pentru a reda muzică"
 
-#: src/playback_control.rs:118
+#: src/audio/inhibit_controller.rs:40
+msgid "Playback in progress"
+msgstr "Redare în curs"
+
+#: src/audio/song.rs:339
+msgid "Unknown artist"
+msgstr "Artist necunoscut"
+
+#: src/audio/song.rs:346
+msgid "Unknown title"
+msgstr "Titlu necunoscut"
+
+#: src/audio/song.rs:353
+msgid "Unknown album"
+msgstr "Album necunoscut"
+
+#: src/cover_picture.rs:75
+msgid "Cover image"
+msgstr "Coperta"
+
+#: src/playback_control.rs:115
+msgid "Do Not Repeat"
+msgstr "Nu repeta"
+
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "Repetă toate melodiile"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
-msgstr "Repetă melodia curentă"
+msgstr "Repetă melodia actuală"
 
-#: src/window.rs:432
+#: src/window.rs:149
 msgid "Audio files"
 msgstr "Fișiere audio"
 
-#: src/window.rs:437
+#: src/window.rs:159
 msgid "_Add Song"
 msgstr "_Adaugă o melodie"
 
-#: src/window.rs:440
+#: src/window.rs:163
 msgid "Open File"
 msgstr "Deschide un fișier"
 
-#: src/window.rs:445 src/window.rs:465 src/window.rs:1354
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1487
 msgid "Unable to access files"
 msgstr "Nu se pot accesa fișierele"
 
-#: src/window.rs:457
+#: src/window.rs:182
 msgid "_Add Folder"
 msgstr "_Adaugă un dosar"
 
-#: src/window.rs:459
+#: src/window.rs:185
 msgid "Open Folder"
 msgstr "Deschide un dosar"
 
-#: src/window.rs:482
+#: src/window.rs:512
 msgid "No available song found"
-msgstr "Nu s-a găsit nicio melodie disponibilă"
+msgstr "Nicio melodie disponibilă"
 
-#: src/window.rs:537
+#: src/window.rs:574
 msgid "No songs found"
 msgstr "Nu s-au găsit melodii"
 
-#: src/window.rs:567
+#: src/window.rs:607
 msgid "Added a new song"
 msgstr "S-a adăugat o melodie nouă"
 
-#: src/window.rs:568
+#: src/window.rs:608
 msgid "Play"
 msgstr "Redare"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:577
+#: src/window.rs:617
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "S-a adăugat o melodie"
 msgstr[1] "S-au adăugat {} melodii"
 msgstr[2] "S-au adăugat {} de melodii"
 
-#: src/window.rs:1118
+#: src/window.rs:1247
 msgid "Unable to access dropped files"
-msgstr "Nu se pot accesa fișierele plasate"
+msgstr "Nu se pot accesa fișierele așezate"
 
-#: src/window.rs:1212
+#: src/window.rs:1341
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} minut"
 msgstr[1] "{} minute"
 msgstr[2] "{} de minute"
 
-#: src/window.rs:1223
+#: src/window.rs:1352
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "{hours} oră {minutes} rămase"
@@ -442,29 +484,33 @@ msgstr[2] "{hours} de ore {minutes} rămase"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1233
+#: src/window.rs:1362
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "{} minut rămas"
 msgstr[1] "{} minute rămase"
 msgstr[2] "{} de minute rămase"
 
-#: src/window.rs:1333
+#: src/window.rs:1466
 msgid "No song selected"
-msgstr "Nu este nicio melodie selectată"
+msgstr "Nicio melodie selecționată"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1338
+#: src/window.rs:1471
 msgid "{} song selected"
 msgid_plural "{} songs selected"
-msgstr[0] "{} melodie selectată"
-msgstr[1] "{} melodii selectate"
-msgstr[2] "{} de melodii selectate"
+msgstr[0] "{} melodie selecționată"
+msgstr[1] "{} melodii selecționate"
+msgstr[2] "{} de melodii selecționate"
 
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1392
+#: src/window.rs:1527
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Acum se redă „{title}” de „{artist}”"
+
+#: src/window.rs:1564
+msgid "Unable to open folder"
+msgstr "Dosarul nu poate fi deschis"
