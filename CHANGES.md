@@ -8,6 +8,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+### Fixed
+
+### Removed
+
+## [2026.1] - 2026-04-05
+
+### Changed
+
 - Update dependencies [!171, !184, !187]
 - Switch to Blueprint for UI definition files
 - Use AdwShortcutsDialog instead of GtkShortcutsWindow
@@ -21,8 +29,6 @@ All notable changes to this project will be documented in this file.
 - Show playlist when triggering a search [#424]
 - Add Ctrl+F to the keyboard shortcuts list [#423]
 - Fix wording of the repeat button tooltip [#326]
-
-### Removed
 
 ## [2025.1] - 2025-03-30
 
