@@ -63,6 +63,17 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release version="2026.1" date="2026-04-05">
+      <description>
+        <ul>
+          <li>Allow opening the containing folder of the current song</li>
+          <li>Fix various crashes</li>
+          <li>Handle playlist visibility better when loading or searching</li>
+          <li>Small quality of life improvements to the interface</li>
+          <li>Translation updates</li>
+        </ul>
+      </description>
+    </release>
     <release version="2025.1" date="2025-03-30">
       <description>
         <ul>
