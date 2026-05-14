@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2025-08-23 17:37+0000\n"
-"PO-Revision-Date: 2025-08-24 14:10+0300\n"
+"POT-Creation-Date: 2026-04-05 16:57+0000\n"
+"PO-Revision-Date: 2026-05-14 22:43+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: Finnish <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #: data/io.bassi.Amberol.desktop.in.in:2
 #: data/io.bassi.Amberol.metainfo.xml.in.in:6
@@ -119,7 +119,7 @@ msgctxt "a11y"
 msgid "Shuffle"
 msgstr "Sekoita"
 
-#: src/gtk/playback-control.blp:116 src/playback_control.rs:114
+#: src/gtk/playback-control.blp:116
 msgid "Enable Repeat"
 msgstr "Käytä kertausta"
 
@@ -296,35 +296,40 @@ msgstr "Näytä/piilota soittolista"
 
 #: src/gtk/shortcuts-dialog.blp:57
 msgctxt "shortcut window"
+msgid "Search the playlist"
+msgstr "Etsi soittolistalta"
+
+#: src/gtk/shortcuts-dialog.blp:62
+msgctxt "shortcut window"
 msgid "Toggle shuffling songs"
 msgstr "Kappaleiden sekoitus päälle/pois"
 
-#: src/gtk/shortcuts-dialog.blp:63
+#: src/gtk/shortcuts-dialog.blp:68
 msgctxt "shortcut window"
 msgid "Playback"
 msgstr "Toisto"
 
-#: src/gtk/shortcuts-dialog.blp:66
+#: src/gtk/shortcuts-dialog.blp:71
 msgctxt "shortcut window"
 msgid "Toggle play/pause"
 msgstr "Toista/keskeytä"
 
-#: src/gtk/shortcuts-dialog.blp:71
+#: src/gtk/shortcuts-dialog.blp:76
 msgctxt "shortcut window"
 msgid "Previous song"
 msgstr "Edellinen kappale"
 
-#: src/gtk/shortcuts-dialog.blp:76
+#: src/gtk/shortcuts-dialog.blp:81
 msgctxt "shortcut window"
 msgid "Next song"
 msgstr "Seuraava kappale"
 
-#: src/gtk/shortcuts-dialog.blp:81
+#: src/gtk/shortcuts-dialog.blp:86
 msgctxt "shortcut window"
 msgid "Seek backwards in the current song"
 msgstr "Siirry takaisinpäin nykyisessä kappaleessa"
 
-#: src/gtk/shortcuts-dialog.blp:86
+#: src/gtk/shortcuts-dialog.blp:91
 msgctxt "shortcut window"
 msgid "Seek forward in the current song"
 msgstr "Siirry eteenpäin nykyisessä kappaleessa"
@@ -376,15 +381,15 @@ msgstr "Amberolin tulee olla käynnissä taustalla toistaakseen musiikkia"
 msgid "Playback in progress"
 msgstr "Toisto meneillään"
 
-#: src/audio/song.rs:317
+#: src/audio/song.rs:341
 msgid "Unknown artist"
 msgstr "Tuntematon esittäjä"
 
-#: src/audio/song.rs:324
+#: src/audio/song.rs:348
 msgid "Unknown title"
 msgstr "Tuntematon kappale"
 
-#: src/audio/song.rs:331
+#: src/audio/song.rs:355
 msgid "Unknown album"
 msgstr "Tuntematon albumi"
 
@@ -392,11 +397,15 @@ msgstr "Tuntematon albumi"
 msgid "Cover image"
 msgstr "Kansikuva"
 
-#: src/playback_control.rs:118
+#: src/playback_control.rs:115
+msgid "Do Not Repeat"
+msgstr "Älä kertaa"
+
+#: src/playback_control.rs:119
 msgid "Repeat All Songs"
 msgstr "Kertaa kaikki kappaleet"
 
-#: src/playback_control.rs:122
+#: src/playback_control.rs:123
 msgid "Repeat the Current Song"
 msgstr "Kertaa nykyinen kappale"
 
@@ -412,7 +421,7 @@ msgstr "_Lisää kappale"
 msgid "Open File"
 msgstr "Avaa tiedosto"
 
-#: src/window.rs:168 src/window.rs:190 src/window.rs:1482
+#: src/window.rs:168 src/window.rs:190 src/window.rs:1487
 msgid "Unable to access files"
 msgstr "Ei pääsyä tiedostoihin"
 
@@ -424,42 +433,45 @@ msgstr "_Lisää kansio"
 msgid "Open Folder"
 msgstr "Avaa kansio"
 
-#: src/window.rs:508
+#: src/window.rs:512
 msgid "No available song found"
 msgstr "Saatavilla olevaa kappaletta ei löytynyt"
 
-#: src/window.rs:569
+#: src/window.rs:574
 msgid "No songs found"
 msgstr "Kappaleita ei löytynyt"
 
-#: src/window.rs:602
+#: src/window.rs:607
 msgid "Added a new song"
 msgstr "Lisättiin uusi kappale"
 
-#: src/window.rs:603
+#: src/window.rs:608
 msgid "Play"
 msgstr "Toista"
 
 #. Translators: the `{}` must be left unmodified;
 #. it will be expanded to the number of songs added
 #. to the playlist
-#: src/window.rs:612
+#: src/window.rs:617
+#, rust-format
 msgid "Added one song"
 msgid_plural "Added {} songs"
 msgstr[0] "Lisättiin yksi kappale"
 msgstr[1] "Lisättiin {} kappaletta"
 
-#: src/window.rs:1242
+#: src/window.rs:1247
 msgid "Unable to access dropped files"
 msgstr "Ei pääsyä pudotettuihin tiedostoihin"
 
-#: src/window.rs:1336
+#: src/window.rs:1341
+#, rust-format
 msgid "{} minute"
 msgid_plural "{} minutes"
 msgstr[0] "{} minuutti"
 msgstr[1] "{} minuuttia"
 
-#: src/window.rs:1347
+#: src/window.rs:1352
+#, rust-format
 msgid "{hours} hour {minutes} remaining"
 msgid_plural "{hours} hours {minutes} remaining"
 msgstr[0] "{hours} tunti {minutes} jäljellä"
@@ -468,19 +480,21 @@ msgstr[1] "{hours} tuntia {minutes} jäljellä"
 #. Translators: the '{}' must be left unmodified, and
 #. it will be replaced by the number of minutes remaining
 #. in the playlist
-#: src/window.rs:1357
+#: src/window.rs:1362
+#, rust-format
 msgid "{} minute remaining"
 msgid_plural "{} minutes remaining"
 msgstr[0] "{} minuutti jäljellä"
 msgstr[1] "{} minuuttia jäljellä"
 
-#: src/window.rs:1461
+#: src/window.rs:1466
 msgid "No song selected"
 msgstr "Kappaletta ei ole valittu"
 
 #. Translators: The '{}' must be left unmodified, and
 #. it is expanded to the number of songs selected
-#: src/window.rs:1466
+#: src/window.rs:1471
+#, rust-format
 msgid "{} song selected"
 msgid_plural "{} songs selected"
 msgstr[0] "{} kappale valittu"
@@ -489,11 +503,12 @@ msgstr[1] "{} kappaletta valittu"
 #. Translators: `{title}` and `{artist}` must be left
 #. untranslated; they will expand to the title and
 #. artist of the currently playing song, respectively
-#: src/window.rs:1522
+#: src/window.rs:1527
+#, rust-format
 msgid "Currently playing “{title}” by “{artist}”"
 msgstr "Toistetaan kappale “{title}” esittäjältä “{artist}”"
 
-#: src/window.rs:1559
+#: src/window.rs:1564
 msgid "Unable to open folder"
 msgstr "Kansion avaaminen ei onnistunut"
 
