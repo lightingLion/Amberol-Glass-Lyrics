@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amberol\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
-"POT-Creation-Date: 2026-03-29 14:16+0000\n"
-"PO-Revision-Date: 2026-03-30 11:27+0200\n"
+"POT-Creation-Date: 2026-07-08 19:26+0000\n"
+"PO-Revision-Date: 2026-07-14 15:25+0200\n"
 "Last-Translator: Victoria Niedzielska <victorian@gnome.org>\n"
 "Language-Team: Polish <https://l10n.gnome.org/teams/pl/>\n"
 "Language: pl\n"
@@ -81,7 +81,7 @@ msgstr "Emmanuele Bassi"
 
 #: src/gtk/playback-control.blp:21
 msgid "Play the Previous Song"
-msgstr "Odtwarza poprzedni utwór"
+msgstr "Odtwórz poprzedni utwór"
 
 #: src/gtk/playback-control.blp:28
 msgctxt "a11y"
@@ -90,7 +90,7 @@ msgstr "Przejdź do tyłu"
 
 #: src/gtk/playback-control.blp:36
 msgid "Toggle Play"
-msgstr "Przełącza odtwarzanie"
+msgstr "Przełącz odtwarzanie"
 
 #: src/gtk/playback-control.blp:44
 msgctxt "a11y"
@@ -99,7 +99,7 @@ msgstr "Przełącz odtwarzanie"
 
 #: src/gtk/playback-control.blp:52
 msgid "Play the Next Song"
-msgstr "Odtwarza następny utwór"
+msgstr "Odtwórz następny utwór"
 
 #: src/gtk/playback-control.blp:59
 msgctxt "a11y"
@@ -108,7 +108,7 @@ msgstr "Przejdź do przodu"
 
 #: src/gtk/playback-control.blp:79
 msgid "Toggle Playlist"
-msgstr "Przełącza playlistę"
+msgstr "Przełącz playlistę"
 
 #: src/gtk/playback-control.blp:86
 msgctxt "a11y"
@@ -117,7 +117,7 @@ msgstr "Przełącz playlistę"
 
 #: src/gtk/playback-control.blp:94
 msgid "Shuffle the Playlist"
-msgstr "Miesza playlistę"
+msgstr "Wymieszaj playlistę"
 
 #: src/gtk/playback-control.blp:97
 msgctxt "a11y"
@@ -126,7 +126,7 @@ msgstr "Wymieszaj"
 
 #: src/gtk/playback-control.blp:116
 msgid "Enable Repeat"
-msgstr "Włącza powtarzanie"
+msgstr "Włącz powtarzanie"
 
 #: src/gtk/playback-control.blp:123
 msgctxt "a11y"
@@ -195,7 +195,7 @@ msgstr "_Skróty klawiszowe"
 
 #: src/gtk/playback-control.blp:222
 msgid "_About Amberol"
-msgstr "_O programie"
+msgstr "_O aplikacji"
 
 #: src/gtk/playback-control.blp:227
 msgid "_Quit"
@@ -203,7 +203,7 @@ msgstr "Za_kończ"
 
 #: src/gtk/playlist-view.blp:16
 msgid "Search Songs in the Playlist"
-msgstr "Wyszukuje utwory na playliście"
+msgstr "Wyszukaj utwory na playliście"
 
 #: src/gtk/playlist-view.blp:25
 msgid "Playlist"
@@ -211,15 +211,15 @@ msgstr "Playlista"
 
 #: src/gtk/playlist-view.blp:47
 msgid "Close the Playlist"
-msgstr "Zamyka playlistę"
+msgstr "Zamknij playlistę"
 
 #: src/gtk/playlist-view.blp:55
 msgid "Select Songs in the Playlist"
-msgstr "Zaznacza utwory na playliście"
+msgstr "Zaznacz utwory na playliście"
 
 #: src/gtk/playlist-view.blp:62
 msgid "Search songs"
-msgstr "Wyszukiwanie utworów"
+msgstr "Wyszukaj utwory"
 
 #: src/gtk/playlist-view.blp:66
 msgctxt "a11y"
@@ -229,15 +229,15 @@ msgstr "Wyszukaj"
 #: src/gtk/playlist-view.blp:67
 msgctxt "a11y"
 msgid "Type to search songs"
-msgstr "Wpisanie wyszukuje utwory"
+msgstr "Pisz, aby wyszukać utwory"
 
 #: src/gtk/playlist-view.blp:110
 msgid "Select All Songs"
-msgstr "Zaznacza wszystkie utwory"
+msgstr "Zaznacz wszystkie utwory"
 
 #: src/gtk/playlist-view.blp:123
 msgid "Remove Selected Songs"
-msgstr "Usuwa zaznaczone utwory"
+msgstr "Usuń zaznaczone utwory"
 
 #: src/gtk/queue-row.blp:27
 msgctxt "a11y"
@@ -348,8 +348,8 @@ msgid ""
 "Select a file or a folder, or drag files from your file manager to the "
 "application window to add songs to the playlist"
 msgstr ""
-"Wybranie pliku lub katalogu albo przeciągnięcie plików z menedżera plików do "
-"okna programu doda utwory do playlisty"
+"Wybierz plik lub katalog albo przeciągnij pliki z menedżera plików do okna "
+"aplikacji, aby dodać utwory do playlisty"
 
 #: src/gtk/window.blp:48
 msgid "Restore Playlist"
@@ -389,15 +389,15 @@ msgstr "Amberol musi działać w tle, aby odtwarzać muzykę"
 msgid "Playback in progress"
 msgstr "Trwa odtwarzanie"
 
-#: src/audio/song.rs:339
+#: src/audio/song.rs:341
 msgid "Unknown artist"
-msgstr "Nieznana osoba wykonująca"
+msgstr "Nieznany wykonawca"
 
-#: src/audio/song.rs:346
+#: src/audio/song.rs:348
 msgid "Unknown title"
 msgstr "Nieznany tytuł"
 
-#: src/audio/song.rs:353
+#: src/audio/song.rs:355
 msgid "Unknown album"
 msgstr "Nieznany album"
 
@@ -411,11 +411,11 @@ msgstr "Bez powtarzania"
 
 #: src/playback_control.rs:119
 msgid "Repeat All Songs"
-msgstr "Powtarza wszystkie utwory"
+msgstr "Powtórz wszystkie utwory"
 
 #: src/playback_control.rs:123
 msgid "Repeat the Current Song"
-msgstr "Powtarza obecny utwór"
+msgstr "Powtórz obecny utwór"
 
 #: src/window.rs:149
 msgid "Audio files"
@@ -427,7 +427,7 @@ msgstr "_Dodaj utwór"
 
 #: src/window.rs:163
 msgid "Open File"
-msgstr "Otwarcie pliku"
+msgstr "Otwórz plik"
 
 #: src/window.rs:168 src/window.rs:190 src/window.rs:1487
 msgid "Unable to access files"
@@ -439,15 +439,15 @@ msgstr "_Dodaj katalog"
 
 #: src/window.rs:185
 msgid "Open Folder"
-msgstr "Otwarcie katalogu"
+msgstr "Otwórz katalog"
 
 #: src/window.rs:512
 msgid "No available song found"
-msgstr "Nie odnaleziono dostępnego utworu"
+msgstr "Brak dostępnych utworów"
 
 #: src/window.rs:574
 msgid "No songs found"
-msgstr "Nie odnaleziono żadnych utworów"
+msgstr "Brak utworów"
 
 #: src/window.rs:607
 msgid "Added a new song"
