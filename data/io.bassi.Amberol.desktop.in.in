@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Amberol
+Name=Amberol Glass Lyrics
 GenericName=Music Player
-TryExec=amberol
-Exec=amberol %U
+TryExec=amberol-glass-lyrics
+Exec=amberol-glass-lyrics %U
 Icon=@APPLICATION_ID@
 Terminal=false
 Type=Application

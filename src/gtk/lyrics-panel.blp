@@ -1,0 +1,116 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026 Amberol Glass Lyrics contributors
+
+using Gtk 4.0;
+
+template $AmberolLyricsPanel: Widget {
+  Box {
+    orientation: vertical;
+    hexpand: true;
+    vexpand: true;
+
+    styles ["lyrics-card"]
+
+    Box {
+      margin-top: 24;
+      margin-start: 26;
+      margin-end: 20;
+      margin-bottom: 8;
+      spacing: 10;
+
+      Box {
+        orientation: vertical;
+        hexpand: true;
+        spacing: 3;
+
+        Label {
+          label: _("Now Playing");
+          halign: start;
+          styles ["lyrics-kicker"]
+        }
+
+        Label title_label {
+          label: _("Lyrics");
+          halign: start;
+          ellipsize: end;
+          styles ["heading"]
+        }
+      }
+
+      Button close_button {
+        icon-name: "window-close-symbolic";
+        valign: start;
+        tooltip-text: _("Hide Lyrics");
+        action-name: "win.close-lyrics";
+        styles ["circular", "flat", "glass-button"]
+      }
+    }
+
+    Overlay {
+      vexpand: true;
+
+      child: $AmberolReactionDiffusionView reaction_background {
+        hexpand: true;
+        vexpand: true;
+        styles ["reaction-background"]
+      };
+
+      [overlay]
+      Box {
+        orientation: vertical;
+        valign: center;
+        spacing: 24;
+        margin-start: 28;
+        margin-end: 28;
+        margin-top: 20;
+        margin-bottom: 20;
+
+        Label older_label {
+          wrap: true;
+          justify: center;
+          styles ["lyric-older"]
+        }
+        Label previous_label {
+          wrap: true;
+          justify: center;
+          styles ["lyric-previous"]
+        }
+        Label current_label {
+          label: _("No lyrics found");
+          wrap: true;
+          justify: center;
+          selectable: true;
+          styles ["lyric-current"]
+        }
+        Label next_label {
+          wrap: true;
+          justify: center;
+          styles ["lyric-previous"]
+        }
+        Label later_label {
+          wrap: true;
+          justify: center;
+          styles ["lyric-older"]
+        }
+      }
+    }
+
+    Box {
+      margin-start: 26;
+      margin-end: 26;
+      margin-bottom: 22;
+      spacing: 8;
+
+      Image {
+        icon-name: "media-playback-start-symbolic";
+        pixel-size: 8;
+        styles ["lyrics-live-dot"]
+      }
+      Label status_label {
+        label: _("Sidecar LRC");
+        halign: start;
+        styles ["caption", "dim-label"]
+      }
+    }
+  }
+}

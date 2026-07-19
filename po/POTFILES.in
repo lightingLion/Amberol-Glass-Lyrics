@@ -1,6 +1,7 @@
 data/io.bassi.Amberol.desktop.in.in
 data/io.bassi.Amberol.gschema.xml
 data/io.bassi.Amberol.metainfo.xml.in.in
+src/gtk/lyrics-panel.blp
 src/gtk/playback-control.blp
 src/gtk/playlist-view.blp
 src/gtk/queue-row.blp

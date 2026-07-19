@@ -35,7 +35,7 @@ template $AmberolWindow: Adw.ApplicationWindow {
                 child: Adw.StatusPage status_page {
                   margin-start: 12;
                   margin-end: 12;
-                  title: "Amberol";
+                  title: "Amberol Glass Lyrics";
                   description: _("Select a file or a folder, or drag files from your file manager to the application window to add songs to the playlist");
 
                   child: Box {
@@ -80,87 +80,109 @@ template $AmberolWindow: Adw.ApplicationWindow {
           StackPage {
             name: "main-view";
 
-            child: Adw.OverlaySplitView split_view {
-              max-sidebar-width: 330;
-              sidebar-width-fraction: 0.4;
+            child: Box workspace {
+              orientation: horizontal;
 
-              content: Adw.ToolbarView {
-                [top]
-                Adw.HeaderBar {
-                  show-title: false;
-                }
+              Overlay player_overlay {
+                hexpand: true;
 
-                content: Box main_box {
-                  orientation: vertical;
-                  valign: center;
-                  vexpand: true;
-                  spacing: 6;
+                child: Adw.OverlaySplitView split_view {
+                  max-sidebar-width: 330;
+                  sidebar-width-fraction: 0.4;
 
-                  styles [
-                    "main-box",
-                  ]
-
-                  $AmberolSongCover song_cover {}
-
-                  Box {
-                    orientation: vertical;
-                    spacing: 2;
-                    width-request: 256;
-
-                    Box {
-                      halign: center;
-
-                      $AmberolWaveformView waveform_view {
-                        can-focus: "true";
-                      }
-                    }
-
-                    CenterBox {
-                      orientation: horizontal;
-                      width-request: 256;
-                      halign: center;
-
-                      [start]
-                      Label elapsed_label {
-                        label: "0:00";
-
-                        accessibility {
-                          label: C_("a11y", "Elapsed time");
-                        }
-
-                        styles [
-                          "caption",
-                          "numeric",
-                        ]
-                      }
+                  content: Adw.ToolbarView {
+                    [top]
+                    Adw.HeaderBar {
+                      show-title: false;
 
                       [end]
-                      Label remaining_label {
-                        label: "0:00";
-
-                        accessibility {
-                          label: C_("a11y", "Remaining time");
-                        }
-
-                        styles [
-                          "caption",
-                          "numeric",
-                        ]
+                      ToggleButton lyrics_toggle_button {
+                        icon-name: "view-list-symbolic";
+                        tooltip-text: _("Show Lyrics");
+                        action-name: "win.toggle-lyrics";
+                        styles ["circular", "flat", "glass-button"]
                       }
                     }
-                  }
 
-                  $AmberolSongDetails song_details {}
+                    content: Box main_box {
+                      orientation: vertical;
+                      valign: center;
+                      vexpand: true;
+                      spacing: 6;
 
-                  $AmberolPlaybackControl playback_control {
-                    halign: "center";
-                    margin-top: "0";
-                    margin-bottom: "24";
-                  }
+                      styles ["main-box"]
+
+                      $AmberolSongCover song_cover {}
+
+                      Box {
+                        orientation: vertical;
+                        spacing: 2;
+                        width-request: 256;
+
+                        Box {
+                          halign: center;
+
+                          $AmberolWaveformView waveform_view {
+                            can-focus: "true";
+                          }
+                        }
+
+                        CenterBox {
+                          orientation: horizontal;
+                          width-request: 256;
+                          halign: center;
+
+                          [start]
+                          Label elapsed_label {
+                            label: "0:00";
+                            accessibility { label: C_("a11y", "Elapsed time"); }
+                            styles ["caption", "numeric"]
+                          }
+
+                          [end]
+                          Label remaining_label {
+                            label: "0:00";
+                            accessibility { label: C_("a11y", "Remaining time"); }
+                            styles ["caption", "numeric"]
+                          }
+                        }
+                      }
+
+                      $AmberolSongDetails song_details {}
+
+                      $AmberolPlaybackControl playback_control {
+                        halign: "center";
+                        margin-top: "0";
+                        margin-bottom: "24";
+                      }
+                    };
+                  };
+
+                  sidebar: $AmberolPlaylistView playlist_view {};
                 };
-              };
 
-              sidebar: $AmberolPlaylistView playlist_view {};
+                [overlay]
+                Button lyrics_scrim {
+                  visible: false;
+                  can-focus: false;
+                  action-name: "win.close-lyrics";
+                  styles ["lyrics-scrim", "flat"]
+                }
+              }
+
+              Revealer lyrics_revealer {
+                visible: false;
+                reveal-child: false;
+                transition-type: none;
+                transition-duration: 0;
+
+                child: $AmberolLyricsPanel lyrics_panel {
+                  width-request: 400;
+                  margin-top: 18;
+                  margin-end: 18;
+                  margin-bottom: 18;
+                };
+              }
             };
           }
         };

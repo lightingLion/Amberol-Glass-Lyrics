@@ -4,6 +4,7 @@
 blueprints = custom_target('blueprints',
   input: files(
     'playback-control.blp',
+    'lyrics-panel.blp',
     'playlist-view.blp',
     'queue-row.blp',
     'shortcuts-dialog.blp',

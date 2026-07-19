@@ -7,10 +7,13 @@ mod config;
 mod cover_picture;
 mod drag_overlay;
 mod i18n;
+mod lyrics;
+mod lyrics_panel;
 mod marquee;
 mod playback_control;
 mod playlist_view;
 mod queue_row;
+mod reaction_diffusion_view;
 mod search;
 mod song_cover;
 mod song_details;
@@ -50,20 +53,23 @@ fn main() -> glib::ExitCode {
     debug!("Setting up pulseaudio environment");
     let app_id = APPLICATION_ID.trim_end_matches(".Devel");
     env::set_var("PULSE_PROP_application.icon_name", app_id);
-    env::set_var("PULSE_PROP_application.metadata().name", "Amberol");
+    env::set_var(
+        "PULSE_PROP_application.metadata().name",
+        "Amberol Glass Lyrics",
+    );
     env::set_var("PULSE_PROP_media.role", "music");
 
     debug!("Loading resources");
     let resources = match env::var("MESON_DEVENV") {
-        Err(_) => gio::Resource::load(PKGDATADIR.to_owned() + "/amberol.gresource")
-            .expect("Unable to find amberol.gresource"),
+        Err(_) => gio::Resource::load(PKGDATADIR.to_owned() + "/amberol-glass-lyrics.gresource")
+            .expect("Unable to find amberol-glass-lyrics.gresource"),
         Ok(_) => match env::current_exe() {
             Ok(path) => {
                 let mut resource_path = path;
                 resource_path.pop();
-                resource_path.push("amberol.gresource");
+                resource_path.push("amberol-glass-lyrics.gresource");
                 gio::Resource::load(&resource_path)
-                    .expect("Unable to find amberol.gresource in devenv")
+                    .expect("Unable to find amberol-glass-lyrics.gresource in devenv")
             }
             Err(err) => {
                 error!("Unable to find the current path: {}", err);
@@ -74,8 +80,8 @@ fn main() -> glib::ExitCode {
     gio::resources_register(&resources);
 
     debug!("Setting up application (profile: {})", &PROFILE);
-    glib::set_application_name("Amberol");
-    glib::set_program_name(Some("amberol"));
+    glib::set_application_name("Amberol Glass Lyrics");
+    glib::set_program_name(Some("amberol-glass-lyrics"));
 
     gst::init().expect("Failed to initialize gstreamer");
 

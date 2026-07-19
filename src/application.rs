@@ -78,6 +78,8 @@ mod imp {
             obj.set_accels_for_action("win.next", &["<primary>n"]);
             obj.set_accels_for_action("win.play", &["<primary>p"]);
             obj.set_accels_for_action("win.copy", &["<primary>c"]);
+            obj.set_accels_for_action("win.toggle-lyrics", &["<primary>l"]);
+            obj.set_accels_for_action("win.close-lyrics", &["Escape"]);
         }
     }
 
@@ -231,11 +233,11 @@ impl Application {
         let window = self.active_window().unwrap();
         let dialog = adw::AboutDialog::builder()
             .application_icon(APPLICATION_ID)
-            .application_name("Amberol")
+            .application_name("Amberol Glass Lyrics")
             .developer_name("Emmanuele Bassi")
             .version(VERSION)
-            .developers(vec!["Emmanuele Bassi"])
-            .copyright("© 2022 Emmanuele Bassi")
+            .developers(vec!["Emmanuele Bassi", "Amberol Glass Lyrics contributors"])
+            .copyright("© 2022 Emmanuele Bassi; © 2026 Amberol Glass Lyrics contributors")
             .website("https://apps.gnome.org/Amberol/")
             .issue_url("https://gitlab.gnome.org/World/amberol/-/issues/new")
             .license_type(gtk::License::Gpl30)

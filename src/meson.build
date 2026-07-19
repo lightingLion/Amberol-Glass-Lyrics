@@ -5,7 +5,7 @@ subdir('gtk')
 
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 
-gnome.compile_resources('amberol',
+gnome.compile_resources('amberol-glass-lyrics',
   'amberol.gresource.xml',
   gresource_bundle: true,
   dependencies: blueprints,
@@ -15,7 +15,7 @@ gnome.compile_resources('amberol',
 
 conf = configuration_data()
 conf.set_quoted('VERSION', '@0@@1@'.format(meson.project_version(), version_suffix))
-conf.set_quoted('GETTEXT_PACKAGE', 'amberol')
+conf.set_quoted('GETTEXT_PACKAGE', 'amberol-glass-lyrics')
 conf.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('APPLICATION_ID', application_id)
@@ -53,7 +53,7 @@ cargo_release = custom_target(
   'cargo-build',
   build_by_default: true,
   build_always_stale: true,
-  output: meson.project_name(),
+  output: 'amberol-glass-lyrics',
   console: true,
   install: true,
   install_dir: get_option('bindir'),
@@ -63,6 +63,6 @@ cargo_release = custom_target(
     cargo, 'build',
     cargo_options,
     '&&',
-    'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@',
+    'cp', 'src' / rust_target / 'amberol', '@OUTPUT@',
   ],
 )

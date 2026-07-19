@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022  Emmanuele Bassi
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-project('amberol', 'rust',
+project('amberol-glass-lyrics', 'rust',
   version: '2026.2',
   license: ['GPL-3.0'],
   meson_version: '>= 0.59.0',
@@ -45,7 +45,7 @@ else
   version_suffix = ''
 endif
 
-application_id = 'io.bassi.Amberol@0@'.format(profile)
+application_id = 'io.github.amberolglass.Lyrics@0@'.format(profile)
 
 subdir('data')
 subdir('src')
