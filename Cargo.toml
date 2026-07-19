@@ -26,6 +26,7 @@ fuzzy-matcher = "0.3.7"
 async-channel = "2.2.0"
 futures = "0.3"
 gl = "0.14"
+pangocairo = "0.22"
 
 [target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
 ashpd = {version = "0.13", default-features = false, features = ["gtk4", "background", "async-io"]}

@@ -26,6 +26,8 @@ mod imp {
         pub later_label: TemplateChild<gtk::Label>,
         #[template_child]
         pub status_label: TemplateChild<gtk::Label>,
+        #[template_child]
+        pub reaction_background: TemplateChild<ReactionDiffusionView>,
         pub track: RefCell<LyricsTrack>,
         pub current_index: Cell<Option<usize>>,
     }
@@ -75,10 +77,13 @@ impl LyricsPanel {
         let Some(song) = song else {
             imp.title_label.set_label("Lyrics");
             imp.track.replace(LyricsTrack::default());
-            self.show_empty("No song playing");
+            self.show_empty("No synced lyrics found");
             return;
         };
         imp.title_label.set_label(&song.title());
+        if let Some(palette) = song.cover_palette() {
+            imp.reaction_background.set_palette(&palette);
+        }
         let track = song
             .file()
             .path()
@@ -86,13 +91,9 @@ impl LyricsPanel {
             .unwrap_or_default();
         if track.lines.is_empty() {
             imp.track.replace(track);
-            self.show_empty("No lyrics found\n\nPlace a .lrc file beside the song");
+            self.show_empty("No synced lyrics found");
         } else {
-            imp.status_label.set_label(if track.synced {
-                "Synced sidecar lyrics"
-            } else {
-                "Plain text lyrics"
-            });
+            imp.status_label.set_visible(false);
             imp.track.replace(track);
             self.update_position(0);
         }
@@ -125,6 +126,7 @@ impl LyricsPanel {
         imp.older_label.set_label(text(-2));
         imp.previous_label.set_label(text(-1));
         imp.current_label.set_label(text(0));
+        imp.reaction_background.set_lyric(text(0));
         imp.next_label.set_label(text(1));
         imp.later_label.set_label(text(2));
     }
@@ -136,6 +138,8 @@ impl LyricsPanel {
         imp.current_label.set_label(message);
         imp.next_label.set_label("");
         imp.later_label.set_label("");
-        imp.status_label.set_label("Lyrics unavailable");
+        imp.reaction_background.set_lyric("");
+        imp.status_label.set_label(message);
+        imp.status_label.set_visible(true);
     }
 }

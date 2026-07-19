@@ -8,6 +8,7 @@ template $AmberolLyricsPanel: Widget {
     orientation: vertical;
     hexpand: true;
     vexpand: true;
+    overflow: hidden;
 
     styles ["lyrics-card"]
 
@@ -57,6 +58,7 @@ template $AmberolLyricsPanel: Widget {
 
       [overlay]
       Box {
+        visible: false;
         orientation: vertical;
         valign: center;
         spacing: 24;
@@ -93,23 +95,14 @@ template $AmberolLyricsPanel: Widget {
           styles ["lyric-older"]
         }
       }
-    }
 
-    Box {
-      margin-start: 26;
-      margin-end: 26;
-      margin-bottom: 22;
-      spacing: 8;
-
-      Image {
-        icon-name: "media-playback-start-symbolic";
-        pixel-size: 8;
-        styles ["lyrics-live-dot"]
-      }
+      [overlay]
       Label status_label {
-        label: _("Sidecar LRC");
-        halign: start;
-        styles ["caption", "dim-label"]
+        label: _("No synced lyrics found");
+        halign: center;
+        valign: center;
+        wrap: true;
+        styles ["dim-label", "lyrics-empty-state"]
       }
     }
   }

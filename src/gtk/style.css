@@ -200,6 +200,12 @@ lyricspanel {
   opacity: 0.72;
 }
 
+.lyrics-empty-state {
+  margin: 40px;
+  font-size: 11pt;
+  opacity: 0.46;
+}
+
 .lyrics-kicker {
   font-size: 9pt;
   font-weight: 600;
