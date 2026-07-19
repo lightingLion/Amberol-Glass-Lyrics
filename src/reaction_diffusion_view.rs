@@ -16,6 +16,7 @@ use std::{
 };
 
 const SIM_SIZE: i32 = 256;
+const ITERATIONS_PER_FRAME: u32 = 8;
 
 extern "C" {
     fn dlopen(
@@ -101,7 +102,11 @@ mod imp {
                 renderer: RefCell::new(None),
                 pending_mask: RefCell::new(None),
                 last_bounds: Cell::new(None),
-                palette: Cell::new([[0.20, 0.035, 0.11], [0.78, 0.22, 0.42], [1.00, 0.63, 0.30]]),
+                palette: Cell::new([
+                    [0.004, 0.012, 0.018],
+                    [0.000, 0.680, 0.760],
+                    [0.050, 0.960, 1.000],
+                ]),
                 last_frame_us: Cell::new(0),
                 init_failed: Cell::new(false),
             }
@@ -398,7 +403,11 @@ impl Renderer {
             front: 0,
             phase_seconds: 4.0,
             frame: 0,
-            palette: [[0.20, 0.035, 0.11], [0.78, 0.22, 0.42], [1.00, 0.63, 0.30]],
+            palette: [
+                [0.004, 0.012, 0.018],
+                [0.000, 0.680, 0.760],
+                [0.050, 0.960, 1.000],
+            ],
         })
     }
 
@@ -413,18 +422,9 @@ impl Renderer {
     unsafe fn render(&mut self, width: i32, height: i32) {
         let mut gtk_framebuffer = 0;
         gl::GetIntegerv(gl::FRAMEBUFFER_BINDING, &mut gtk_framebuffer);
-        let back = 1 - self.front;
-
         gl::Disable(gl::BLEND);
-        gl::BindFramebuffer(gl::FRAMEBUFFER, self.framebuffers[back]);
         gl::Viewport(0, 0, SIM_SIZE, SIM_SIZE);
         gl::UseProgram(self.simulation_program);
-        bind_texture(
-            self.simulation_program,
-            b"state\0",
-            0,
-            self.state_textures[self.front],
-        );
         bind_texture(
             self.simulation_program,
             b"textMask\0",
@@ -438,13 +438,30 @@ impl Renderer {
             self.mask_textures[1],
         );
         uniform_1f(self.simulation_program, b"phase\0", self.phase_seconds);
-        uniform_1f(self.simulation_program, b"time\0", self.frame as f32 / 30.0);
         // Audio slots are wired as stable defaults in this first text-seed prototype.
         uniform_1f(self.simulation_program, b"audioEnergy\0", 0.12);
         uniform_1f(self.simulation_program, b"beatPulse\0", 0.0);
         gl::BindVertexArray(self.vao);
-        gl::DrawArrays(gl::TRIANGLES, 0, 3);
-        self.front = back;
+        // The reference playground advances many ping-pong steps per display
+        // frame. Eight iterations at 256² preserves that flowing maze rhythm
+        // while staying inside the desktop player's GPU budget.
+        for iteration in 0..ITERATIONS_PER_FRAME {
+            let back = 1 - self.front;
+            gl::BindFramebuffer(gl::FRAMEBUFFER, self.framebuffers[back]);
+            bind_texture(
+                self.simulation_program,
+                b"state\0",
+                0,
+                self.state_textures[self.front],
+            );
+            uniform_1f(
+                self.simulation_program,
+                b"time\0",
+                (self.frame * ITERATIONS_PER_FRAME + iteration) as f32 / 240.0,
+            );
+            gl::DrawArrays(gl::TRIANGLES, 0, 3);
+            self.front = back;
+        }
 
         gl::BindFramebuffer(gl::FRAMEBUFFER, gtk_framebuffer as u32);
         gl::Viewport(0, 0, width.max(1), height.max(1));
@@ -650,8 +667,10 @@ const VERTEX_SHADER: &str = r#"#version 330 core
 out vec2 uv;
 void main() {
     vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
-    uv = p * 0.5;
-    gl_Position = vec4(p - 1.0, 0.0, 1.0);
+    // One oversized triangle: (-1,-1), (3,-1), (-1,3).
+    // The previous p-1 mapping ended at (+1,+1), covering only half the card.
+    uv = p;
+    gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
 }
 "#;
 
@@ -673,15 +692,13 @@ float noise(vec2 p) {
 void main() {
     vec2 px = 1.0 / vec2(textureSize(state, 0));
     vec2 c = texture(state, uv).rg;
-    vec2 lap = -c;
-    lap += 0.20 * (texture(state, uv + vec2(px.x, 0)).rg +
-                   texture(state, uv - vec2(px.x, 0)).rg +
-                   texture(state, uv + vec2(0, px.y)).rg +
-                   texture(state, uv - vec2(0, px.y)).rg);
-    lap += 0.05 * (texture(state, uv + px).rg +
-                   texture(state, uv - px).rg +
-                   texture(state, uv + vec2(px.x, -px.y)).rg +
-                   texture(state, uv + vec2(-px.x, px.y)).rg);
+    // Five-point stencil and fingerprint preset family, independently adapted
+    // for the native low-resolution GL pipeline.
+    vec2 lap = -4.0 * c;
+    lap += texture(state, uv + vec2(px.x, 0)).rg;
+    lap += texture(state, uv - vec2(px.x, 0)).rg;
+    lap += texture(state, uv + vec2(0, px.y)).rg;
+    lap += texture(state, uv - vec2(0, px.y)).rg;
 
     float mask = texture(textMask, uv).r;
     float oldMask = texture(previousTextMask, uv).r;
@@ -689,18 +706,18 @@ void main() {
     float seedStage = 1.0 - smoothstep(0.10, 0.22, phase);
     float growthStage = smoothstep(0.12, 0.90, phase);
     float erosionStage = smoothstep(0.08, 1.35, phase);
-    float sparseSeed = mask * step(0.72, n) * seedStage * 0.24;
-    float softConstraint = mask * growthStage * (0.010 + audioEnergy * 0.006);
-    float oldErosion = oldMask * erosionStage * (0.012 + 0.020 * n);
+    float sparseSeed = mask * step(0.72, n) * seedStage * 0.035;
+    float softConstraint = mask * growthStage * (0.0018 + audioEnergy * 0.0008);
+    float oldErosion = oldMask * erosionStage * (0.0018 + 0.0032 * n);
 
     float reaction = c.x * c.y * c.y;
-    float feed = 0.0345 + audioEnergy * 0.0015;
-    float kill = 0.061;
-    float a = c.x + 0.16 * lap.x - reaction + feed * (1.0 - c.x);
-    float b = c.y + 0.08 * lap.y + reaction - (feed + kill) * c.y;
+    float feed = 0.037 + audioEnergy * 0.0008;
+    float kill = 0.060;
+    float a = c.x + 0.2097 * lap.x - reaction + feed * (1.0 - c.x);
+    float b = c.y + 0.1050 * lap.y + reaction - (feed + kill) * c.y;
     b += sparseSeed + softConstraint + beatPulse * mask * 0.035;
     b -= oldErosion;
-    b += (n - 0.5) * mask * growthStage * 0.005;
+    b += (n - 0.5) * mask * growthStage * 0.0012;
     nextState = clamp(vec2(a, b), 0.0, 1.0);
 }
 "#;
@@ -725,12 +742,12 @@ void main() {
     float b = texture(state, uv).g;
     float mask = texture(textMask, uv).r;
     float oldMask = texture(previousTextMask, uv).r;
-    float chemistry = smoothstep(0.10, 0.58, b);
-    float cellularEdge = smoothstep(0.018, 0.11, fwidth(chemistry));
+    float chemistry = smoothstep(0.035, 0.34, b);
+    float cellularEdge = smoothstep(0.012, 0.075, fwidth(b));
     float n = noise(floor(uv * 256.0) + floor(time * 2.0));
 
     float formation = smoothstep(0.10, 0.95, phase);
-    float threshold = mix(0.93, 0.16, formation);
+    float threshold = mix(0.90, 0.12, formation);
     float currentInk = mask * smoothstep(threshold, threshold + 0.13,
                                           chemistry + n * 0.22);
 
@@ -742,12 +759,18 @@ void main() {
 
     float glyphMatter = clamp(currentInk + previousInk * 0.68, 0.0, 1.0);
     float glyphEdge = cellularEdge * clamp(mask + oldMask * (1.0 - erosion), 0.0, 1.0);
-    float freePattern = chemistry * (1.0 - mask * 0.45) * 0.22;
+    // The supplied video uses a dense, cyan-on-dark labyrinth. Background and
+    // glyph strokes remain one continuous chemical field rather than layers.
+    float mazeLine = clamp(chemistry * 0.72 + cellularEdge * 0.75, 0.0, 1.0);
+    float freePattern = mazeLine * (1.0 - mask * 0.20) * 0.62;
 
-    vec3 mapped = mix(paletteDark, paletteMid, freePattern + glyphMatter * 0.72);
-    mapped = mix(mapped, paletteLight, glyphEdge * 0.88 + glyphMatter * 0.20);
+    vec3 mapped = mix(paletteDark, paletteMid,
+                      clamp(freePattern + glyphMatter * 0.74, 0.0, 1.0));
+    mapped = mix(mapped, paletteLight,
+                 clamp(glyphEdge * 0.95 + cellularEdge * 0.34 + glyphMatter * 0.16,
+                       0.0, 1.0));
     float vignette = 1.0 - 0.30 * dot(uv - 0.5, uv - 0.5);
-    float alpha = 0.30 + freePattern * 0.22 + glyphMatter * 0.62 + glyphEdge * 0.18;
+    float alpha = 0.40 + freePattern * 0.42 + glyphMatter * 0.48 + glyphEdge * 0.14;
     color = vec4(mapped * vignette, clamp(alpha, 0.0, 0.96));
 }
 "#;
