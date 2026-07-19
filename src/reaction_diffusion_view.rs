@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Amberol Glass Lyrics contributors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! The visible lyrics are produced by a continuous Gray-Scott simulation.
-//! Pango/Cairo only rasterises an invisible seed/constraint mask; the display
-//! shader never paints that mask directly.
+//! Prelude-built Turing texture plus hand-drawn lyric cavities.
+//! The texture follows a repeated blur + 300% unsharp process; once built it
+//! stays topologically stable. Pango/Cairo masks only carve and refill local
+//! cavities, so a lyric never causes the whole field to reorganise.
 
 use gtk::{cairo, gdk, glib, pango, prelude::*, subclass::prelude::*};
 use std::{
@@ -16,7 +17,7 @@ use std::{
 };
 
 const SIM_SIZE: i32 = 256;
-const ITERATIONS_PER_FRAME: u32 = 8;
+const TURING_ITERATIONS: u32 = 20;
 
 extern "C" {
     fn dlopen(
@@ -59,6 +60,7 @@ unsafe fn load_gl_symbol(symbol: &str) -> *const std::ffi::c_void {
 struct MaskUpdate {
     pixels: Vec<u8>,
     bounds: MaskRect,
+    duration_seconds: f32,
 }
 
 #[derive(Clone, Copy, Default)]
@@ -92,6 +94,9 @@ mod imp {
         pub(super) pending_mask: RefCell<Option<MaskUpdate>>,
         pub(super) last_bounds: Cell<Option<MaskRect>>,
         pub(super) palette: Cell<[[f32; 3]; 3]>,
+        pub(super) pending_position: Cell<Option<f32>>,
+        pub(super) pending_intro_duration: Cell<Option<f32>>,
+        pub(super) reset_pattern: Cell<bool>,
         last_frame_us: Cell<i64>,
         init_failed: Cell<bool>,
     }
@@ -107,6 +112,9 @@ mod imp {
                     [0.000, 0.680, 0.760],
                     [0.050, 0.960, 1.000],
                 ]),
+                pending_position: Cell::new(Some(0.0)),
+                pending_intro_duration: Cell::new(Some(4.0)),
+                reset_pattern: Cell::new(true),
                 last_frame_us: Cell::new(0),
                 init_failed: Cell::new(false),
             }
@@ -168,7 +176,7 @@ mod imp {
                 match unsafe { Renderer::new() } {
                     Ok(renderer) => {
                         log::debug!(
-                            "Text-seeded reaction diffusion ready: {}x{} at 30 FPS",
+                            "Blur-unsharp Turing canvas ready: {}x{} at 30 FPS",
                             SIM_SIZE,
                             SIM_SIZE
                         );
@@ -187,7 +195,16 @@ mod imp {
             if let Some(renderer) = self.renderer.borrow_mut().as_mut() {
                 unsafe {
                     if let Some(update) = self.pending_mask.borrow_mut().take() {
-                        renderer.set_text_mask(&update.pixels);
+                        renderer.set_text_mask(&update.pixels, update.duration_seconds);
+                    }
+                    if self.reset_pattern.replace(false) {
+                        renderer.reset_pattern();
+                    }
+                    if let Some(duration) = self.pending_intro_duration.take() {
+                        renderer.intro_duration = duration.max(0.5);
+                    }
+                    if let Some(position) = self.pending_position.take() {
+                        renderer.song_seconds = position.max(0.0);
                     }
                     renderer.palette = self.palette.get();
                     renderer.render(
@@ -214,7 +231,7 @@ impl Default for ReactionDiffusionView {
 }
 
 impl ReactionDiffusionView {
-    pub fn set_lyric(&self, text: &str) {
+    pub fn set_lyric(&self, text: &str, duration_seconds: f32) {
         self.upcast_ref::<gtk::Accessible>()
             .update_property(&[gtk::accessible::Property::Label(text)]);
         if text.trim().is_empty() {
@@ -222,6 +239,7 @@ impl ReactionDiffusionView {
             self.imp().pending_mask.replace(Some(MaskUpdate {
                 pixels: vec![0_u8; (SIM_SIZE * SIM_SIZE) as usize],
                 bounds: MaskRect::default(),
+                duration_seconds: 0.0,
             }));
             self.queue_render();
             return;
@@ -236,7 +254,10 @@ impl ReactionDiffusionView {
                     update.bounds.height
                 );
                 self.imp().last_bounds.set(Some(update.bounds));
-                self.imp().pending_mask.replace(Some(update));
+                self.imp().pending_mask.replace(Some(MaskUpdate {
+                    duration_seconds: duration_seconds.max(1.0),
+                    ..update
+                }));
                 self.queue_render();
             }
             Err(error) => log::warn!("Unable to build lyric text mask: {error}"),
@@ -258,6 +279,21 @@ impl ReactionDiffusionView {
             pick(1, fallback[1]),
             pick(2, fallback[2]),
         ]);
+    }
+
+    pub fn begin_song(&self, intro_duration: f32) {
+        let imp = self.imp();
+        imp.last_bounds.set(None);
+        imp.pending_intro_duration
+            .set(Some(intro_duration.clamp(0.5, 30.0)));
+        imp.pending_position.set(Some(0.0));
+        imp.reset_pattern.set(true);
+        self.set_lyric("", 0.0);
+        self.queue_render();
+    }
+
+    pub fn set_playback_position(&self, seconds: f32) {
+        self.imp().pending_position.set(Some(seconds.max(0.0)));
     }
 }
 
@@ -333,6 +369,7 @@ fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate
             width,
             height,
         },
+        duration_seconds: 0.0,
     })
 }
 
@@ -345,7 +382,11 @@ struct Renderer {
     mask_textures: [u32; 2],
     current_mask: Vec<u8>,
     front: usize,
-    phase_seconds: f32,
+    pattern_iterations: u32,
+    intro_duration: f32,
+    song_seconds: f32,
+    lyric_age: f32,
+    lyric_duration: f32,
     frame: u32,
     palette: [[f32; 3]; 3],
 }
@@ -401,7 +442,11 @@ impl Renderer {
             mask_textures,
             current_mask: empty,
             front: 0,
-            phase_seconds: 4.0,
+            pattern_iterations: 0,
+            intro_duration: 4.0,
+            song_seconds: 0.0,
+            lyric_age: 30.0,
+            lyric_duration: 0.0,
             frame: 0,
             palette: [
                 [0.004, 0.012, 0.018],
@@ -411,12 +456,34 @@ impl Renderer {
         })
     }
 
-    unsafe fn set_text_mask(&mut self, pixels: &[u8]) {
+    unsafe fn set_text_mask(&mut self, pixels: &[u8], duration_seconds: f32) {
         upload_mask(self.mask_textures[1], &self.current_mask);
         upload_mask(self.mask_textures[0], pixels);
         self.current_mask.clear();
         self.current_mask.extend_from_slice(pixels);
-        self.phase_seconds = 0.0;
+        self.lyric_age = 0.0;
+        self.lyric_duration = duration_seconds.max(0.0);
+    }
+
+    unsafe fn reset_pattern(&mut self) {
+        let seed = make_seed();
+        for texture in self.state_textures {
+            gl::BindTexture(gl::TEXTURE_2D, texture);
+            gl::TexSubImage2D(
+                gl::TEXTURE_2D,
+                0,
+                0,
+                0,
+                SIM_SIZE,
+                SIM_SIZE,
+                gl::RG,
+                gl::FLOAT,
+                seed.as_ptr().cast(),
+            );
+        }
+        self.front = 0;
+        self.pattern_iterations = 0;
+        self.song_seconds = 0.0;
     }
 
     unsafe fn render(&mut self, width: i32, height: i32) {
@@ -425,27 +492,16 @@ impl Renderer {
         gl::Disable(gl::BLEND);
         gl::Viewport(0, 0, SIM_SIZE, SIM_SIZE);
         gl::UseProgram(self.simulation_program);
-        bind_texture(
-            self.simulation_program,
-            b"textMask\0",
-            1,
-            self.mask_textures[0],
-        );
-        bind_texture(
-            self.simulation_program,
-            b"previousTextMask\0",
-            2,
-            self.mask_textures[1],
-        );
-        uniform_1f(self.simulation_program, b"phase\0", self.phase_seconds);
-        // Audio slots are wired as stable defaults in this first text-seed prototype.
-        uniform_1f(self.simulation_program, b"audioEnergy\0", 0.12);
-        uniform_1f(self.simulation_program, b"beatPulse\0", 0.0);
         gl::BindVertexArray(self.vao);
-        // The reference playground advances many ping-pong steps per display
-        // frame. Eight iterations at 256² preserves that flowing maze rhythm
-        // while staying inside the desktop player's GPU budget.
-        for iteration in 0..ITERATIONS_PER_FRAME {
+
+        // Match the notebook's 20 repeated blur + unsharp iterations, but
+        // schedule them across the prelude instead of evolving forever.
+        let intro_progress = (self.song_seconds / self.intro_duration).clamp(0.0, 1.0);
+        let target_iterations = (intro_progress * TURING_ITERATIONS as f32).floor() as u32;
+        let steps = target_iterations
+            .saturating_sub(self.pattern_iterations)
+            .min(4);
+        for _ in 0..steps {
             let back = 1 - self.front;
             gl::BindFramebuffer(gl::FRAMEBUFFER, self.framebuffers[back]);
             bind_texture(
@@ -454,13 +510,9 @@ impl Renderer {
                 0,
                 self.state_textures[self.front],
             );
-            uniform_1f(
-                self.simulation_program,
-                b"time\0",
-                (self.frame * ITERATIONS_PER_FRAME + iteration) as f32 / 240.0,
-            );
             gl::DrawArrays(gl::TRIANGLES, 0, 3);
             self.front = back;
+            self.pattern_iterations += 1;
         }
 
         gl::BindFramebuffer(gl::FRAMEBUFFER, gtk_framebuffer as u32);
@@ -482,14 +534,19 @@ impl Renderer {
             1,
             self.mask_textures[0],
         );
-        bind_texture(
-            self.display_program,
-            b"previousTextMask\0",
-            2,
-            self.mask_textures[1],
-        );
-        uniform_1f(self.display_program, b"phase\0", self.phase_seconds);
         uniform_1f(self.display_program, b"time\0", self.frame as f32 / 30.0);
+        uniform_1f(self.display_program, b"songTime\0", self.song_seconds);
+        uniform_1f(
+            self.display_program,
+            b"introDuration\0",
+            self.intro_duration,
+        );
+        uniform_1f(self.display_program, b"lyricAge\0", self.lyric_age);
+        uniform_1f(
+            self.display_program,
+            b"lyricDuration\0",
+            self.lyric_duration,
+        );
         for (index, color) in self.palette.iter().enumerate() {
             let name = match index {
                 0 => b"paletteDark\0".as_slice(),
@@ -507,7 +564,8 @@ impl Renderer {
         gl::BindVertexArray(0);
         gl::UseProgram(0);
 
-        self.phase_seconds = (self.phase_seconds + 1.0 / 30.0).min(30.0);
+        self.song_seconds += 1.0 / 30.0;
+        self.lyric_age = (self.lyric_age + 1.0 / 30.0).min(60.0);
         self.frame = self.frame.wrapping_add(1);
     }
 }
@@ -607,10 +665,16 @@ fn make_seed() -> Vec<f32> {
     for y in 0..SIM_SIZE {
         for x in 0..SIM_SIZE {
             let i = ((y * SIM_SIZE + x) * 2) as usize;
-            let wave = ((x * 17 + y * 29 + (x * y) % 31) % 101) as f32 / 101.0;
-            let b = if wave > 0.93 { 0.86 } else { 0.0 };
-            pixels[i] = 1.0 - b * 0.48;
-            pixels[i + 1] = b;
+            let mut value = (x as u64)
+                .wrapping_mul(0x9E37_79B1)
+                .wrapping_add((y as u64).wrapping_mul(0x85EB_CA77))
+                .wrapping_add(0xC2B2_AE3D);
+            value ^= value >> 16;
+            value = value.wrapping_mul(0x7FEB_352D);
+            value ^= value >> 15;
+            let gray = (value & 0xffff) as f32 / 65_535.0;
+            pixels[i] = gray;
+            pixels[i + 1] = gray;
         }
     }
     pixels
@@ -676,101 +740,93 @@ void main() {
 
 const SIMULATION_SHADER: &str = r#"#version 330 core
 uniform sampler2D state;
-uniform sampler2D textMask;
-uniform sampler2D previousTextMask;
-uniform float phase;
-uniform float time;
-uniform float audioEnergy;
-uniform float beatPulse;
 in vec2 uv;
 layout(location = 0) out vec2 nextState;
 
-float noise(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
 void main() {
     vec2 px = 1.0 / vec2(textureSize(state, 0));
-    vec2 c = texture(state, uv).rg;
-    // Five-point stencil and fingerprint preset family, independently adapted
-    // for the native low-resolution GL pipeline.
-    vec2 lap = -4.0 * c;
-    lap += texture(state, uv + vec2(px.x, 0)).rg;
-    lap += texture(state, uv - vec2(px.x, 0)).rg;
-    lap += texture(state, uv + vec2(0, px.y)).rg;
-    lap += texture(state, uv - vec2(0, px.y)).rg;
+    float boxBlur = 0.0;
+    for (int y = -2; y <= 2; ++y) {
+        for (int x = -2; x <= 2; ++x) {
+            boxBlur += texture(state, fract(uv + vec2(x, y) * px)).r;
+        }
+    }
+    boxBlur /= 25.0;
 
-    float mask = texture(textMask, uv).r;
-    float oldMask = texture(previousTextMask, uv).r;
-    float n = noise(floor(uv / px) + floor(time * 17.0));
-    float seedStage = 1.0 - smoothstep(0.10, 0.22, phase);
-    float growthStage = smoothstep(0.12, 0.90, phase);
-    float erosionStage = smoothstep(0.08, 1.35, phase);
-    float sparseSeed = mask * step(0.72, n) * seedStage * 0.035;
-    float softConstraint = mask * growthStage * (0.0018 + audioEnergy * 0.0008);
-    float oldErosion = oldMask * erosionStage * (0.0018 + 0.0032 * n);
-
-    float reaction = c.x * c.y * c.y;
-    float feed = 0.037 + audioEnergy * 0.0008;
-    float kill = 0.060;
-    float a = c.x + 0.2097 * lap.x - reaction + feed * (1.0 - c.x);
-    float b = c.y + 0.1050 * lap.y + reaction - (feed + kill) * c.y;
-    b += sparseSeed + softConstraint + beatPulse * mask * 0.035;
-    b -= oldErosion;
-    b += (n - 0.5) * mask * growthStage * 0.0012;
-    nextState = clamp(vec2(a, b), 0.0, 1.0);
+    // A second radius-2 box blur is equivalent to this separable triangular
+    // 9x9 kernel. This lets one fragment pass reproduce blur + 300% unsharp.
+    float twiceBlurred = 0.0;
+    float totalWeight = 0.0;
+    for (int y = -4; y <= 4; ++y) {
+        for (int x = -4; x <= 4; ++x) {
+            float weight = float(5 - abs(x)) * float(5 - abs(y));
+            twiceBlurred += texture(state, fract(uv + vec2(x, y) * px)).r * weight;
+            totalWeight += weight;
+        }
+    }
+    twiceBlurred /= totalWeight;
+    float sharpened = clamp(boxBlur + 3.0 * (boxBlur - twiceBlurred), 0.0, 1.0);
+    nextState = vec2(sharpened, sharpened);
 }
 "#;
 
 const DISPLAY_SHADER: &str = r#"#version 330 core
 uniform sampler2D state;
 uniform sampler2D textMask;
-uniform sampler2D previousTextMask;
-uniform float phase;
 uniform float time;
+uniform float songTime;
+uniform float introDuration;
+uniform float lyricAge;
+uniform float lyricDuration;
 uniform vec3 paletteDark;
 uniform vec3 paletteMid;
 uniform vec3 paletteLight;
 in vec2 uv;
 out vec4 color;
 
-float noise(vec2 p) {
-    return fract(sin(dot(p, vec2(41.7, 289.1))) * 45758.5453);
+float hash21(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
 }
 
 void main() {
-    float b = texture(state, uv).g;
-    float mask = texture(textMask, uv).r;
-    float oldMask = texture(previousTextMask, uv).r;
-    float chemistry = smoothstep(0.035, 0.34, b);
-    float cellularEdge = smoothstep(0.012, 0.075, fwidth(b));
-    float n = noise(floor(uv * 256.0) + floor(time * 2.0));
+    // Quantised sub-pixel motion gives a restrained frame-by-frame hand-drawn
+    // wobble without changing the established pattern topology.
+    float handFrame = floor(time * 9.0);
+    vec2 jitter = vec2(hash21(vec2(handFrame, 2.0)),
+                       hash21(vec2(7.0, handFrame))) - 0.5;
+    vec2 sampleUv = fract(uv + jitter / 384.0);
+    float field = texture(state, sampleUv).r;
+    float ink = smoothstep(0.42, 0.58, field);
+    float edge = smoothstep(0.012, 0.055, fwidth(field));
 
-    float formation = smoothstep(0.10, 0.95, phase);
-    float threshold = mix(0.90, 0.12, formation);
-    float currentInk = mask * smoothstep(threshold, threshold + 0.13,
-                                          chemistry + n * 0.22);
+    // During the prelude, a noisy wavefront progressively lays the texture
+    // across the card. At completion the global pattern is visually frozen.
+    float intro = clamp(songTime / max(introDuration, 0.5), 0.0, 1.0);
+    float spreadNoise = hash21(floor(uv * 22.0));
+    float spreadDistance = distance(uv, vec2(0.18, 0.72));
+    float spread = smoothstep(-0.06, 0.06,
+                              intro * 1.58 - spreadDistance + spreadNoise * 0.16);
 
-    float erosion = smoothstep(0.05, 1.45, phase);
-    float erosionThreshold = mix(0.12, 0.94, erosion);
-    float previousInk = oldMask * chemistry *
-        smoothstep(erosionThreshold, erosionThreshold + 0.10,
-                   chemistry * 0.72 + n * 0.42);
+    // A lyric is a cavity cut out of the stable texture. Entry and refill use
+    // noisy stepped thresholds, producing the requested hand-drawn cadence.
+    float enterDuration = min(0.75, max(0.28, lyricDuration * 0.24));
+    float refillDuration = min(1.05, max(0.38, lyricDuration * 0.28));
+    float refillStart = max(enterDuration, lyricDuration - refillDuration);
+    float enter = smoothstep(0.0, enterDuration, lyricAge);
+    float refill = 1.0 - smoothstep(refillStart, max(lyricDuration, refillStart + 0.01), lyricAge);
+    float cavityStrength = min(enter, refill) * step(0.01, lyricDuration);
+    float paperNoise = hash21(floor(uv * 150.0) + handFrame * 0.37);
+    float cavityDraw = smoothstep(1.0 - cavityStrength,
+                                  1.10 - cavityStrength, paperNoise);
+    float mask = texture(textMask, sampleUv).r;
+    float cavity = mask * cavityDraw;
+    float cavityEdge = fwidth(mask * cavityDraw) * 9.0;
 
-    float glyphMatter = clamp(currentInk + previousInk * 0.68, 0.0, 1.0);
-    float glyphEdge = cellularEdge * clamp(mask + oldMask * (1.0 - erosion), 0.0, 1.0);
-    // The supplied video uses a dense, cyan-on-dark labyrinth. Background and
-    // glyph strokes remain one continuous chemical field rather than layers.
-    float mazeLine = clamp(chemistry * 0.72 + cellularEdge * 0.75, 0.0, 1.0);
-    float freePattern = mazeLine * (1.0 - mask * 0.20) * 0.62;
-
-    vec3 mapped = mix(paletteDark, paletteMid,
-                      clamp(freePattern + glyphMatter * 0.74, 0.0, 1.0));
-    mapped = mix(mapped, paletteLight,
-                 clamp(glyphEdge * 0.95 + cellularEdge * 0.34 + glyphMatter * 0.16,
-                       0.0, 1.0));
-    float vignette = 1.0 - 0.30 * dot(uv - 0.5, uv - 0.5);
-    float alpha = 0.40 + freePattern * 0.42 + glyphMatter * 0.48 + glyphEdge * 0.14;
-    color = vec4(mapped * vignette, clamp(alpha, 0.0, 0.96));
+    vec3 patternColor = mix(paletteMid, paletteLight, edge * 0.55 + ink * 0.18);
+    vec3 base = mix(paletteDark, patternColor, ink * spread);
+    base = mix(base, paletteDark * 0.38, cavity * spread);
+    base += paletteLight * cavityEdge * 0.16 * spread;
+    float vignette = 1.0 - 0.20 * dot(uv - 0.5, uv - 0.5);
+    color = vec4(base * vignette, 0.88);
 }
 "#;

@@ -89,6 +89,13 @@ impl LyricsPanel {
             .path()
             .map(|p| LyricsTrack::load_for_audio(&p))
             .unwrap_or_default();
+        let intro_seconds = track
+            .lines
+            .first()
+            .map(|line| line.start_ms as f32 / 1_000.0)
+            .filter(|seconds| *seconds >= 0.5)
+            .unwrap_or(3.0);
+        imp.reaction_background.begin_song(intro_seconds);
         if track.lines.is_empty() {
             imp.track.replace(track);
             self.show_empty("No synced lyrics found");
@@ -101,13 +108,18 @@ impl LyricsPanel {
 
     pub fn update_position(&self, seconds: u64) {
         let imp = self.imp();
+        imp.reaction_background
+            .set_playback_position(seconds as f32);
         let track = imp.track.borrow();
         if track.lines.is_empty() {
             return;
         }
-        let index = track
-            .current_index(seconds.saturating_mul(1000))
-            .unwrap_or(0);
+        let Some(index) = track.current_index(seconds.saturating_mul(1000)) else {
+            if imp.current_index.take().is_some() {
+                imp.reaction_background.set_lyric("", 0.0);
+            }
+            return;
+        };
         if imp.current_index.replace(Some(index)) == Some(index) {
             return;
         }
@@ -126,7 +138,13 @@ impl LyricsPanel {
         imp.older_label.set_label(text(-2));
         imp.previous_label.set_label(text(-1));
         imp.current_label.set_label(text(0));
-        imp.reaction_background.set_lyric(text(0));
+        let duration_seconds = track
+            .lines
+            .get(index + 1)
+            .map(|next| next.start_ms.saturating_sub(track.lines[index].start_ms) as f32 / 1_000.0)
+            .unwrap_or(5.0)
+            .max(1.0);
+        imp.reaction_background.set_lyric(text(0), duration_seconds);
         imp.next_label.set_label(text(1));
         imp.later_label.set_label(text(2));
     }
@@ -138,7 +156,7 @@ impl LyricsPanel {
         imp.current_label.set_label(message);
         imp.next_label.set_label("");
         imp.later_label.set_label("");
-        imp.reaction_background.set_lyric("");
+        imp.reaction_background.set_lyric("", 0.0);
         imp.status_label.set_label(message);
         imp.status_label.set_visible(true);
     }
