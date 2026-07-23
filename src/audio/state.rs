@@ -20,6 +20,7 @@ mod imp {
     pub struct PlayerState {
         pub playback_state: Cell<PlaybackState>,
         pub position: Cell<u64>,
+        pub position_ms: Cell<u64>,
         pub current_song: RefCell<Option<Song>>,
         pub volume: Cell<f64>,
     }
@@ -33,6 +34,7 @@ mod imp {
             Self {
                 playback_state: Cell::new(PlaybackState::Stopped),
                 position: Cell::new(0),
+                position_ms: Cell::new(0),
                 current_song: RefCell::new(None),
                 volume: Cell::new(1.0),
             }
@@ -45,6 +47,7 @@ mod imp {
                 vec![
                     ParamSpecBoolean::builder("playing").read_only().build(),
                     ParamSpecUInt64::builder("position").read_only().build(),
+                    ParamSpecUInt64::builder("position-ms").read_only().build(),
                     ParamSpecObject::builder::<Song>("song").read_only().build(),
                     ParamSpecString::builder("title").read_only().build(),
                     ParamSpecString::builder("artist").read_only().build(),
@@ -69,6 +72,7 @@ mod imp {
             match pspec.name() {
                 "playing" => obj.playing().to_value(),
                 "position" => obj.position().to_value(),
+                "position-ms" => obj.position_ms().to_value(),
                 "song" => self.current_song.borrow().to_value(),
                 "volume" => obj.volume().to_value(),
 
@@ -155,6 +159,7 @@ impl PlayerState {
     pub fn set_current_song(&self, song: Option<Song>) {
         self.imp().current_song.replace(song);
         self.imp().position.replace(0);
+        self.imp().position_ms.replace(0);
         self.notify("song");
         self.notify("title");
         self.notify("artist");
@@ -162,6 +167,7 @@ impl PlayerState {
         self.notify("duration");
         self.notify("cover");
         self.notify("position");
+        self.notify("position-ms");
     }
 
     pub fn position(&self) -> u64 {
@@ -170,7 +176,29 @@ impl PlayerState {
 
     pub fn set_position(&self, position: u64) {
         self.imp().position.replace(position);
+        self.imp()
+            .position_ms
+            .replace(position.saturating_mul(1_000));
         self.notify("position");
+        self.notify("position-ms");
+    }
+
+    /// Precise playback clock used by synchronized lyrics. The public
+    /// `position` property remains seconds for the existing UI and MPRIS code.
+    pub fn position_ms(&self) -> u64 {
+        self.imp().position_ms.get()
+    }
+
+    pub fn set_position_ms(&self, position_ms: u64) {
+        self.imp().position_ms.replace(position_ms);
+        let seconds = position_ms / 1_000;
+        let previous_seconds = self.imp().position.replace(seconds);
+        // Notify for every precise backend tick so sub-second LRC cues are
+        // observed; keep legacy UI updates at one notification per second.
+        self.notify("position-ms");
+        if previous_seconds != seconds {
+            self.notify("position");
+        }
     }
 
     pub fn volume(&self) -> f64 {

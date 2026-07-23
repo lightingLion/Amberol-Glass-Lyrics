@@ -100,12 +100,15 @@ mod imp {
         pub lyrics_visible: Cell<bool>,
         pub compact_width: Cell<i32>,
         pub lyrics_transition_serial: Cell<u32>,
+        pub pattern_initializing: Cell<bool>,
+        pub resume_after_pattern: Cell<bool>,
         pub replaygain_mode: Cell<ReplayGainMode>,
 
         pub playlist_filtermodel: RefCell<Option<gio::ListModel>>,
 
         pub notify_playing_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_position_id: RefCell<Option<glib::SignalHandlerId>>,
+        pub notify_lyrics_position_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_song_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_cover_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_nsongs_id: RefCell<Option<glib::SignalHandlerId>>,
@@ -285,12 +288,15 @@ mod imp {
                 lyrics_visible: Cell::new(false),
                 compact_width: Cell::new(0),
                 lyrics_transition_serial: Cell::new(0),
+                pattern_initializing: Cell::new(false),
+                resume_after_pattern: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
                 provider: gtk::CssProvider::new(),
                 settings: utils::settings_manager(),
                 notify_playing_id: RefCell::new(None),
                 notify_position_id: RefCell::new(None),
+                notify_lyrics_position_id: RefCell::new(None),
                 notify_song_id: RefCell::new(None),
                 notify_cover_id: RefCell::new(None),
                 notify_nsongs_id: RefCell::new(None),
@@ -836,6 +842,18 @@ impl Window {
             );
             imp.notify_position_id.replace(Some(notify_position_id));
 
+            self.update_lyrics_position();
+            let notify_lyrics_position_id = state.connect_notify_local(
+                Some("position-ms"),
+                clone!(
+                    #[weak(rename_to = win)]
+                    self,
+                    move |_, _| win.update_lyrics_position()
+                ),
+            );
+            imp.notify_lyrics_position_id
+                .replace(Some(notify_lyrics_position_id));
+
             // Update the UI
             self.update_song();
             let notify_song_id = state.connect_notify_local(
@@ -896,6 +914,9 @@ impl Window {
                 state.disconnect(id);
             }
             if let Some(id) = self.imp().notify_position_id.take() {
+                state.disconnect(id);
+            }
+            if let Some(id) = self.imp().notify_lyrics_position_id.take() {
                 state.disconnect(id);
             }
             if let Some(id) = self.imp().notify_song_id.take() {
@@ -998,6 +1019,16 @@ impl Window {
     }
 
     fn connect_signals(&self) {
+        self.imp().lyrics_panel.connect_closure(
+            "pattern-ready",
+            false,
+            closure_local!(
+                #[watch(rename_to = win)]
+                self,
+                move |_panel: LyricsPanel| win.on_pattern_ready()
+            ),
+        );
+
         self.imp().split_view.connect_notify_local(
             Some("collapsed"),
             clone!(
@@ -1408,6 +1439,12 @@ impl Window {
     fn update_play_button(&self) {
         if let Some(player) = self.player() {
             let state = player.state();
+            if self.imp().pattern_initializing.get() && state.playing() {
+                self.imp().resume_after_pattern.set(true);
+                self.defer_pattern_pause();
+                return;
+            }
+            self.imp().lyrics_panel.set_playing(state.playing());
             let play_button = self.imp().playback_control.play_button();
             if state.playing() {
                 play_button.set_icon_name("media-playback-pause-symbolic");
@@ -1415,6 +1452,30 @@ impl Window {
                 play_button.set_icon_name("media-playback-start-symbolic");
             }
         }
+    }
+
+    fn defer_pattern_pause(&self) {
+        // Song switching can notify `playing` from inside AudioPlayer's
+        // transition to Playing. Pausing synchronously in that notification
+        // is then overwritten by the outer transition's final backend.play().
+        // The idle callback runs after that transition and makes the
+        // initialization gate authoritative.
+        let weak = self.downgrade();
+        glib::idle_add_local_once(move || {
+            let Some(win) = weak.upgrade() else {
+                return;
+            };
+            if !win.imp().pattern_initializing.get() {
+                return;
+            }
+            if let Some(player) = win.player() {
+                if player.state().playing() {
+                    debug!("Pausing audio until Gray-Scott initialization completes");
+                    player.pause();
+                }
+                win.imp().lyrics_panel.set_playing(false);
+            }
+        });
     }
 
     fn update_position_labels(&self) {
@@ -1428,7 +1489,6 @@ impl Window {
 
                 let position = state.position() as f64 / state.duration() as f64;
                 self.set_song_position(position);
-                self.imp().lyrics_panel.update_position(elapsed);
             } else {
                 self.set_song_time(None, None);
                 self.set_song_position(0.0);
@@ -1436,9 +1496,20 @@ impl Window {
         }
     }
 
+    fn update_lyrics_position(&self) {
+        if let Some(player) = self.player() {
+            self.imp()
+                .lyrics_panel
+                .update_position_ms(player.state().position_ms());
+        }
+    }
+
     fn update_song(&self) {
         if let Some(player) = self.player() {
             let state = player.state();
+            let has_song = state.current_song().is_some();
+            self.imp().pattern_initializing.set(has_song);
+            self.imp().resume_after_pattern.set(state.playing());
             self.scroll_playlist_to_song();
             self.update_playlist_time();
             self.update_title(state.current_song().as_ref());
@@ -1446,6 +1517,24 @@ impl Window {
             self.imp()
                 .lyrics_panel
                 .load_song(state.current_song().as_ref());
+            if has_song && state.playing() {
+                self.defer_pattern_pause();
+            }
+        }
+    }
+
+    fn on_pattern_ready(&self) {
+        if !self.imp().pattern_initializing.replace(false) {
+            return;
+        }
+        let should_resume = self.imp().resume_after_pattern.replace(false);
+        if let Some(player) = self.player() {
+            // The backend can advance a few milliseconds before the pause
+            // notification is observed. Restart from zero, then release audio.
+            player.seek_start();
+            if should_resume {
+                player.play();
+            }
         }
     }
 

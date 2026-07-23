@@ -23,9 +23,11 @@ pub struct GstReplayGain {
 }
 
 fn send_update_position(sender: &Sender<PlaybackAction>, clock: gst::ClockTime, notify: bool) {
-    let pos = clock.seconds();
-    if let Err(e) = sender.send_blocking(PlaybackAction::UpdatePosition(pos, notify)) {
-        error!("Failed to send UpdatePosition({pos}): {e}");
+    // LRC timestamps are millisecond-accurate. Keep that precision all the way
+    // to the lyrics panel instead of truncating each 250 ms update to seconds.
+    let position_ms = clock.mseconds();
+    if let Err(e) = sender.send_blocking(PlaybackAction::UpdatePosition(position_ms, notify)) {
+        error!("Failed to send UpdatePosition({position_ms} ms): {e}");
     }
 }
 
@@ -76,7 +78,9 @@ impl GstBackend {
         gst_player.set_video_track_enabled(false);
 
         let mut config = gst_player.config();
-        config.set_position_update_interval(250);
+        // Precise lyrics use their own property, so a 20 ms clock does not
+        // force the regular time labels and waveform to redraw at this rate.
+        config.set_position_update_interval(20);
         gst_player.set_config(config).unwrap();
 
         let res = Self {

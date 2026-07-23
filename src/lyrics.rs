@@ -114,4 +114,15 @@ mod tests {
         let t = LyricsTrack::parse_lrc("[offset:-500]\n[00:01.00]One");
         assert_eq!(t.lines[0].start_ms, 500);
     }
+
+    #[test]
+    fn switches_on_exact_subsecond_boundaries() {
+        let t = LyricsTrack::parse_lrc("[00:00.500]First\n[00:01.001]Second\n[00:01.250]Third");
+        assert_eq!(t.current_index(499), None);
+        assert_eq!(t.current_index(500), Some(0));
+        assert_eq!(t.current_index(1_000), Some(0));
+        assert_eq!(t.current_index(1_001), Some(1));
+        assert_eq!(t.current_index(1_249), Some(1));
+        assert_eq!(t.current_index(1_250), Some(2));
+    }
 }

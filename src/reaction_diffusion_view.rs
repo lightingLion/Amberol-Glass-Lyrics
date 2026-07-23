@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Amberol Glass Lyrics contributors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! Prelude-built Turing texture plus hand-drawn lyric cavities.
-//! The texture follows a repeated blur + 300% unsharp process; once built it
-//! stays topologically stable. Pango/Cairo masks only carve and refill local
-//! cavities, so a lyric never causes the whole field to reorganise.
+//! Audio-seeded Gray-Scott reaction-diffusion with chemical lyric cavities.
+//! The text texture only modulates the U/V chemistry for a short envelope;
+//! appearance and disappearance remain entirely inside the continuous field.
 
 use gtk::{cairo, gdk, glib, pango, prelude::*, subclass::prelude::*};
 use std::{
@@ -16,8 +15,21 @@ use std::{
     sync::OnceLock,
 };
 
-const SIM_SIZE: i32 = 256;
-const TURING_ITERATIONS: u32 = 20;
+// Recipe adapted from ph-200711/Turing-Patterns-Music-Video-Generator mode 4.
+const SIM_WIDTH: i32 = 768;
+const SIM_HEIGHT: i32 = 1024;
+const INITIALIZATION_PASSES: u32 = 3_600;
+const INITIALIZATION_STEPS_PER_FRAME: u32 = 48;
+// The GTK canvas renders at 30 fps; 48 steps matches the reference's
+// 24 steps at a typical 60 Hz browser requestAnimationFrame loop.
+const PLAYBACK_STEPS_PER_FRAME: u32 = 48;
+const FEED_RATE: f32 = 0.0480;
+const KILL_RATE: f32 = 0.0615;
+const GLYPH_EMERGE_SECONDS: f32 = 0.30;
+const GLYPH_MIN_RELEASE_SECONDS: f32 = 1.20;
+const GLYPH_MAX_RELEASE_SECONDS: f32 = 4.00;
+const GLYPH_RELEASE_CUE_RATIO: f32 = 0.72;
+const GLYPH_CHEMISTRY_STRENGTH: f32 = 0.13;
 
 extern "C" {
     fn dlopen(
@@ -60,6 +72,7 @@ unsafe fn load_gl_symbol(symbol: &str) -> *const std::ffi::c_void {
 struct MaskUpdate {
     pixels: Vec<u8>,
     bounds: MaskRect,
+    cue_start_seconds: f32,
     duration_seconds: f32,
 }
 
@@ -87,6 +100,8 @@ impl MaskRect {
 
 mod imp {
     use super::*;
+    use glib::subclass::Signal;
+    use once_cell::sync::Lazy;
     use std::cell::RefCell;
 
     pub struct ReactionDiffusionView {
@@ -95,9 +110,12 @@ mod imp {
         pub(super) last_bounds: Cell<Option<MaskRect>>,
         pub(super) palette: Cell<[[f32; 3]; 3]>,
         pub(super) pending_position: Cell<Option<f32>>,
-        pub(super) pending_intro_duration: Cell<Option<f32>>,
         pub(super) reset_pattern: Cell<bool>,
+        pub(super) pattern_seed: Cell<u64>,
+        pub(super) playing: Cell<bool>,
+        pub(super) pattern_ready_emitted: Cell<bool>,
         last_frame_us: Cell<i64>,
+        frame_delta: Cell<f32>,
         init_failed: Cell<bool>,
     }
 
@@ -113,9 +131,12 @@ mod imp {
                     [0.050, 0.960, 1.000],
                 ]),
                 pending_position: Cell::new(Some(0.0)),
-                pending_intro_duration: Cell::new(Some(4.0)),
                 reset_pattern: Cell::new(true),
+                pattern_seed: Cell::new(0xA6D1_35C7_94E2_8B01),
+                playing: Cell::new(false),
+                pattern_ready_emitted: Cell::new(false),
                 last_frame_us: Cell::new(0),
+                frame_delta: Cell::new(1.0 / 30.0),
                 init_failed: Cell::new(false),
             }
         }
@@ -147,13 +168,26 @@ mod imp {
                 move |_, clock| {
                     let now = clock.frame_time();
                     let imp = obj.imp();
-                    if now - imp.last_frame_us.get() >= 33_000 {
+                    let previous = imp.last_frame_us.get();
+                    if now - previous >= 33_000 {
+                        let delta = if previous > 0 {
+                            ((now - previous) as f32 / 1_000_000.0).clamp(0.001, 0.05)
+                        } else {
+                            1.0 / 30.0
+                        };
+                        imp.frame_delta.set(delta);
                         imp.last_frame_us.set(now);
                         obj.queue_render();
                     }
                     glib::ControlFlow::Continue
                 }
             ));
+        }
+
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: Lazy<Vec<Signal>> =
+                Lazy::new(|| vec![Signal::builder("pattern-ready").build()]);
+            SIGNALS.as_ref()
         }
     }
 
@@ -176,9 +210,9 @@ mod imp {
                 match unsafe { Renderer::new() } {
                     Ok(renderer) => {
                         log::debug!(
-                            "Blur-unsharp Turing canvas ready: {}x{} at 30 FPS",
-                            SIM_SIZE,
-                            SIM_SIZE
+                            "Audio-seeded Turing canvas ready: {}x{} with timed lyric cavities",
+                            SIM_WIDTH,
+                            SIM_HEIGHT
                         );
                         *self.renderer.borrow_mut() = Some(renderer);
                     }
@@ -192,26 +226,38 @@ mod imp {
 
             let obj = self.obj();
             let scale = obj.scale_factor();
+            let mut emit_pattern_ready = false;
             if let Some(renderer) = self.renderer.borrow_mut().as_mut() {
                 unsafe {
-                    if let Some(update) = self.pending_mask.borrow_mut().take() {
-                        renderer.set_text_mask(&update.pixels, update.duration_seconds);
-                    }
+                    renderer.pattern_seed = self.pattern_seed.get();
                     if self.reset_pattern.replace(false) {
+                        self.pattern_ready_emitted.set(false);
                         renderer.reset_pattern();
                     }
-                    if let Some(duration) = self.pending_intro_duration.take() {
-                        renderer.intro_duration = duration.max(0.5);
+                    if let Some(update) = self.pending_mask.borrow_mut().take() {
+                        renderer.set_text_mask(
+                            &update.pixels,
+                            update.cue_start_seconds,
+                            update.duration_seconds,
+                        );
                     }
                     if let Some(position) = self.pending_position.take() {
                         renderer.song_seconds = position.max(0.0);
                     }
+                    renderer.playback_running = self.playing.get();
                     renderer.palette = self.palette.get();
                     renderer.render(
                         obj.width().saturating_mul(scale),
                         obj.height().saturating_mul(scale),
+                        self.frame_delta.get(),
                     );
+                    emit_pattern_ready =
+                        renderer.pattern_ready() && !self.pattern_ready_emitted.replace(true);
                 }
+            }
+            if emit_pattern_ready {
+                log::debug!("Gray-Scott initialization completed before playback");
+                obj.emit_by_name::<()>("pattern-ready", &[]);
             }
             glib::Propagation::Stop
         }
@@ -231,14 +277,15 @@ impl Default for ReactionDiffusionView {
 }
 
 impl ReactionDiffusionView {
-    pub fn set_lyric(&self, text: &str, duration_seconds: f32) {
+    pub fn set_lyric(&self, text: &str, cue_start_ms: u64, duration_ms: u64) {
         self.upcast_ref::<gtk::Accessible>()
             .update_property(&[gtk::accessible::Property::Label(text)]);
         if text.trim().is_empty() {
             self.imp().last_bounds.set(None);
             self.imp().pending_mask.replace(Some(MaskUpdate {
-                pixels: vec![0_u8; (SIM_SIZE * SIM_SIZE) as usize],
+                pixels: vec![0_u8; (SIM_WIDTH * SIM_HEIGHT * 4) as usize],
                 bounds: MaskRect::default(),
+                cue_start_seconds: cue_start_ms as f32 / 1_000.0,
                 duration_seconds: 0.0,
             }));
             self.queue_render();
@@ -255,7 +302,8 @@ impl ReactionDiffusionView {
                 );
                 self.imp().last_bounds.set(Some(update.bounds));
                 self.imp().pending_mask.replace(Some(MaskUpdate {
-                    duration_seconds: duration_seconds.max(1.0),
+                    cue_start_seconds: cue_start_ms as f32 / 1_000.0,
+                    duration_seconds: duration_ms.max(50) as f32 / 1_000.0,
                     ..update
                 }));
                 self.queue_render();
@@ -268,37 +316,59 @@ impl ReactionDiffusionView {
         if colors.is_empty() {
             return;
         }
-        let fallback = self.imp().palette.get();
-        let pick = |index: usize, old: [f32; 3]| {
-            colors
-                .get(index)
-                .map_or(old, |c| [c.red(), c.green(), c.blue()])
-        };
-        self.imp().palette.set([
-            pick(0, fallback[0]),
-            pick(1, fallback[1]),
-            pick(2, fallback[2]),
-        ]);
+        let mut ordered = colors
+            .iter()
+            .map(|color| [color.red(), color.green(), color.blue()])
+            .collect::<Vec<_>>();
+        ordered.sort_by(|left, right| {
+            relative_luminance(*left).total_cmp(&relative_luminance(*right))
+        });
+
+        let darkest = ordered[0];
+        let brightest = ordered[ordered.len() - 1];
+        let middle = ordered[ordered.len() / 2];
+        let album_mix = ordered.iter().fold([0.0; 3], |mut sum, color| {
+            for channel in 0..3 {
+                sum[channel] += color[channel] / ordered.len() as f32;
+            }
+            sum
+        });
+
+        // Blend the extracted cover colors into each stop rather than forcing
+        // a fixed cyan tint. Black/white are only used to preserve enough
+        // contrast for the chemical strands and lyric cavities.
+        let dark = mix_rgb(mix_rgb(darkest, album_mix, 0.18), [0.0, 0.0, 0.0], 0.40);
+        let mid = mix_rgb(middle, album_mix, 0.52);
+        let mut light = mix_rgb(mix_rgb(brightest, album_mix, 0.20), [1.0, 1.0, 1.0], 0.10);
+        if contrast_ratio(dark, light) < 3.0 {
+            light = mix_rgb(light, [1.0, 1.0, 1.0], 0.34);
+        }
+        self.imp().palette.set([dark, mid, light]);
     }
 
-    pub fn begin_song(&self, intro_duration: f32) {
+    pub fn begin_song(&self, _intro_duration: f32, pattern_seed: u64) {
         let imp = self.imp();
         imp.last_bounds.set(None);
-        imp.pending_intro_duration
-            .set(Some(intro_duration.clamp(0.5, 30.0)));
+        imp.pattern_seed.set(pattern_seed);
         imp.pending_position.set(Some(0.0));
         imp.reset_pattern.set(true);
-        self.set_lyric("", 0.0);
+        imp.pattern_ready_emitted.set(false);
+        self.set_lyric("", 0, 0);
         self.queue_render();
     }
 
     pub fn set_playback_position(&self, seconds: f32) {
         self.imp().pending_position.set(Some(seconds.max(0.0)));
     }
+
+    pub fn set_playing(&self, playing: bool) {
+        self.imp().playing.set(playing);
+        self.queue_render();
+    }
 }
 
 fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate, String> {
-    let mut surface = cairo::ImageSurface::create(cairo::Format::ARgb32, SIM_SIZE, SIM_SIZE)
+    let mut surface = cairo::ImageSurface::create(cairo::Format::ARgb32, SIM_WIDTH, SIM_HEIGHT)
         .map_err(|error| error.to_string())?;
     let cr = cairo::Context::new(&surface).map_err(|error| error.to_string())?;
     cr.set_source_rgb(0.0, 0.0, 0.0);
@@ -306,26 +376,28 @@ fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate
 
     let layout = pangocairo::functions::create_layout(&cr);
     layout.set_text(text);
-    layout.set_width((SIM_SIZE - 32) * pango::SCALE);
+    layout.set_width((SIM_WIDTH - 96) * pango::SCALE);
     layout.set_wrap(pango::WrapMode::WordChar);
     layout.set_alignment(pango::Alignment::Center);
-    let font_size = if text.chars().count() > 34 { 17 } else { 22 };
+    // The reference demo uses Comfortaa around weight 375. Regular Sans keeps
+    // a comparable stroke-to-pattern ratio and has complete CJK fallback.
+    let font_size = if text.chars().count() > 34 { 68 } else { 90 };
     layout.set_font_description(Some(&pango::FontDescription::from_string(&format!(
-        "Sans Bold {font_size}"
+        "Sans {font_size}"
     ))));
 
     let (_, logical) = layout.pixel_extents();
-    let width = logical.width().min(SIM_SIZE - 28).max(1);
-    let height = logical.height().min(92).max(1);
+    let width = logical.width().min(SIM_WIDTH - 84).max(1);
+    let height = logical.height().min(276).max(1);
     let mut hasher = DefaultHasher::new();
     text.hash(&mut hasher);
     let hash = hasher.finish() as usize;
     let candidates = [
-        ((SIM_SIZE - width) / 2, (SIM_SIZE - height) / 2),
-        (18, 42),
-        (SIM_SIZE - width - 18, SIM_SIZE - height - 42),
-        (SIM_SIZE - width - 22, 54),
-        (22, SIM_SIZE - height - 54),
+        ((SIM_WIDTH - width) / 2, (SIM_HEIGHT - height) / 2),
+        (54, 150),
+        (SIM_WIDTH - width - 54, SIM_HEIGHT - height - 150),
+        (SIM_WIDTH - width - 66, 230),
+        (66, SIM_HEIGHT - height - 230),
     ];
     let mut selected = candidates[hash % candidates.len()];
     for offset in 0..candidates.len() {
@@ -353,14 +425,15 @@ fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate
     surface.flush();
     let stride = surface.stride() as usize;
     let data = surface.data().map_err(|error| error.to_string())?;
-    let mut pixels = vec![0_u8; (SIM_SIZE * SIM_SIZE) as usize];
-    for y in 0..SIM_SIZE as usize {
-        for x in 0..SIM_SIZE as usize {
+    let mut coverage = vec![0_u8; (SIM_WIDTH * SIM_HEIGHT) as usize];
+    for y in 0..SIM_HEIGHT as usize {
+        for x in 0..SIM_WIDTH as usize {
             // Cairo rows start at the visual top; OpenGL texture row zero is bottom.
-            let source = (SIM_SIZE as usize - 1 - y) * stride + x * 4;
-            pixels[y * SIM_SIZE as usize + x] = data[source + 2];
+            let source = (SIM_HEIGHT as usize - 1 - y) * stride + x * 4;
+            coverage[y * SIM_WIDTH as usize + x] = data[source + 2];
         }
     }
+    let pixels = build_mask_field(&coverage, SIM_WIDTH as usize, SIM_HEIGHT as usize);
     Ok(MaskUpdate {
         pixels,
         bounds: MaskRect {
@@ -369,8 +442,19 @@ fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate
             width,
             height,
         },
+        cue_start_seconds: 0.0,
         duration_seconds: 0.0,
     })
+}
+
+/// RGBA chemical mask. Only R is populated with antialiased glyph coverage;
+/// the display shader never samples this texture.
+fn build_mask_field(coverage: &[u8], width: usize, height: usize) -> Vec<u8> {
+    let mut field = vec![0_u8; width * height * 4];
+    for (index, coverage) in coverage.iter().enumerate() {
+        field[index * 4] = *coverage;
+    }
+    field
 }
 
 struct Renderer {
@@ -379,15 +463,17 @@ struct Renderer {
     vao: u32,
     state_textures: [u32; 2],
     framebuffers: [u32; 2],
-    mask_textures: [u32; 2],
-    current_mask: Vec<u8>,
+    mask_texture: u32,
     front: usize,
     pattern_iterations: u32,
-    intro_duration: f32,
+    queued_mask: Option<(Vec<u8>, f32, f32)>,
+    has_current_mask: bool,
     song_seconds: f32,
     lyric_age: f32,
-    lyric_duration: f32,
-    frame: u32,
+    lyric_start_seconds: f32,
+    lyric_duration_seconds: f32,
+    playback_running: bool,
+    pattern_seed: u64,
     palette: [[f32; 3]; 3],
 }
 
@@ -410,27 +496,25 @@ impl Renderer {
         gl::GenFramebuffers(2, framebuffers.as_mut_ptr());
         allocate_state_textures(&state_textures, &framebuffers)?;
 
-        let mut mask_textures = [0; 2];
-        gl::GenTextures(2, mask_textures.as_mut_ptr());
-        let empty = vec![0_u8; (SIM_SIZE * SIM_SIZE) as usize];
-        for texture in mask_textures {
-            gl::BindTexture(gl::TEXTURE_2D, texture);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE as i32);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::R8 as i32,
-                SIM_SIZE,
-                SIM_SIZE,
-                0,
-                gl::RED,
-                gl::UNSIGNED_BYTE,
-                empty.as_ptr().cast(),
-            );
-        }
+        let mut mask_texture = 0;
+        gl::GenTextures(1, &mut mask_texture);
+        let empty = vec![0_u8; (SIM_WIDTH * SIM_HEIGHT * 4) as usize];
+        gl::BindTexture(gl::TEXTURE_2D, mask_texture);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE as i32);
+        gl::TexImage2D(
+            gl::TEXTURE_2D,
+            0,
+            gl::RGBA8 as i32,
+            SIM_WIDTH,
+            SIM_HEIGHT,
+            0,
+            gl::RGBA,
+            gl::UNSIGNED_BYTE,
+            empty.as_ptr().cast(),
+        );
         gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
 
         Ok(Self {
@@ -439,15 +523,17 @@ impl Renderer {
             vao,
             state_textures,
             framebuffers,
-            mask_textures,
-            current_mask: empty,
+            mask_texture,
             front: 0,
             pattern_iterations: 0,
-            intro_duration: 4.0,
+            queued_mask: None,
+            has_current_mask: false,
             song_seconds: 0.0,
             lyric_age: 30.0,
-            lyric_duration: 0.0,
-            frame: 0,
+            lyric_start_seconds: 0.0,
+            lyric_duration_seconds: 0.0,
+            playback_running: false,
+            pattern_seed: 0xA6D1_35C7_94E2_8B01,
             palette: [
                 [0.004, 0.012, 0.018],
                 [0.000, 0.680, 0.760],
@@ -456,17 +542,21 @@ impl Renderer {
         })
     }
 
-    unsafe fn set_text_mask(&mut self, pixels: &[u8], duration_seconds: f32) {
-        upload_mask(self.mask_textures[1], &self.current_mask);
-        upload_mask(self.mask_textures[0], pixels);
-        self.current_mask.clear();
-        self.current_mask.extend_from_slice(pixels);
-        self.lyric_age = 0.0;
-        self.lyric_duration = duration_seconds.max(0.0);
+    unsafe fn set_text_mask(
+        &mut self,
+        pixels: &[u8],
+        cue_start_seconds: f32,
+        duration_seconds: f32,
+    ) {
+        self.queued_mask = Some((
+            pixels.to_vec(),
+            cue_start_seconds.max(0.0),
+            duration_seconds.max(0.0),
+        ));
     }
 
     unsafe fn reset_pattern(&mut self) {
-        let seed = make_seed();
+        let seed = make_seed(self.pattern_seed);
         for texture in self.state_textures {
             gl::BindTexture(gl::TEXTURE_2D, texture);
             gl::TexSubImage2D(
@@ -474,8 +564,8 @@ impl Renderer {
                 0,
                 0,
                 0,
-                SIM_SIZE,
-                SIM_SIZE,
+                SIM_WIDTH,
+                SIM_HEIGHT,
                 gl::RG,
                 gl::FLOAT,
                 seed.as_ptr().cast(),
@@ -483,36 +573,54 @@ impl Renderer {
         }
         self.front = 0;
         self.pattern_iterations = 0;
+        self.has_current_mask = false;
         self.song_seconds = 0.0;
+        self.lyric_start_seconds = 0.0;
+        self.lyric_duration_seconds = 0.0;
+        self.lyric_age = 30.0;
     }
 
-    unsafe fn render(&mut self, width: i32, height: i32) {
+    fn pattern_ready(&self) -> bool {
+        self.pattern_iterations >= INITIALIZATION_PASSES
+    }
+
+    unsafe fn render(&mut self, width: i32, height: i32, delta_seconds: f32) {
+        self.lyric_age = (self.song_seconds - self.lyric_start_seconds)
+            .max(0.0)
+            .min(60.0);
+
         let mut gtk_framebuffer = 0;
         gl::GetIntegerv(gl::FRAMEBUFFER_BINDING, &mut gtk_framebuffer);
         gl::Disable(gl::BLEND);
-        gl::Viewport(0, 0, SIM_SIZE, SIM_SIZE);
-        gl::UseProgram(self.simulation_program);
+        gl::Viewport(0, 0, SIM_WIDTH, SIM_HEIGHT);
         gl::BindVertexArray(self.vao);
 
-        // Match the notebook's 20 repeated blur + unsharp iterations, but
-        // schedule them across the prelude instead of evolving forever.
-        let intro_progress = (self.song_seconds / self.intro_duration).clamp(0.0, 1.0);
-        let target_iterations = (intro_progress * TURING_ITERATIONS as f32).floor() as u32;
-        let steps = target_iterations
-            .saturating_sub(self.pattern_iterations)
-            .min(4);
-        for _ in 0..steps {
-            let back = 1 - self.front;
-            gl::BindFramebuffer(gl::FRAMEBUFFER, self.framebuffers[back]);
-            bind_texture(
-                self.simulation_program,
-                b"state\0",
-                0,
-                self.state_textures[self.front],
-            );
-            gl::DrawArrays(gl::TRIANGLES, 0, 3);
-            self.front = back;
-            self.pattern_iterations += 1;
+        // Cue replacement is immediate and never waits for an older cavity.
+        if let Some((pixels, cue_start, duration)) = self.queued_mask.take() {
+            upload_mask(self.mask_texture, &pixels);
+            self.has_current_mask = duration > 0.0;
+            self.lyric_start_seconds = cue_start;
+            self.lyric_duration_seconds = duration;
+            self.lyric_age = (self.song_seconds - cue_start).max(0.0).min(60.0);
+        }
+
+        if !self.pattern_ready() {
+            let steps = INITIALIZATION_PASSES
+                .saturating_sub(self.pattern_iterations)
+                .min(INITIALIZATION_STEPS_PER_FRAME);
+            for _ in 0..steps {
+                self.run_simulation_pass(0.0);
+                self.pattern_iterations += 1;
+            }
+        } else if self.playback_running {
+            let strength = if self.has_current_mask {
+                glyph_chemistry_envelope(self.lyric_age, self.lyric_duration_seconds)
+            } else {
+                0.0
+            };
+            for _ in 0..PLAYBACK_STEPS_PER_FRAME {
+                self.run_simulation_pass(strength);
+            }
         }
 
         gl::BindFramebuffer(gl::FRAMEBUFFER, gtk_framebuffer as u32);
@@ -527,25 +635,6 @@ impl Renderer {
             b"state\0",
             0,
             self.state_textures[self.front],
-        );
-        bind_texture(
-            self.display_program,
-            b"textMask\0",
-            1,
-            self.mask_textures[0],
-        );
-        uniform_1f(self.display_program, b"time\0", self.frame as f32 / 30.0);
-        uniform_1f(self.display_program, b"songTime\0", self.song_seconds);
-        uniform_1f(
-            self.display_program,
-            b"introDuration\0",
-            self.intro_duration,
-        );
-        uniform_1f(self.display_program, b"lyricAge\0", self.lyric_age);
-        uniform_1f(
-            self.display_program,
-            b"lyricDuration\0",
-            self.lyric_duration,
         );
         for (index, color) in self.palette.iter().enumerate() {
             let name = match index {
@@ -564,9 +653,61 @@ impl Renderer {
         gl::BindVertexArray(0);
         gl::UseProgram(0);
 
-        self.song_seconds += 1.0 / 30.0;
-        self.lyric_age = (self.lyric_age + 1.0 / 30.0).min(60.0);
-        self.frame = self.frame.wrapping_add(1);
+        if self.playback_running && self.pattern_ready() {
+            self.song_seconds += delta_seconds;
+        }
+        self.lyric_age = (self.song_seconds - self.lyric_start_seconds)
+            .max(0.0)
+            .min(60.0);
+    }
+
+    unsafe fn run_simulation_pass(&mut self, carve_strength: f32) {
+        let back = 1 - self.front;
+        gl::BindFramebuffer(gl::FRAMEBUFFER, self.framebuffers[back]);
+        gl::UseProgram(self.simulation_program);
+        bind_texture(
+            self.simulation_program,
+            b"state\0",
+            0,
+            self.state_textures[self.front],
+        );
+        bind_texture(self.simulation_program, b"textMask\0", 1, self.mask_texture);
+        uniform_1f(self.simulation_program, b"feedRate\0", FEED_RATE);
+        uniform_1f(self.simulation_program, b"killRate\0", KILL_RATE);
+        uniform_1f(
+            self.simulation_program,
+            b"carveStrength\0",
+            carve_strength.clamp(0.0, GLYPH_CHEMISTRY_STRENGTH),
+        );
+        gl::DrawArrays(gl::TRIANGLES, 0, 3);
+        self.front = back;
+    }
+}
+
+fn smooth_step(progress: f32) -> f32 {
+    let progress = progress.clamp(0.0, 1.0);
+    progress * progress * (3.0 - 2.0 * progress)
+}
+
+fn glyph_release_seconds(cue_duration_seconds: f32) -> f32 {
+    (cue_duration_seconds * GLYPH_RELEASE_CUE_RATIO)
+        .clamp(GLYPH_MIN_RELEASE_SECONDS, GLYPH_MAX_RELEASE_SECONDS)
+}
+
+fn glyph_chemistry_envelope(age_seconds: f32, cue_duration_seconds: f32) -> f32 {
+    let release_seconds = glyph_release_seconds(cue_duration_seconds);
+    let release_start = cue_duration_seconds.max(GLYPH_EMERGE_SECONDS);
+    if age_seconds < 0.0 {
+        0.0
+    } else if age_seconds < GLYPH_EMERGE_SECONDS {
+        smooth_step(age_seconds / GLYPH_EMERGE_SECONDS) * GLYPH_CHEMISTRY_STRENGTH
+    } else if age_seconds < release_start {
+        GLYPH_CHEMISTRY_STRENGTH
+    } else if age_seconds < release_start + release_seconds {
+        let release = (age_seconds - release_start) / release_seconds;
+        (1.0 - smooth_step(release)) * GLYPH_CHEMISTRY_STRENGTH
+    } else {
+        0.0
     }
 }
 
@@ -577,24 +718,16 @@ impl Drop for Renderer {
             gl::DeleteProgram(self.display_program);
             gl::DeleteVertexArrays(1, &self.vao);
             gl::DeleteTextures(2, self.state_textures.as_ptr());
-            gl::DeleteTextures(2, self.mask_textures.as_ptr());
+            gl::DeleteTextures(1, &self.mask_texture);
             gl::DeleteFramebuffers(2, self.framebuffers.as_ptr());
         }
     }
 }
 
 unsafe fn allocate_state_textures(textures: &[u32; 2], fbos: &[u32; 2]) -> Result<(), String> {
-    let seed_rg = make_seed();
-    let mut seed_rgba = Vec::with_capacity((SIM_SIZE * SIM_SIZE * 4) as usize);
-    for chemistry in seed_rg.chunks_exact(2) {
-        seed_rgba.extend_from_slice(&[chemistry[0], chemistry[1], 0.0, 1.0]);
-    }
-    let formats = [
-        (gl::RG16F, gl::RG, seed_rg.as_ptr()),
-        (gl::RGBA16F, gl::RGBA, seed_rgba.as_ptr()),
-        (gl::RGBA8, gl::RGBA, seed_rgba.as_ptr()),
-    ];
-    for (internal, format, seed) in formats {
+    let seed = make_seed(0xA6D1_35C7_94E2_8B01);
+    let formats = [gl::RG32F, gl::RG16F, gl::RG8];
+    for internal in formats {
         let mut complete = true;
         while gl::GetError() != gl::NO_ERROR {}
         for index in 0..2 {
@@ -607,12 +740,12 @@ unsafe fn allocate_state_textures(textures: &[u32; 2], fbos: &[u32; 2]) -> Resul
                 gl::TEXTURE_2D,
                 0,
                 internal as i32,
-                SIM_SIZE,
-                SIM_SIZE,
+                SIM_WIDTH,
+                SIM_HEIGHT,
                 0,
-                format,
+                gl::RG,
                 gl::FLOAT,
-                seed.cast(),
+                seed.as_ptr().cast(),
             );
             gl::BindFramebuffer(gl::FRAMEBUFFER, fbos[index]);
             gl::FramebufferTexture2D(
@@ -629,7 +762,7 @@ unsafe fn allocate_state_textures(textures: &[u32; 2], fbos: &[u32; 2]) -> Resul
             return Ok(());
         }
     }
-    Err("no supported reaction-diffusion framebuffer format".into())
+    Err("no supported two-channel reaction-diffusion framebuffer format".into())
 }
 
 unsafe fn upload_mask(texture: u32, pixels: &[u8]) {
@@ -639,9 +772,9 @@ unsafe fn upload_mask(texture: u32, pixels: &[u8]) {
         0,
         0,
         0,
-        SIM_SIZE,
-        SIM_SIZE,
-        gl::RED,
+        SIM_WIDTH,
+        SIM_HEIGHT,
+        gl::RGBA,
         gl::UNSIGNED_BYTE,
         pixels.as_ptr().cast(),
     );
@@ -660,21 +793,81 @@ unsafe fn uniform_1f(program: u32, name: &[u8], value: f32) {
     gl::Uniform1f(gl::GetUniformLocation(program, name.as_ptr().cast()), value);
 }
 
-fn make_seed() -> Vec<f32> {
-    let mut pixels = vec![0.0; (SIM_SIZE * SIM_SIZE * 2) as usize];
-    for y in 0..SIM_SIZE {
-        for x in 0..SIM_SIZE {
-            let i = ((y * SIM_SIZE + x) * 2) as usize;
-            let mut value = (x as u64)
-                .wrapping_mul(0x9E37_79B1)
-                .wrapping_add((y as u64).wrapping_mul(0x85EB_CA77))
-                .wrapping_add(0xC2B2_AE3D);
-            value ^= value >> 16;
-            value = value.wrapping_mul(0x7FEB_352D);
-            value ^= value >> 15;
-            let gray = (value & 0xffff) as f32 / 65_535.0;
-            pixels[i] = gray;
-            pixels[i + 1] = gray;
+fn splitmix64(state: &mut u64) -> u64 {
+    *state = state.wrapping_add(0x9E37_79B9_7F4A_7C15);
+    let mut value = *state;
+    value = (value ^ (value >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+    value = (value ^ (value >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+    value ^ (value >> 31)
+}
+
+fn random_unit(state: &mut u64) -> f32 {
+    (splitmix64(state) >> 40) as f32 / ((1_u32 << 24) - 1) as f32
+}
+
+fn mix_rgb(from: [f32; 3], to: [f32; 3], amount: f32) -> [f32; 3] {
+    let amount = amount.clamp(0.0, 1.0);
+    [
+        from[0] + (to[0] - from[0]) * amount,
+        from[1] + (to[1] - from[1]) * amount,
+        from[2] + (to[2] - from[2]) * amount,
+    ]
+}
+
+fn relative_luminance(color: [f32; 3]) -> f32 {
+    let linear = |channel: f32| {
+        if channel <= 0.04045 {
+            channel / 12.92
+        } else {
+            ((channel + 0.055) / 1.055).powf(2.4)
+        }
+    };
+    0.2126 * linear(color[0]) + 0.7152 * linear(color[1]) + 0.0722 * linear(color[2])
+}
+
+fn contrast_ratio(first: [f32; 3], second: [f32; 3]) -> f32 {
+    let a = relative_luminance(first);
+    let b = relative_luminance(second);
+    (a.max(b) + 0.05) / (a.min(b) + 0.05)
+}
+
+/// Gray-Scott U/V state seeded by audio-derived circular disturbances. The
+/// density and radius match the reference generator's 12 px cells and 3 px
+/// seed dots, while the hash makes every audio file deterministic.
+fn make_seed(pattern_seed: u64) -> Vec<f32> {
+    let mut pixels = vec![0.0_f32; (SIM_WIDTH * SIM_HEIGHT * 2) as usize];
+    for pair in pixels.chunks_exact_mut(2) {
+        pair[0] = 1.0; // Chemical U
+        pair[1] = 0.0; // Chemical V
+    }
+
+    let mut random = pattern_seed ^ 0x6A09_E667_F3BC_C909;
+    const CELL: i32 = 12;
+    let cells_x = (SIM_WIDTH + CELL - 1) / CELL;
+    let cells_y = (SIM_HEIGHT + CELL - 1) / CELL;
+    for cell_y in 0..cells_y {
+        for cell_x in 0..cells_x {
+            if random_unit(&mut random) < 0.965 {
+                continue;
+            }
+            let center_x = (cell_x * CELL + CELL / 2).min(SIM_WIDTH - 1) as f32;
+            let center_y = (cell_y * CELL + CELL / 2).min(SIM_HEIGHT - 1) as f32;
+            let radius = 2.6 + random_unit(&mut random) * 0.8;
+            let min_x = (center_x - radius).floor().max(0.0) as i32;
+            let max_x = (center_x + radius).ceil().min((SIM_WIDTH - 1) as f32) as i32;
+            let min_y = (center_y - radius).floor().max(0.0) as i32;
+            let max_y = (center_y + radius).ceil().min((SIM_HEIGHT - 1) as f32) as i32;
+            for y in min_y..=max_y {
+                for x in min_x..=max_x {
+                    let dx = x as f32 + 0.5 - center_x;
+                    let dy = y as f32 + 0.5 - center_y;
+                    if dx * dx + dy * dy <= radius * radius {
+                        let index = ((y * SIM_WIDTH + x) * 2) as usize;
+                        pixels[index] = 0.45;
+                        pixels[index + 1] = 0.95;
+                    }
+                }
+            }
         }
     }
     pixels
@@ -731,8 +924,6 @@ const VERTEX_SHADER: &str = r#"#version 330 core
 out vec2 uv;
 void main() {
     vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
-    // One oversized triangle: (-1,-1), (3,-1), (-1,3).
-    // The previous p-1 mapping ended at (+1,+1), covering only half the card.
     uv = p;
     gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
 }
@@ -740,93 +931,129 @@ void main() {
 
 const SIMULATION_SHADER: &str = r#"#version 330 core
 uniform sampler2D state;
+uniform sampler2D textMask;
+uniform float feedRate;
+uniform float killRate;
+uniform float carveStrength;
 in vec2 uv;
 layout(location = 0) out vec2 nextState;
 
-void main() {
-    vec2 px = 1.0 / vec2(textureSize(state, 0));
-    float boxBlur = 0.0;
-    for (int y = -2; y <= 2; ++y) {
-        for (int x = -2; x <= 2; ++x) {
-            boxBlur += texture(state, fract(uv + vec2(x, y) * px)).r;
-        }
-    }
-    boxBlur /= 25.0;
+ivec2 wrapCoord(ivec2 coordinate) {
+    ivec2 size = textureSize(state, 0);
+    return ivec2((coordinate.x % size.x + size.x) % size.x,
+                 (coordinate.y % size.y + size.y) % size.y);
+}
 
-    // A second radius-2 box blur is equivalent to this separable triangular
-    // 9x9 kernel. This lets one fragment pass reproduce blur + 300% unsharp.
-    float twiceBlurred = 0.0;
-    float totalWeight = 0.0;
-    for (int y = -4; y <= 4; ++y) {
-        for (int x = -4; x <= 4; ++x) {
-            float weight = float(5 - abs(x)) * float(5 - abs(y));
-            twiceBlurred += texture(state, fract(uv + vec2(x, y) * px)).r * weight;
-            totalWeight += weight;
-        }
-    }
-    twiceBlurred /= totalWeight;
-    float sharpened = clamp(boxBlur + 3.0 * (boxBlur - twiceBlurred), 0.0, 1.0);
-    nextState = vec2(sharpened, sharpened);
+vec2 stateAt(ivec2 coordinate, ivec2 offset) {
+    return texelFetch(state, wrapCoord(coordinate + offset), 0).rg;
+}
+
+void main() {
+    ivec2 coordinate = ivec2(gl_FragCoord.xy);
+    vec2 chemistry = stateAt(coordinate, ivec2(0));
+
+    // Gray-Scott Laplacian from the reference repository: cardinal 0.2,
+    // diagonal 0.05 and centre -1.0.
+    vec2 laplacian = -chemistry;
+    laplacian += 0.20 * stateAt(coordinate, ivec2( 1,  0));
+    laplacian += 0.20 * stateAt(coordinate, ivec2(-1,  0));
+    laplacian += 0.20 * stateAt(coordinate, ivec2( 0,  1));
+    laplacian += 0.20 * stateAt(coordinate, ivec2( 0, -1));
+    laplacian += 0.05 * stateAt(coordinate, ivec2( 1,  1));
+    laplacian += 0.05 * stateAt(coordinate, ivec2(-1,  1));
+    laplacian += 0.05 * stateAt(coordinate, ivec2( 1, -1));
+    laplacian += 0.05 * stateAt(coordinate, ivec2(-1, -1));
+
+    float u = chemistry.r;
+    float v = chemistry.g;
+    float uvv = u * v * v;
+    u += laplacian.r - uvv + feedRate * (1.0 - u);
+    v += 0.5 * laplacian.g + uvv - (feedRate + killRate) * v;
+
+    // Mode-4 hazy void: the glyph holds the actual chemistry toward empty U/V
+    // for its LRC interval. Once the sung line ends, only Gray-Scott evolution
+    // fills the cavity; the display shader has no text mask or opacity animation.
+    float mask = texelFetch(textMask, coordinate, 0).r * carveStrength;
+    float chemicalWeight = smoothstep(0.04, 0.72, mask);
+    u = mix(u, 1.0, chemicalWeight);
+    v = mix(v, 0.0, chemicalWeight);
+
+    nextState = clamp(vec2(u, v), 0.0, 1.0);
 }
 "#;
 
 const DISPLAY_SHADER: &str = r#"#version 330 core
 uniform sampler2D state;
-uniform sampler2D textMask;
-uniform float time;
-uniform float songTime;
-uniform float introDuration;
-uniform float lyricAge;
-uniform float lyricDuration;
 uniform vec3 paletteDark;
 uniform vec3 paletteMid;
 uniform vec3 paletteLight;
 in vec2 uv;
 out vec4 color;
 
-float hash21(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
 void main() {
-    // Quantised sub-pixel motion gives a restrained frame-by-frame hand-drawn
-    // wobble without changing the established pattern topology.
-    float handFrame = floor(time * 9.0);
-    vec2 jitter = vec2(hash21(vec2(handFrame, 2.0)),
-                       hash21(vec2(7.0, handFrame))) - 0.5;
-    vec2 sampleUv = fract(uv + jitter / 384.0);
-    float field = texture(state, sampleUv).r;
-    float ink = smoothstep(0.42, 0.58, field);
-    float edge = smoothstep(0.012, 0.055, fwidth(field));
+    float v = texture(state, uv).g;
+    float concentration = clamp((v - 0.02) / 0.40, 0.0, 1.0);
 
-    // During the prelude, a noisy wavefront progressively lays the texture
-    // across the card. At completion the global pattern is visually frozen.
-    float intro = clamp(songTime / max(introDuration, 0.5), 0.0, 1.0);
-    float spreadNoise = hash21(floor(uv * 22.0));
-    float spreadDistance = distance(uv, vec2(0.18, 0.72));
-    float spread = smoothstep(-0.06, 0.06,
-                              intro * 1.58 - spreadDistance + spreadNoise * 0.16);
+    vec3 background = paletteDark * 0.18;
+    vec3 albumPattern = mix(
+        paletteMid,
+        paletteLight,
+        smoothstep(0.14, 0.88, concentration)
+    );
+    vec3 base = mix(
+        background,
+        albumPattern,
+        smoothstep(0.04, 0.66, concentration)
+    );
 
-    // A lyric is a cavity cut out of the stable texture. Entry and refill use
-    // noisy stepped thresholds, producing the requested hand-drawn cadence.
-    float enterDuration = min(0.75, max(0.28, lyricDuration * 0.24));
-    float refillDuration = min(1.05, max(0.38, lyricDuration * 0.28));
-    float refillStart = max(enterDuration, lyricDuration - refillDuration);
-    float enter = smoothstep(0.0, enterDuration, lyricAge);
-    float refill = 1.0 - smoothstep(refillStart, max(lyricDuration, refillStart + 0.01), lyricAge);
-    float cavityStrength = min(enter, refill) * step(0.01, lyricDuration);
-    float paperNoise = hash21(floor(uv * 150.0) + handFrame * 0.37);
-    float cavityDraw = smoothstep(1.0 - cavityStrength,
-                                  1.10 - cavityStrength, paperNoise);
-    float mask = texture(textMask, sampleUv).r;
-    float cavity = mask * cavityDraw;
-    float cavityEdge = fwidth(mask * cavityDraw) * 9.0;
+    vec2 texel = 1.0 / vec2(textureSize(state, 0));
+    float gx = texture(state, uv + vec2(texel.x, 0.0)).g
+             - texture(state, uv - vec2(texel.x, 0.0)).g;
+    float gy = texture(state, uv + vec2(0.0, texel.y)).g
+             - texture(state, uv - vec2(0.0, texel.y)).g;
+    float edge = clamp(length(vec2(gx, gy)) * 2.2, 0.0, 1.0);
+    vec3 coverHighlight = mix(paletteMid, paletteLight, 0.72);
+    base += coverHighlight * pow(edge, 1.5) * 0.52;
 
-    vec3 patternColor = mix(paletteMid, paletteLight, edge * 0.55 + ink * 0.18);
-    vec3 base = mix(paletteDark, patternColor, ink * spread);
-    base = mix(base, paletteDark * 0.38, cavity * spread);
-    base += paletteLight * cavityEdge * 0.16 * spread;
-    float vignette = 1.0 - 0.20 * dot(uv - 0.5, uv - 0.5);
-    color = vec4(base * vignette, 0.88);
+    float vignette = smoothstep(1.25, 0.35, length(uv - 0.5) * 1.4);
+    base *= mix(0.65, 1.0, vignette);
+    color = vec4(base, 0.90);
 }
 "#;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mode_four_envelope_matches_reference_recipe() {
+        assert_eq!(glyph_chemistry_envelope(-0.1, 3.0), 0.0);
+        assert_eq!(glyph_chemistry_envelope(0.0, 3.0), 0.0);
+        assert!((glyph_chemistry_envelope(0.30, 3.0) - 0.13).abs() < 0.0001);
+        assert_eq!(
+            glyph_chemistry_envelope(2.90, 3.0),
+            GLYPH_CHEMISTRY_STRENGTH
+        );
+        assert_eq!(glyph_release_seconds(0.5), GLYPH_MIN_RELEASE_SECONDS);
+        assert_eq!(glyph_release_seconds(10.0), GLYPH_MAX_RELEASE_SECONDS);
+        assert_eq!(
+            glyph_chemistry_envelope(3.0 + glyph_release_seconds(3.0), 3.0),
+            0.0
+        );
+    }
+
+    #[test]
+    fn audio_seed_is_deterministic_two_channel_gray_scott_state() {
+        let first = make_seed(0x1234_5678);
+        let again = make_seed(0x1234_5678);
+        let other = make_seed(0x8765_4321);
+        assert_eq!(first, again);
+        assert_ne!(first, other);
+        assert_eq!(first.len(), (SIM_WIDTH * SIM_HEIGHT * 2) as usize);
+        let disturbed = first
+            .chunks_exact(2)
+            .filter(|pair| pair[1] > 0.5 && pair[0] < 0.9)
+            .count();
+        assert!(disturbed > 1_000);
+    }
+}
