@@ -6,7 +6,7 @@ use std::{
     path::PathBuf,
     rc::Rc,
     str::FromStr,
-    time::{Duration, Instant},
+    time::Instant,
 };
 
 use adw::subclass::prelude::*;
@@ -70,16 +70,6 @@ mod imp {
         #[template_child]
         pub playback_control: TemplateChild<PlaybackControl>,
         #[template_child]
-        pub main_box: TemplateChild<gtk::Box>,
-        #[template_child]
-        pub player_overlay: TemplateChild<gtk::Overlay>,
-        #[template_child]
-        pub lyrics_toggle_button: TemplateChild<gtk::ToggleButton>,
-        #[template_child]
-        pub lyrics_scrim: TemplateChild<gtk::Button>,
-        #[template_child]
-        pub lyrics_revealer: TemplateChild<gtk::Revealer>,
-        #[template_child]
         pub lyrics_panel: TemplateChild<LyricsPanel>,
         #[template_child]
         pub split_view: TemplateChild<adw::OverlaySplitView>,
@@ -97,9 +87,6 @@ mod imp {
         pub playlist_visible: Cell<bool>,
         pub playlist_selection: Cell<bool>,
         pub playlist_search: Cell<bool>,
-        pub lyrics_visible: Cell<bool>,
-        pub compact_width: Cell<i32>,
-        pub lyrics_transition_serial: Cell<u32>,
         pub pattern_initializing: Cell<bool>,
         pub resume_after_pattern: Cell<bool>,
         pub replaygain_mode: Cell<ReplayGainMode>,
@@ -154,12 +141,6 @@ mod imp {
                 if let Some(p) = win.player() {
                     p.skip_next();
                 }
-            });
-            klass.install_action("win.toggle-lyrics", None, move |win, _, _| {
-                win.set_lyrics_visible(!win.lyrics_visible());
-            });
-            klass.install_action("win.close-lyrics", None, move |win, _, _| {
-                win.set_lyrics_visible(false);
             });
             klass.install_action("queue.repeat-mode", None, move |win, _, _| {
                 debug!("Window::queue.repeat()");
@@ -267,11 +248,6 @@ mod imp {
                 toast_overlay: TemplateChild::default(),
                 drag_overlay: TemplateChild::default(),
                 playback_control: TemplateChild::default(),
-                main_box: TemplateChild::default(),
-                player_overlay: TemplateChild::default(),
-                lyrics_toggle_button: TemplateChild::default(),
-                lyrics_scrim: TemplateChild::default(),
-                lyrics_revealer: TemplateChild::default(),
                 lyrics_panel: TemplateChild::default(),
                 waveform_view: TemplateChild::default(),
                 elapsed_label: TemplateChild::default(),
@@ -285,9 +261,6 @@ mod imp {
                 playlist_visible: Cell::new(true),
                 playlist_selection: Cell::new(false),
                 playlist_search: Cell::new(false),
-                lyrics_visible: Cell::new(false),
-                compact_width: Cell::new(0),
-                lyrics_transition_serial: Cell::new(0),
                 pattern_initializing: Cell::new(false),
                 resume_after_pattern: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
@@ -313,18 +286,6 @@ mod imp {
             if APPLICATION_ID.ends_with("Devel") {
                 self.obj().add_css_class("devel");
             }
-
-            // Deterministic visual-test hook; normal launches leave the pane closed.
-            if std::env::var_os("AMBEROL_SHOW_LYRICS_ON_START").is_some() {
-                glib::timeout_add_local_once(
-                    std::time::Duration::from_millis(500),
-                    glib::clone!(
-                        #[weak(rename_to = win)]
-                        self.obj(),
-                        move || win.set_lyrics_visible(true)
-                    ),
-                );
-            }
         }
 
         fn properties() -> &'static [ParamSpec] {
@@ -334,7 +295,6 @@ mod imp {
                     ParamSpecBoolean::builder("playlist-visible").build(),
                     ParamSpecBoolean::builder("playlist-selection").build(),
                     ParamSpecBoolean::builder("playlist-search").build(),
-                    ParamSpecBoolean::builder("lyrics-visible").build(),
                     ParamSpecEnum::builder::<ReplayGainMode>("replaygain-mode").build(),
                 ]
             });
@@ -348,7 +308,6 @@ mod imp {
                 "playlist-visible" => obj.set_playlist_visible(value.get::<bool>().unwrap()),
                 "playlist-selection" => obj.set_playlist_selection(value.get::<bool>().unwrap()),
                 "playlist-search" => obj.set_playlist_search(value.get::<bool>().unwrap()),
-                "lyrics-visible" => obj.set_lyrics_visible(value.get::<bool>().unwrap()),
                 "replaygain-mode" => obj.set_replaygain(value.get::<ReplayGainMode>().unwrap()),
                 _ => unimplemented!(),
             }
@@ -361,7 +320,6 @@ mod imp {
                 "playlist-visible" => obj.playlist_visible().to_value(),
                 "playlist-selection" => obj.playlist_selection().to_value(),
                 "playlist-search" => obj.playlist_search().to_value(),
-                "lyrics-visible" => obj.lyrics_visible().to_value(),
                 "replaygain-mode" => obj.replaygain().to_value(),
                 _ => unimplemented!(),
             }
@@ -463,11 +421,13 @@ impl Window {
         let settings = utils::settings_manager();
         let width = settings.int("window-width");
         let height = settings.int("window-height");
-        self.set_default_size(width.max(600), height.max(680));
+        // A default size is only an initial preference. Keeping fixed widget
+        // requests off the toplevel lets GTK and the adaptive split views
+        // honor later user resizing.
+        self.set_default_size(width.max(320), height.max(360));
     }
 
     fn reset_queue(&self) {
-        self.set_lyrics_visible(false);
         self.set_playlist_visible(false);
         self.set_playlist_shuffled(false);
         self.set_playlist_selection(false);
@@ -485,100 +445,10 @@ impl Window {
     }
 
     fn set_playlist_visible(&self, visible: bool) {
-        if visible {
-            self.set_lyrics_visible(false);
-        }
         if visible != self.imp().playlist_visible.replace(visible) {
             self.imp().split_view.set_show_sidebar(visible);
             self.notify("playlist-visible");
         }
-    }
-
-    fn lyrics_visible(&self) -> bool {
-        self.imp().lyrics_visible.get()
-    }
-
-    fn set_lyrics_visible(&self, visible: bool) {
-        let imp = self.imp();
-        if visible == imp.lyrics_visible.get() {
-            return;
-        }
-
-        let serial = imp.lyrics_transition_serial.get().wrapping_add(1);
-        imp.lyrics_transition_serial.set(serial);
-
-        if visible {
-            self.set_playlist_visible(false);
-            let current_width = self.width().max(self.default_size().0).max(560);
-            let player_width = imp.player_overlay.width().max(360);
-            imp.compact_width.set(current_width);
-            // Freeze the left hand player allocation before the top-level window grows.
-            // This keeps the cover, waveform and controls from reflowing for one frame.
-            imp.player_overlay.set_size_request(player_width, -1);
-            imp.player_overlay.set_hexpand(false);
-            self.set_default_size(current_width.saturating_add(420), self.default_size().1);
-            imp.main_box.add_css_class("lyrics-dimmed");
-            imp.lyrics_scrim.set_visible(true);
-
-            glib::timeout_add_local_once(
-                Duration::from_millis(80),
-                clone!(
-                    #[weak(rename_to = win)]
-                    self,
-                    move || {
-                        if win.imp().lyrics_transition_serial.get() == serial
-                            && win.lyrics_visible()
-                        {
-                            win.imp().lyrics_revealer.set_visible(true);
-                            win.imp().lyrics_revealer.set_reveal_child(true);
-                        }
-                    }
-                ),
-            );
-        } else {
-            imp.main_box.remove_css_class("lyrics-dimmed");
-            imp.lyrics_scrim.set_visible(false);
-            imp.lyrics_revealer.set_reveal_child(false);
-            imp.lyrics_revealer.set_visible(false);
-
-            glib::timeout_add_local_once(
-                Duration::from_millis(40),
-                clone!(
-                    #[weak(rename_to = win)]
-                    self,
-                    move || {
-                        if win.imp().lyrics_transition_serial.get() != serial
-                            || win.lyrics_visible()
-                        {
-                            return;
-                        }
-                        let compact_width = win.imp().compact_width.get();
-                        if compact_width > 0 {
-                            win.set_default_size(compact_width, win.default_size().1);
-                        }
-                        glib::timeout_add_local_once(
-                            Duration::from_millis(80),
-                            clone!(
-                                #[weak]
-                                win,
-                                move || {
-                                    if win.imp().lyrics_transition_serial.get() == serial
-                                        && !win.lyrics_visible()
-                                    {
-                                        win.imp().player_overlay.set_size_request(-1, -1);
-                                        win.imp().player_overlay.set_hexpand(true);
-                                    }
-                                }
-                            ),
-                        );
-                    }
-                ),
-            );
-        }
-
-        imp.lyrics_visible.set(visible);
-        imp.lyrics_toggle_button.set_active(visible);
-        self.notify("lyrics-visible");
     }
 
     fn playlist_shuffled(&self) -> bool {
@@ -945,8 +815,6 @@ impl Window {
                             win.reset_queue();
                         } else {
                             win.action_set_enabled("queue.toggle", true);
-                            win.action_set_enabled("win.toggle-lyrics", true);
-                            win.action_set_enabled("win.close-lyrics", true);
                             win.action_set_enabled("queue.shuffle", queue.n_songs() > 1);
 
                             win.action_set_enabled("win.play", true);
@@ -1214,8 +1082,6 @@ impl Window {
             self.action_set_enabled("win.next", !queue.is_last_song());
 
             self.action_set_enabled("queue.toggle", !queue.is_empty());
-            self.action_set_enabled("win.toggle-lyrics", !queue.is_empty());
-            self.action_set_enabled("win.close-lyrics", !queue.is_empty());
             self.action_set_enabled("queue.shuffle", queue.n_songs() > 1);
             self.action_set_enabled("win.replaygain", player.replaygain_available());
 

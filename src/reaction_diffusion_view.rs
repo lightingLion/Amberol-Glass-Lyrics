@@ -376,28 +376,48 @@ fn render_text_mask(text: &str, previous: Option<MaskRect>) -> Result<MaskUpdate
 
     let layout = pangocairo::functions::create_layout(&cr);
     layout.set_text(text);
-    layout.set_width((SIM_WIDTH - 96) * pango::SCALE);
+    layout.set_width((SIM_WIDTH - 128) * pango::SCALE);
     layout.set_wrap(pango::WrapMode::WordChar);
     layout.set_alignment(pango::Alignment::Center);
     // The reference demo uses Comfortaa around weight 375. Regular Sans keeps
     // a comparable stroke-to-pattern ratio and has complete CJK fallback.
-    let font_size = if text.chars().count() > 34 { 68 } else { 90 };
-    layout.set_font_description(Some(&pango::FontDescription::from_string(&format!(
-        "Sans {font_size}"
-    ))));
+    let character_count = text.chars().filter(|c| !c.is_whitespace()).count();
+    let mut font_size = if character_count > 34 {
+        62
+    } else if character_count > 20 {
+        74
+    } else {
+        84
+    };
+    let logical = loop {
+        layout.set_font_description(Some(&pango::FontDescription::from_string(&format!(
+            "Sans {font_size}"
+        ))));
+        let (_, logical) = layout.pixel_extents();
+        if (logical.width() <= SIM_WIDTH - 108 && logical.height() <= 300) || font_size <= 42 {
+            break logical;
+        }
+        font_size -= 2;
+    };
 
-    let (_, logical) = layout.pixel_extents();
-    let width = logical.width().min(SIM_WIDTH - 84).max(1);
-    let height = logical.height().min(276).max(1);
+    let width = logical.width().clamp(1, SIM_WIDTH - 108);
+    let height = logical.height().clamp(1, SIM_HEIGHT - 240);
     let mut hasher = DefaultHasher::new();
     text.hash(&mut hasher);
     let hash = hasher.finish() as usize;
+    let center_x = (SIM_WIDTH - width) / 2;
+    let center_y = (SIM_HEIGHT - height) / 2;
+    let right_x = (SIM_WIDTH - width - 54).max(54);
+    let lower_y = (SIM_HEIGHT - height - 132).max(132);
+    let upper_y = 132.min(SIM_HEIGHT - height - 132).max(54);
+    let upper_middle_y = 228.min(SIM_HEIGHT - height - 132).max(54);
+    let lower_middle_y = (SIM_HEIGHT - height - 228).max(54);
     let candidates = [
-        ((SIM_WIDTH - width) / 2, (SIM_HEIGHT - height) / 2),
-        (54, 150),
-        (SIM_WIDTH - width - 54, SIM_HEIGHT - height - 150),
-        (SIM_WIDTH - width - 66, 230),
-        (66, SIM_HEIGHT - height - 230),
+        (center_x, center_y),
+        (54, upper_y),
+        (right_x, lower_y),
+        (right_x, upper_middle_y),
+        (54, lower_middle_y),
     ];
     let mut selected = candidates[hash % candidates.len()];
     for offset in 0..candidates.len() {
@@ -948,6 +968,12 @@ vec2 stateAt(ivec2 coordinate, ivec2 offset) {
     return texelFetch(state, wrapCoord(coordinate + offset), 0).rg;
 }
 
+float maskAt(ivec2 coordinate, ivec2 offset) {
+    ivec2 size = textureSize(textMask, 0);
+    ivec2 samplePoint = clamp(coordinate + offset, ivec2(0), size - ivec2(1));
+    return texelFetch(textMask, samplePoint, 0).r;
+}
+
 void main() {
     ivec2 coordinate = ivec2(gl_FragCoord.xy);
     vec2 chemistry = stateAt(coordinate, ivec2(0));
@@ -973,10 +999,25 @@ void main() {
     // Mode-4 hazy void: the glyph holds the actual chemistry toward empty U/V
     // for its LRC interval. Once the sung line ends, only Gray-Scott evolution
     // fills the cavity; the display shader has no text mask or opacity animation.
-    float mask = texelFetch(textMask, coordinate, 0).r * carveStrength;
+    float rawMask = maskAt(coordinate, ivec2(0));
+    float mask = rawMask * carveStrength;
     float chemicalWeight = smoothstep(0.04, 0.72, mask);
     u = mix(u, 1.0, chemicalWeight);
     v = mix(v, 0.0, chemicalWeight);
+
+    // A one-texel outer ring is injected into the same chemistry. Its V peak
+    // is above the free pattern's normal range, so the display shader can
+    // resolve it as a very fine white rim without compositing a text layer.
+    float nearbyMask = max(
+        max(maskAt(coordinate, ivec2( 1,  0)), maskAt(coordinate, ivec2(-1,  0))),
+        max(maskAt(coordinate, ivec2( 0,  1)), maskAt(coordinate, ivec2( 0, -1)))
+    );
+    float outsideGlyph = 1.0 - smoothstep(0.02, 0.24, rawMask);
+    float ring = smoothstep(0.08, 0.62, nearbyMask)
+               * outsideGlyph
+               * clamp(carveStrength / 0.13, 0.0, 1.0);
+    u = mix(u, 0.34, ring * 0.30);
+    v = mix(v, 0.86, ring * 0.30);
 
     nextState = clamp(vec2(u, v), 0.0, 1.0);
 }
@@ -1014,6 +1055,8 @@ void main() {
     float edge = clamp(length(vec2(gx, gy)) * 2.2, 0.0, 1.0);
     vec3 coverHighlight = mix(paletteMid, paletteLight, 0.72);
     base += coverHighlight * pow(edge, 1.5) * 0.52;
+    float lyricRim = smoothstep(0.74, 0.90, v);
+    base = mix(base, vec3(1.0), lyricRim * 0.76);
 
     float vignette = smoothstep(1.25, 0.35, length(uv - 0.5) * 1.4);
     base *= mix(0.65, 1.0, vignette);

@@ -7,10 +7,10 @@
   </enum>
 	<schema id="io.github.amberolglass.Lyrics" path="/io/github/amberolglass/Lyrics/">
 	  <key name="window-width" type="i">
-	    <default>600</default>
+	    <default>1170</default>
 	  </key>
 	  <key name="window-height" type="i">
-	    <default>300</default>
+	    <default>720</default>
 	  </key>
 	  <key name="enable-recoloring" type="b">
 	    <default>true</default>

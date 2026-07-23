@@ -5,3 +5,6 @@ src/config.rs
 target
 
 subprojects/blueprint-compiler
+
+build-deb/
+dist/*

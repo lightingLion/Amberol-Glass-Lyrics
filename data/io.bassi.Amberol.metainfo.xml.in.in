@@ -4,52 +4,34 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>Amberol Glass Lyrics</name>
-  <summary>Plays music, and nothing else</summary>
+  <summary>Amberol-based player with reaction-diffusion lyrics</summary>
   <description>
     <p>
-      Amberol is a music player with no delusions of grandeur. If you just
-      want to play music available on your local system then Amberol is the
-      music player you are looking for.
+      Amberol Glass Lyrics keeps Amberol's focused local music playback and
+      adds synchronized lyrics generated inside a continuous Gray-Scott
+      reaction-diffusion field.
     </p>
     <p>Current features:</p>
     <ul>
-      <li>adaptive UI</li>
-      <li>UI recoloring using the album art</li>
-      <li>drag and drop support to queue songs</li>
-      <li>shuffle and repeat</li>
-      <li>MPRIS integration</li>
+      <li>lyrics carved as chemical cavities and naturally regrown</li>
+      <li>album-art-derived reaction-diffusion colors</li>
+      <li>fixed lyrics card with adaptive player avoidance</li>
+      <li>LRC and embedded synchronized lyric support</li>
+      <li>Amberol playback queue, waveform, shuffle, repeat, and MPRIS</li>
     </ul>
   </description>
   <branding>
     <color type="primary" scheme_preference="light">#90c0ff</color>
     <color type="primary" scheme_preference="dark">#003681</color>
   </branding>
-  <screenshots>
-    <screenshot type="default">
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-full.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-compact.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-playlist.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-recolor.png</image>
-    </screenshot>
-  </screenshots>
   <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
-  <url type="homepage">https://gitlab.gnome.org/World/amberol</url>
-  <url type="bugtracker">https://gitlab.gnome.org/World/amberol/-/issues</url>
-  <url type="donation">https://ko-fi.com/emmanueleb</url>
-  <url type="contact">https://matrix.to/#/#amberol:gnome.org</url>
-  <url type="vcs-browser">https://gitlab.gnome.org/World/amberol</url>
-  <url type="translate">https://l10n.gnome.org/module/amberol/</url>
-  <developer_name>Emmanuele Bassi</developer_name>
-  <developer id="io.bassi">
-    <name>Emmanuele Bassi</name>
+  <url type="homepage">https://github.com/lightingLion/Amberol-Glass-Lyrics</url>
+  <url type="bugtracker">https://github.com/lightingLion/Amberol-Glass-Lyrics/issues</url>
+  <url type="vcs-browser">https://github.com/lightingLion/Amberol-Glass-Lyrics</url>
+  <developer_name>Amberol Glass Lyrics contributors</developer_name>
+  <developer id="io.github.amberolglass">
+    <name>Amberol Glass Lyrics contributors</name>
   </developer>
-  <update_contact>ebassi_at_gnome.org</update_contact>
   <translation type="gettext">amberol</translation>
   <custom>
     <value key="Purism::form_factor">mobile</value>
@@ -63,6 +45,16 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release version="2026.2" date="2026-07-24">
+      <description>
+        <ul>
+          <li>Add a continuous Gray-Scott lyrics canvas</li>
+          <li>Derive the pattern palette from album art</li>
+          <li>Add a fixed lyrics card with adaptive player avoidance</li>
+          <li>Fit and place lyric cavities inside safe canvas bounds</li>
+        </ul>
+      </description>
+    </release>
     <release version="2026.1" date="2026-04-05">
       <description>
         <ul>

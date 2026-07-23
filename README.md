@@ -1,84 +1,127 @@
-Amberol
-=======
+# Amberol Glass Lyrics
 
-![Application icon](./data/icons/hicolor/scalable/apps/io.bassi.Amberol.svg)
+基于 **Amberol** 播放器本体制作的 Linux 桌面音乐播放器实验分支：把同步歌词变成连续 Gray-Scott 图灵反应扩散场中的动态空腔。
 
-A small and simple sound and music player that is well integrated with GNOME.
+> **平台状态：目前只适配 Linux。Windows 与 macOS 版本会在后续有空时继续处理。**
+>
+> **Platform status: Linux only for now. Windows and macOS ports are planned for a later stage.**
 
-Amberol aspires to be as small, unintrusive, and simple as possible. It does
-not manage your music collection; it does not let you manage playlists, smart
-or otherwise; it does not let you edit the metadata for your songs; it does
-not show you lyrics for your songs, or the Wikipedia page for your bands.
+![Amberol Glass Lyrics](data/screenshots/amberol-glass-lyrics.png)
 
-Amberol plays music, and nothing else.
+## 项目来源与致谢
 
-![Full UI](./data/screenshots/amberol-full.png)
-![Compact UI](./data/screenshots/amberol-compact.png)
+- **播放器本体：Amberol**，由 Emmanuele Bassi 与 GNOME 社区开发。本项目保留 Amberol 的本地播放、播放队列、封面取色、波形、MPRIS 与 GStreamer 后端。上游项目：[GNOME / Amberol](https://gitlab.gnome.org/World/amberol)。
+- **图灵纹斑与歌词视觉方向：参考抖音博主「李铣豆」的相关创作。**
+- Gray-Scott 参数与 GPU 实现同时参考了 [ph-200711/Turing-Patterns-Music-Video-Generator](https://github.com/ph-200711/Turing-Patterns-Music-Video-Generator) 的音乐视频生成方案。
 
-Flatpak builds
---------------
+Amberol 原项目与本项目均按照 GPL-3.0-or-later 发布。有关上游版权信息请参阅仓库中的 `LICENSES/`、`REUSE.toml` 与源码文件头。
 
-The recommended way of installing Amberol is through Flatpak. If you don't have
-Flatpak installed, you can get it from [the Flatpak website](https://flatpak.org/setup).
+## 当前功能
 
-You can install stable builds of Amberol from [Flathub](https://flathub.org)
-by using this command:
+- 原生 Rust + GTK4 + libadwaita 桌面应用；
+- GStreamer 本地音乐播放、队列、随机/循环与 MPRIS；
+- 同名 `.lrc` 自动加载，支持多时间标签和 `[offset]`；
+- 毫秒级歌词时间轴；
+- 音频内容决定随机种子，Gray-Scott 小圆点真实生长为连续图灵纹斑；
+- 初始化完成后才从歌曲开头播放；
+- 歌词在纹斑中生成空腔，唱完后由同一化学场自然回填；
+- 歌词边缘带一圈很细的白色化学描边；
+- 图灵纹斑颜色由专辑封面的多种提取色混合生成；
+- 歌词卡片固定在播放界面右侧上层，不再通过按钮弹出或扩展顶层窗口；
+- 默认采用约 2:1 的播放器/歌词比例；窄窗口中缩小播放器避让量，卡片尺寸与位置保持稳定；
+- 卡片外区域保持完全透明，不给播放器叠加白色、模糊或半透明底色；
+- 播放队列可独立打开，不改变歌词卡片的固定状态。
 
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak install flathub io.bassi.Amberol
+## 安装 Debian 软件包
 
-<a href="https://flathub.org/apps/details/io.bassi.Amberol"><img src="https://flathub.org/api/badge?svg&locale=en" width="200"/></a>
+从 GitHub Releases 下载最新的 `amberol-glass-lyrics_*_amd64.deb`，然后运行：
 
-Getting in touch
-----------------
+```bash
+sudo apt install ./amberol-glass-lyrics_*_amd64.deb
+```
 
-If you have questions about Amberol, you can join the [`#amberol:gnome.org`](https://matrix.to/#/#amberol:gnome.org)
-channel on Matrix, or use the [GNOME Discourse instance](https://discourse.gnome.org/c/applications/7).
+安装完成后可在 GNOME 应用菜单中搜索 **Amberol Glass Lyrics**，或运行：
 
-Contributing
-------------
+```bash
+amberol-glass-lyrics
+```
 
-Please, see the [contribution guide](./CONTRIBUTING.md) if you wish to report
-and issue, fix a bug, or implement a new feature.
+当前 `.deb` 面向 x86_64 Linux，并依赖较新的 GTK4、libadwaita 与 GStreamer 运行环境。
 
-How to obtain debugging information
------------------------------------
+## 歌词文件
 
-Run Amberol from your terminal using:
+把 LRC 放在音频文件旁边并使用相同文件名：
 
-    RUST_BACKTRACE=1 RUST_LOG=amberol=debug flatpak run io.bassi.Amberol
+```text
+song.flac
+song.lrc
+```
 
-to obtain a full debug log.
+示例：
 
-Translations
-------------
+```lrc
+[offset:-120]
+[00:05.230]第一句歌词
+[00:09.840]第二句歌词
+```
 
-Amberol is translated on the [GNOME translation platform](https://l10n.gnome.org/module/amberol).
+应用也会读取 FLAC 元数据中的同步歌词；同名 `.txt` 可作为普通文本后备。
 
-You should contact the coordinator of [the localization team for your language](https://l10n.gnome.org/teams/)
-if you have questions.
+## 操作
 
-For more information, please see the [GNOME Translation Project Welcome page](https://welcome.gnome.org/team/translation/).
+- 歌词卡片始终固定在播放界面右侧；
+- 缩放窗口：宽屏时播放器与歌词约为 2:1，窄屏时歌词固定覆盖在播放器右侧；
+- 拖入音频文件或目录：加入播放队列。
 
-Code of conduct
----------------
+## 从源码构建
 
-Amberol follows the GNOME project [Code of Conduct](./code-of-conduct.md). All
-communications in project spaces, such as the issue tracker or
-[Discourse](https://discourse.gnome.org) are expected to follow it.
+### 依赖
 
-Why is it called "Amberol"?
----------------------------
+- Rust / Cargo
+- Meson + Ninja
+- GTK 4
+- libadwaita 1
+- GStreamer 1.0（base、audio、play、bad audio）
+- Blueprint Compiler
 
-The name comes from the the [Blue Amberol
-Records](https://en.wikipedia.org/wiki/Blue_Amberol_Records), a type of cylinder
-records made of (blue) nitrocellulose, capable of playback durations of around
-four minutes, just about the length of the average song since 1990.
+### 开发构建
 
-Copyright and licensing
------------------------
+```bash
+meson setup builddir -Dprofile=development
+meson compile -C builddir
+meson devenv -C builddir src/amberol-glass-lyrics /path/to/song.flac
+```
 
-Copyright 2022  Emmanuele Bassi
+### Release 构建
 
-Amberol is released under the terms of the GNU General Public License, either
-version 3.0 or, at your option, any later version.
+```bash
+meson setup build-release -Dprofile=default --buildtype=release
+meson compile -C build-release
+```
+
+### 构建 `.deb`
+
+```bash
+./packaging/build-deb.sh
+```
+
+软件包输出到 `dist/`。
+
+## 图灵歌词实现
+
+状态纹理为双通道 Gray-Scott U/V 化学场，使用 Ping-Pong FBO 持续更新。歌词由 Pango/Cairo 生成化学边界输入，显示 Shader 只根据化学浓度、梯度和专辑封面混合色绘制画面。详细设计见：
+
+- [`docs/图灵歌词原型.md`](docs/图灵歌词原型.md)
+- [`docs/反应扩散参考实现.md`](docs/反应扩散参考实现.md)
+- [`docs/桌面应用使用说明.md`](docs/桌面应用使用说明.md)
+
+## 测试
+
+```bash
+cargo test --all
+meson test -C builddir --print-errorlogs
+```
+
+## License
+
+GPL-3.0-or-later。播放器上游 Amberol 的版权归其原作者与贡献者所有；本项目新增的歌词面板、反应扩散画布与桌面整合代码沿用相同许可。

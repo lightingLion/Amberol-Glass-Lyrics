@@ -1,7 +1,7 @@
 version = 1
-SPDX-PackageName = "amberol"
-SPDX-PackageSupplier = "Emmanuele Bassi"
-SPDX-PackageDownloadLocation = "https://gitlab.gnome.org/ebassi/amberol"
+SPDX-PackageName = "amberol-glass-lyrics"
+SPDX-PackageSupplier = "Amberol Glass Lyrics contributors"
+SPDX-PackageDownloadLocation = "https://github.com/lightingLion/Amberol-Glass-Lyrics"
 
 [[annotations]]
 path = ".gitignore"

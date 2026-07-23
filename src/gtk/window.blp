@@ -6,9 +6,9 @@ using Adw 1;
 
 template $AmberolWindow: Adw.ApplicationWindow {
   handle-menubar-accel: true;
-  width-request: 360;
-  height-request: 660;
-  default-width: 800;
+  default-width: 1170;
+  default-height: 720;
+  resizable: true;
 
   content: WindowHandle {
     $DragOverlay drag_overlay {
@@ -80,13 +80,12 @@ template $AmberolWindow: Adw.ApplicationWindow {
           StackPage {
             name: "main-view";
 
-            child: Box workspace {
-              orientation: horizontal;
+            child: Overlay {
+              overflow: hidden;
 
-              Overlay player_overlay {
-                hexpand: true;
-
-                child: Adw.OverlaySplitView split_view {
+              child: Box {
+                Adw.OverlaySplitView split_view {
+                  hexpand: true;
                   max-sidebar-width: 330;
                   sidebar-width-fraction: 0.4;
 
@@ -94,94 +93,95 @@ template $AmberolWindow: Adw.ApplicationWindow {
                     [top]
                     Adw.HeaderBar {
                       show-title: false;
-
-                      [end]
-                      ToggleButton lyrics_toggle_button {
-                        icon-name: "view-list-symbolic";
-                        tooltip-text: _("Show Lyrics");
-                        action-name: "win.toggle-lyrics";
-                        styles ["circular", "flat", "glass-button"]
-                      }
                     }
 
-                    content: Box main_box {
-                      orientation: vertical;
-                      valign: center;
-                      vexpand: true;
-                      spacing: 6;
+                    content: ScrolledWindow {
+                      hscrollbar-policy: never;
+                      vscrollbar-policy: automatic;
+                      propagate-natural-height: false;
 
-                      styles ["main-box"]
-
-                      $AmberolSongCover song_cover {}
-
-                      Box {
+                      child: Box main_box {
                         orientation: vertical;
-                        spacing: 2;
-                        width-request: 256;
+                        valign: center;
+                        vexpand: true;
+                        spacing: 6;
+
+                        styles ["main-box"]
+
+                        $AmberolSongCover song_cover {}
 
                         Box {
-                          halign: center;
+                          orientation: vertical;
+                          spacing: 2;
 
-                          $AmberolWaveformView waveform_view {
-                            can-focus: "true";
+                          Box {
+                            halign: center;
+
+                            $AmberolWaveformView waveform_view {
+                              can-focus: "true";
+                            }
+                          }
+
+                          CenterBox {
+                            orientation: horizontal;
+                            halign: fill;
+                            margin-start: 18;
+                            margin-end: 18;
+
+                            [start]
+                            Label elapsed_label {
+                              label: "0:00";
+                              accessibility { label: C_("a11y", "Elapsed time"); }
+                              styles ["caption", "numeric"]
+                            }
+
+                            [end]
+                            Label remaining_label {
+                              label: "0:00";
+                              accessibility { label: C_("a11y", "Remaining time"); }
+                              styles ["caption", "numeric"]
+                            }
                           }
                         }
 
-                        CenterBox {
-                          orientation: horizontal;
-                          width-request: 256;
-                          halign: center;
+                        $AmberolSongDetails song_details {}
 
-                          [start]
-                          Label elapsed_label {
-                            label: "0:00";
-                            accessibility { label: C_("a11y", "Elapsed time"); }
-                            styles ["caption", "numeric"]
-                          }
-
-                          [end]
-                          Label remaining_label {
-                            label: "0:00";
-                            accessibility { label: C_("a11y", "Remaining time"); }
-                            styles ["caption", "numeric"]
-                          }
+                        $AmberolPlaybackControl playback_control {
+                          halign: "center";
+                          margin-top: "0";
+                          margin-bottom: "24";
                         }
-                      }
-
-                      $AmberolSongDetails song_details {}
-
-                      $AmberolPlaybackControl playback_control {
-                        halign: "center";
-                        margin-top: "0";
-                        margin-bottom: "24";
-                      }
+                      };
                     };
                   };
 
                   sidebar: $AmberolPlaylistView playlist_view {};
-                };
-
-                [overlay]
-                Button lyrics_scrim {
-                  visible: false;
-                  can-focus: false;
-                  action-name: "win.close-lyrics";
-                  styles ["lyrics-scrim", "flat"]
                 }
-              }
 
-              Revealer lyrics_revealer {
-                visible: false;
-                reveal-child: false;
-                transition-type: none;
-                transition-duration: 0;
+                Box {
+                  width-request: 120;
+                }
 
-                child: $AmberolLyricsPanel lyrics_panel {
-                  width-request: 400;
-                  margin-top: 18;
-                  margin-end: 18;
-                  margin-bottom: 18;
-                };
+                Revealer lyrics_avoidance_revealer {
+                  reveal-child: true;
+                  transition-type: slide_left;
+                  transition-duration: 280;
+
+                  child: Box {
+                    width-request: 270;
+                  };
+                }
+              };
+
+              [overlay]
+              $AmberolLyricsPanel lyrics_panel {
+                width-request: 360;
+                halign: end;
+                valign: fill;
+                margin-top: 18;
+                margin-start: 12;
+                margin-end: 18;
+                margin-bottom: 18;
               }
             };
           }
@@ -195,6 +195,14 @@ template $AmberolWindow: Adw.ApplicationWindow {
 
     setters {
       split_view.collapsed: true;
+    }
+  }
+
+  Adw.Breakpoint {
+    condition ("max-width: 1000sp")
+
+    setters {
+      lyrics_avoidance_revealer.reveal-child: false;
     }
   }
 }
