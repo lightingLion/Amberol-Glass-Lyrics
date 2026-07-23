@@ -1,6 +1,6 @@
 # Amberol Glass Lyrics
 
-基于 **Amberol** 播放器本体制作的 Linux 桌面音乐播放器实验分支：把同步歌词变成连续 Gray-Scott 图灵反应扩散场中的动态空腔。
+基于 **Amberol** 播放器本体制作的 Linux 桌面音乐播放器实验分支：添加了一个基于图灵扩散视觉效果的动态歌词卡片。
 
 > **平台状态：目前只适配 Linux。Windows 与 macOS 版本会在后续有空时继续处理。**
 >
