@@ -12,7 +12,7 @@
 
 - **播放器本体：Amberol**，由 Emmanuele Bassi 与 GNOME 社区开发。本项目保留 Amberol 的本地播放、播放队列、封面取色、波形、MPRIS 与 GStreamer 后端。上游项目：[GNOME / Amberol](https://gitlab.gnome.org/World/amberol)。
 - **图灵纹斑与歌词视觉方向：参考抖音博主「李铣豆」的相关创作。**
-- Gray-Scott 参数与 GPU 实现同时参考了 [ph-200711/Turing-Patterns-Music-Video-Generator](https://github.com/ph-200711/Turing-Patterns-Music-Video-Generator) 的音乐视频生成方案。
+- Gray-Scott 参数与 GPU 实现参考了博主的仓库 [ph-200711/Turing-Patterns-Music-Video-Generator](https://github.com/ph-200711/Turing-Patterns-Music-Video-Generator) 的音乐视频生成方案。
 
 Amberol 原项目与本项目均按照 GPL-3.0-or-later 发布。有关上游版权信息请参阅仓库中的 `LICENSES/`、`REUSE.toml` 与源码文件头。
 
