@@ -22,11 +22,25 @@ pub struct LyricsTrack {
 
 impl LyricsTrack {
     pub fn load_for_audio(audio: &Path) -> Self {
+        Self::load_for_audio_with_embedded(audio, None)
+    }
+
+    pub fn load_for_audio_with_embedded(audio: &Path, embedded: Option<&str>) -> Self {
         let lrc = audio.with_extension("lrc");
         if let Ok(content) = fs::read_to_string(&lrc) {
             let mut track = Self::parse_lrc(&content);
             track.source = Some(lrc);
             if !track.lines.is_empty() {
+                return track;
+            }
+        }
+
+        if let Some(content) = embedded {
+            let mut track = Self::parse_lrc(content);
+            if !track.lines.is_empty() {
+                // No sidecar path: this track came from LYRICS/SYNCEDLYRICS
+                // metadata embedded in the audio container.
+                track.source = None;
                 return track;
             }
         }
@@ -124,5 +138,23 @@ mod tests {
         assert_eq!(t.current_index(1_001), Some(1));
         assert_eq!(t.current_index(1_249), Some(1));
         assert_eq!(t.current_index(1_250), Some(2));
+    }
+
+    #[test]
+    fn loads_synced_embedded_lyrics_when_sidecar_is_absent() {
+        let audio = std::env::temp_dir().join(format!(
+            "amberol-glass-lyrics-metadata-{}.flac",
+            std::process::id()
+        ));
+        let track = LyricsTrack::load_for_audio_with_embedded(
+            &audio,
+            Some("[00:00.500]Embedded first\n[00:02.250]Embedded second"),
+        );
+
+        assert!(track.synced);
+        assert_eq!(track.lines.len(), 2);
+        assert_eq!(track.lines[0].text, "Embedded first");
+        assert_eq!(track.lines[1].start_ms, 2_250);
+        assert!(track.source.is_none());
     }
 }

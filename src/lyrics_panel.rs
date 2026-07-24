@@ -108,10 +108,11 @@ impl LyricsPanel {
         if let Some(palette) = song.cover_palette() {
             imp.reaction_background.set_palette(&palette);
         }
+        let embedded_lyrics = song.lyrics();
         let track = song
             .file()
             .path()
-            .map(|p| LyricsTrack::load_for_audio(&p))
+            .map(|p| LyricsTrack::load_for_audio_with_embedded(&p, embedded_lyrics.as_deref()))
             .unwrap_or_default();
         let intro_seconds = track
             .lines

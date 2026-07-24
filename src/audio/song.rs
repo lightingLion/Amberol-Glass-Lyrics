@@ -30,6 +30,7 @@ pub struct SongData {
     artist: Option<String>,
     title: Option<String>,
     album: Option<String>,
+    lyrics: Option<String>,
     cover_art: Option<CoverArt>,
     cover_uuid: Option<String>,
     uuid: Option<String>,
@@ -48,6 +49,10 @@ impl SongData {
 
     pub fn album(&self) -> Option<&str> {
         self.album.as_deref()
+    }
+
+    pub fn lyrics(&self) -> Option<&str> {
+        self.lyrics.as_deref()
     }
 
     pub fn uuid(&self) -> Option<&str> {
@@ -124,6 +129,12 @@ impl SongData {
         let mut artist = None;
         let mut title = None;
         let mut album = None;
+        let lyrics = tagged_file.tags().iter().find_map(|tag| {
+            tag.get_string(ItemKey::Lyrics)
+                .or_else(|| tag.get_string(ItemKey::UnsyncLyrics))
+                .filter(|text| !text.trim().is_empty())
+                .map(str::to_owned)
+        });
         let mut cover_art = None;
         let mut cover_uuid = None;
         if let Some(tag) = tagged_file.primary_tag() {
@@ -192,6 +203,7 @@ impl SongData {
             artist,
             title,
             album,
+            lyrics,
             cover_art,
             cover_uuid,
             uuid,
@@ -215,6 +227,7 @@ impl Default for SongData {
             artist: Some("Invalid Artist".to_string()),
             title: Some("Invalid Title".to_string()),
             album: Some("Invalid Album".to_string()),
+            lyrics: None,
             cover_art: None,
             cover_uuid: None,
             uuid: None,
@@ -354,6 +367,10 @@ impl Song {
             Some(album) => album.to_string(),
             None => i18n("Unknown album"),
         }
+    }
+
+    pub fn lyrics(&self) -> Option<String> {
+        self.imp().data.borrow().lyrics().map(str::to_owned)
     }
 
     pub fn cover_texture(&self) -> Option<gdk::Texture> {
