@@ -65,7 +65,7 @@ jobs:
             src/gtk/window.blp
           glib-compile-resources src/amberol.gresource.xml \
             --sourcedir=src \
-            --sourcedir=build-windows \
+            --sourcedir=build-windows/gtk \
             --target=build-windows/amberol-glass-lyrics.gresource
           cargo build --release --target x86_64-pc-windows-gnu
           packaging/windows/collect-runtime.sh
