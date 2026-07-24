@@ -90,7 +90,6 @@ mod imp {
         pub playlist_selection: Cell<bool>,
         pub playlist_search: Cell<bool>,
         pub pattern_initializing: Cell<bool>,
-        pub resume_after_pattern: Cell<bool>,
         pub replaygain_mode: Cell<ReplayGainMode>,
 
         pub playlist_filtermodel: RefCell<Option<gio::ListModel>>,
@@ -265,7 +264,6 @@ mod imp {
                 playlist_selection: Cell::new(false),
                 playlist_search: Cell::new(false),
                 pattern_initializing: Cell::new(false),
-                resume_after_pattern: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
                 provider: gtk::CssProvider::new(),
@@ -1327,7 +1325,6 @@ impl Window {
         if let Some(player) = self.player() {
             let state = player.state();
             if self.imp().pattern_initializing.get() && state.playing() {
-                self.imp().resume_after_pattern.set(true);
                 self.defer_pattern_pause();
                 return;
             }
@@ -1396,7 +1393,6 @@ impl Window {
             let state = player.state();
             let has_song = state.current_song().is_some();
             self.imp().pattern_initializing.set(has_song);
-            self.imp().resume_after_pattern.set(state.playing());
             self.scroll_playlist_to_song();
             self.update_playlist_time();
             self.update_title(state.current_song().as_ref());
@@ -1414,12 +1410,14 @@ impl Window {
         if !self.imp().pattern_initializing.replace(false) {
             return;
         }
-        let should_resume = self.imp().resume_after_pattern.replace(false);
         if let Some(player) = self.player() {
-            // The backend can advance a few milliseconds before the pause
-            // notification is observed. Restart from zero, then release audio.
-            player.seek_start();
-            if should_resume {
+            if player.state().current_song().is_some() {
+                // Every queue selection is a playback request. The pause above
+                // belongs only to the initialization gate, so always restart
+                // and release the current song when its pattern is ready.
+                // This avoids losing playback intent during the transient
+                // Paused state used by skip-next/skip-to.
+                player.seek_start();
                 player.play();
             }
         }
