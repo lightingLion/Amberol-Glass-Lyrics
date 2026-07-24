@@ -1,0 +1,110 @@
+name: Windows MSI
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*-windows"
+
+permissions:
+  contents: read
+
+jobs:
+  build-msi:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Install Rust GNU target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-gnu
+
+      - name: Install GTK, GStreamer, and build tools
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          path-type: inherit
+          install: >-
+            git
+            mingw-w64-ucrt-x86_64-blueprint-compiler
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-gettext-tools
+            mingw-w64-ucrt-x86_64-glib2
+            mingw-w64-ucrt-x86_64-gst-libav
+            mingw-w64-ucrt-x86_64-gst-plugins-bad
+            mingw-w64-ucrt-x86_64-gst-plugins-base
+            mingw-w64-ucrt-x86_64-gst-plugins-good
+            mingw-w64-ucrt-x86_64-gst-plugins-ugly
+            mingw-w64-ucrt-x86_64-gstreamer
+            mingw-w64-ucrt-x86_64-gtk4
+            mingw-w64-ucrt-x86_64-libadwaita
+            mingw-w64-ucrt-x86_64-pkgconf
+
+      - name: Build native Windows application
+        shell: msys2 {0}
+        env:
+          CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER: x86_64-w64-mingw32-gcc
+          PKG_CONFIG_PATH: /ucrt64/lib/pkgconfig
+        run: |
+          set -euxo pipefail
+          mkdir -p build-windows/gtk
+          blueprint-compiler batch-compile \
+            build-windows/gtk src/gtk \
+            src/gtk/playback-control.blp \
+            src/gtk/lyrics-panel.blp \
+            src/gtk/playlist-view.blp \
+            src/gtk/queue-row.blp \
+            src/gtk/shortcuts-dialog.blp \
+            src/gtk/song-cover.blp \
+            src/gtk/song-details.blp \
+            src/gtk/volume-control.blp \
+            src/gtk/window.blp
+          glib-compile-resources src/amberol.gresource.xml \
+            --sourcedir=src \
+            --sourcedir=build-windows \
+            --target=build-windows/amberol-glass-lyrics.gresource
+          cargo build --release --target x86_64-pc-windows-gnu
+          packaging/windows/collect-runtime.sh
+
+      - name: Install WiX Toolset
+        shell: pwsh
+        run: choco install wixtoolset --no-progress -y
+
+      - name: Build MSI
+        shell: pwsh
+        run: |
+          $source = (Resolve-Path "dist/windows/Amberol Glass Lyrics").Path
+          $wix = "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin"
+          if (-not (Test-Path $wix)) {
+            $wix = (Split-Path (Get-Command heat.exe).Source)
+          }
+          & "$wix\heat.exe" dir $source `
+            -nologo -gg -scom -sreg -sfrag -srd `
+            -dr INSTALLFOLDER -cg AppFiles `
+            -var var.SourceDir `
+            -out packaging/windows/Files.wxs
+          & "$wix\candle.exe" -nologo -arch x64 `
+            "-dSourceDir=$source" `
+            packaging/windows/Product.wxs `
+            packaging/windows/Files.wxs `
+            -out packaging/windows/
+          New-Item -ItemType Directory -Force dist/windows-msi | Out-Null
+          & "$wix\light.exe" -nologo `
+            packaging/windows/Product.wixobj `
+            packaging/windows/Files.wixobj `
+            -out dist/windows-msi/Amberol-Glass-Lyrics-2026.2.1-x64.msi
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-FileHash dist/windows-msi/*.msi -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash.ToLower())  $([IO.Path]::GetFileName($_.Path))" } |
+            Set-Content dist/windows-msi/SHA256SUMS-Windows.txt
+
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Amberol-Glass-Lyrics-Windows-x64
+          path: dist/windows-msi/*
+          if-no-files-found: error

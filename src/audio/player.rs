@@ -12,11 +12,13 @@ use glib::clone;
 use gtk::glib;
 use log::{debug, error};
 
+#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+use crate::audio::MprisController;
 use crate::{
     application::ApplicationAction,
     audio::{
-        Controller, CoverCache, GstBackend, InhibitController, MprisController, PlayerState, Queue,
-        Song, WaveformGenerator,
+        Controller, CoverCache, GstBackend, InhibitController, PlayerState, Queue, Song,
+        WaveformGenerator,
     },
 };
 
@@ -131,8 +133,11 @@ impl AudioPlayer {
 
         let mut controllers: Vec<Box<dyn Controller>> = Vec::new();
 
-        let mpris_controller = MprisController::new(sender.clone());
-        controllers.push(Box::new(mpris_controller));
+        #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+        {
+            let mpris_controller = MprisController::new(sender.clone());
+            controllers.push(Box::new(mpris_controller));
+        }
 
         let inhibit_controller = InhibitController::new();
         controllers.push(Box::new(inhibit_controller));

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product
+    Id="*"
+    Name="Amberol Glass Lyrics"
+    Language="2052"
+    Version="2026.2.1"
+    Manufacturer="Amberol Glass Lyrics Contributors"
+    UpgradeCode="{C6D991A2-ACE8-430A-858F-BF12C362EDCD}">
+    <Package
+      InstallerVersion="500"
+      Compressed="yes"
+      InstallScope="perMachine"
+      Platform="x64"
+      Description="Amberol music player with reaction-diffusion lyrics" />
+    <MajorUpgrade
+      DowngradeErrorMessage="已安装更新版本的 Amberol Glass Lyrics。" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Property Id="ARPPRODUCTICON" Value="AmberolIcon" />
+    <Icon
+      Id="AmberolIcon"
+      SourceFile="$(var.SourceDir)\amberol-glass-lyrics.ico" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="Amberol Glass Lyrics" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+    </Directory>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="ApplicationShortcut" Guid="*" Win64="yes">
+        <Shortcut
+          Id="StartMenuShortcut"
+          Directory="ProgramMenuFolder"
+          Name="Amberol Glass Lyrics"
+          Description="Amberol music player with reaction-diffusion lyrics"
+          Target="[INSTALLFOLDER]amberol-glass-lyrics.exe"
+          WorkingDirectory="INSTALLFOLDER"
+          Icon="AmberolIcon" />
+        <RemoveFolder
+          Id="RemoveProgramMenuShortcut"
+          Directory="ProgramMenuFolder"
+          On="uninstall" />
+        <RegistryValue
+          Root="HKLM"
+          Key="Software\AmberolGlassLyrics"
+          Name="installed"
+          Type="integer"
+          Value="1"
+          KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="MainFeature" Title="Amberol Glass Lyrics" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+  </Product>
+</Wix>

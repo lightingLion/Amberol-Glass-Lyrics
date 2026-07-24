@@ -1,10 +1,10 @@
 # Amberol Glass Lyrics
 
-基于 **Amberol** 播放器本体制作的 Linux 桌面音乐播放器实验分支：添加了一个基于图灵扩散视觉效果的动态歌词卡片。
+基于 **Amberol** 播放器本体制作的桌面音乐播放器实验分支：添加了一个基于图灵扩散视觉效果的动态歌词卡片。
 
-> **平台状态：目前只适配 Linux。Windows 与 macOS 版本会在后续有空时继续处理。**
+> **平台状态：目前支持 x86_64 Linux 与 x64 Windows；macOS 版本会在后续有空时继续处理。**
 >
-> **Platform status: Linux only for now. Windows and macOS ports are planned for a later stage.**
+> **Platform status: x86_64 Linux and x64 Windows are supported. A macOS port is planned for a later stage.**
 
 ![Amberol Glass Lyrics](data/screenshots/amberol-glass-lyrics.png)
 
@@ -19,7 +19,7 @@ Amberol 原项目与本项目均按照 GPL-3.0-or-later 发布。有关上游版
 ## 当前功能
 
 - 原生 Rust + GTK4 + libadwaita 桌面应用；
-- GStreamer 本地音乐播放、队列、随机/循环与 MPRIS；
+- GStreamer 本地音乐播放、队列与随机/循环；Linux 桌面额外支持 MPRIS；
 - 文件夹导入沿用原版 Amberol 的递归检索与自然排序逻辑；
 - 同名 `.lrc` 自动加载，支持多时间标签和 `[offset]`；
 - 毫秒级歌词时间轴；
@@ -48,6 +48,15 @@ amberol-glass-lyrics
 ```
 
 当前 `.deb` 面向 x86_64 Linux，并依赖较新的 GTK4、libadwaita 与 GStreamer 运行环境。
+
+## 安装 Windows MSI
+
+从 [GitHub Releases](https://github.com/lightingLion/Amberol-Glass-Lyrics/releases) 下载最新的
+`Amberol-Glass-Lyrics-*-x64.msi`，双击安装后可从开始菜单启动
+**Amberol Glass Lyrics**。
+
+Windows 安装包面向 64 位 Windows，并已包含 GTK4、libadwaita 与 GStreamer
+运行组件，无需另外安装 MSYS2。
 
 ## 歌词文件
 
@@ -107,6 +116,12 @@ meson compile -C build-release
 ```
 
 软件包输出到 `dist/`。
+
+### 构建 Windows MSI
+
+Windows 安装包由仓库中的 **Windows MSI** GitHub Actions 工作流构建。工作流使用
+MSYS2 UCRT64 编译原生 Windows 可执行文件并收集 GTK4、libadwaita 与 GStreamer
+运行组件，然后使用 WiX Toolset 生成 MSI。
 
 ## 图灵歌词实现
 
