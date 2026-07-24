@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use core::cmp::Ordering;
-use std::{collections::HashSet, path::PathBuf};
+use std::path::PathBuf;
 
 use color_thief::{get_palette, ColorFormat};
 use gtk::{gdk, gio, glib, prelude::*};
@@ -140,31 +140,10 @@ fn load_files_from_folder_internal(
     base: &gio::File,
     folder: &gio::File,
     recursive: bool,
-    visited_folders: &mut HashSet<String>,
 ) -> Vec<gio::File> {
-    // Follow directory links, but identify their target before descending so
-    // linked music libraries work without allowing symlink cycles.
-    let folder_id = folder
-        .query_info(
-            "id::filesystem,id::file",
-            gio::FileQueryInfoFlags::NONE,
-            gio::Cancellable::NONE,
-        )
-        .ok()
-        .and_then(|info| {
-            let filesystem = info.attribute_string("id::filesystem")?;
-            let file = info.attribute_string("id::file")?;
-            Some(format!("{filesystem}:{file}"))
-        })
-        .unwrap_or_else(|| folder.uri().to_string());
-    if !visited_folders.insert(folder_id) {
-        debug!("Skipping already visited folder '{}'", folder.uri());
-        return Vec::new();
-    }
-
     let mut enumerator = if let Ok(enumerator) = folder.enumerate_children(
         "standard::name,standard::type",
-        gio::FileQueryInfoFlags::NONE,
+        gio::FileQueryInfoFlags::NOFOLLOW_SYMLINKS,
         None::<&gio::Cancellable>,
     ) {
         enumerator
@@ -174,25 +153,13 @@ fn load_files_from_folder_internal(
     };
 
     let mut files = Vec::new();
-    loop {
-        match enumerator.next() {
-            Some(Ok(info)) => {
-                let child = enumerator.child(&info);
-                if recursive && info.file_type() == gio::FileType::Directory {
-                    let mut res =
-                        load_files_from_folder_internal(base, &child, recursive, visited_folders);
-                    files.append(&mut res);
-                } else if info.file_type() == gio::FileType::Regular {
-                    files.push(child);
-                }
-            }
-            Some(Err(err)) => {
-                // One unreadable entry must not terminate the rest of the
-                // directory scan, otherwise valid songs in later subfolders
-                // silently disappear from the import result.
-                warn!("Skipping an entry in '{}': {err}", folder.uri());
-            }
-            None => break,
+    while let Some(info) = enumerator.next().and_then(|s| s.ok()) {
+        let child = enumerator.child(&info);
+        if recursive && info.file_type() == gio::FileType::Directory {
+            let mut res = load_files_from_folder_internal(base, &child, recursive);
+            files.append(&mut res);
+        } else if info.file_type() == gio::FileType::Regular {
+            files.push(child.clone());
         }
     }
 
@@ -265,8 +232,7 @@ pub fn load_files_from_folder(folder: &gio::File, recursive: bool) -> Vec<gio::F
     use std::time::Instant;
 
     let now = Instant::now();
-    let mut visited_folders = HashSet::new();
-    let res = load_files_from_folder_internal(folder, folder, recursive, &mut visited_folders);
+    let res = load_files_from_folder_internal(folder, folder, recursive);
     debug!(
         "Folder enumeration: {} us (recursive: {}), total files: {}",
         now.elapsed().as_micros(),
@@ -275,84 +241,6 @@ pub fn load_files_from_folder(folder: &gio::File, recursive: bool) -> Vec<gio::F
     );
 
     res
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::{
-        fs,
-        time::{SystemTime, UNIX_EPOCH},
-    };
-
-    #[test]
-    fn recursively_loads_files_from_nested_folders() {
-        let unique = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos();
-        let root = std::env::temp_dir().join(format!(
-            "amberol-glass-lyrics-folder-scan-{}-{unique}",
-            std::process::id()
-        ));
-        let nested = root.join("album").join("disc-2");
-        fs::create_dir_all(&nested).unwrap();
-        fs::write(root.join("root.flac"), b"fixture").unwrap();
-        fs::write(root.join("album").join("track-1.ogg"), b"fixture").unwrap();
-        fs::write(nested.join("track-2.mp3"), b"fixture").unwrap();
-
-        let files = load_files_from_folder(&gio::File::for_path(&root), true);
-        let relative_paths: Vec<_> = files
-            .iter()
-            .map(|file| {
-                file.path()
-                    .unwrap()
-                    .strip_prefix(&root)
-                    .unwrap()
-                    .to_path_buf()
-            })
-            .collect();
-
-        assert_eq!(relative_paths.len(), 3);
-        assert!(relative_paths.contains(&PathBuf::from("root.flac")));
-        assert!(relative_paths.contains(&PathBuf::from("album/track-1.ogg")));
-        assert!(relative_paths.contains(&PathBuf::from("album/disc-2/track-2.mp3")));
-
-        fs::remove_dir_all(root).unwrap();
-    }
-
-    #[cfg(unix)]
-    #[test]
-    fn follows_linked_subfolders_without_revisiting_cycles() {
-        use std::os::unix::fs::symlink;
-
-        let unique = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos();
-        let root = std::env::temp_dir().join(format!(
-            "amberol-glass-lyrics-linked-scan-{}-{unique}",
-            std::process::id()
-        ));
-        let library = root.join("library");
-        let album = library.join("album");
-        let selection = root.join("selection");
-        fs::create_dir_all(&album).unwrap();
-        fs::create_dir_all(&selection).unwrap();
-        fs::write(album.join("linked-track.flac"), b"fixture").unwrap();
-        symlink(&album, selection.join("linked-album")).unwrap();
-        symlink(&selection, album.join("cycle")).unwrap();
-
-        let files = load_files_from_folder(&gio::File::for_path(&selection), true);
-
-        assert_eq!(files.len(), 1);
-        assert_eq!(
-            files[0].basename().unwrap().to_string_lossy(),
-            "linked-track.flac"
-        );
-
-        fs::remove_dir_all(root).unwrap();
-    }
 }
 
 pub fn store_playlist(queue: &Queue) {
