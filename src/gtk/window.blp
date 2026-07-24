@@ -27,52 +27,56 @@ template $AmberolWindow: Adw.ApplicationWindow {
                 show-title: false;
               }
 
-              content: Adw.Clamp {
-                maximum-size: 450;
+              content: CenterBox {
                 vexpand: true;
-                valign: fill;
 
-                child: Adw.StatusPage status_page {
-                  margin-start: 12;
-                  margin-end: 12;
-                  title: "Amberol Glass Lyrics";
-                  description: _("Select a file or a folder, or drag files from your file manager to the application window to add songs to the playlist");
+                [center]
+                Adw.Clamp {
+                  maximum-size: 450;
+                  valign: center;
 
-                  child: Box {
-                    orientation: vertical;
-                    halign: center;
-                    homogeneous: true;
-                    spacing: 12;
+                  child: Adw.StatusPage status_page {
+                    margin-start: 12;
+                    margin-end: 12;
+                    title: "Amberol Glass Lyrics";
+                    description: _("Select a file or a folder, or drag files from your file manager to the application window to add songs to the playlist");
 
-                    Button restore_playlist_button {
-                      label: _("Restore Playlist");
-                      action-name: "queue.restore-playlist";
+                    child: Box {
+                      orientation: vertical;
+                      halign: center;
+                      homogeneous: true;
+                      spacing: 12;
 
-                      styles [
-                        "suggested-action",
-                        "pill",
-                      ]
-                    }
+                      Button restore_playlist_button {
+                        label: _("Restore Playlist");
+                        action-name: "queue.restore-playlist";
 
-                    Button add_folder_button {
-                      label: _("Add Folder");
-                      action-name: "queue.add-folder";
+                        styles [
+                          "suggested-action",
+                          "pill",
+                        ]
+                      }
 
-                      styles [
-                        "pill",
-                      ]
-                    }
+                      Button add_folder_button {
+                        label: _("Add Folder");
+                        action-name: "queue.add-folder";
 
-                    Button {
-                      label: _("Add Song");
-                      action-name: "queue.add-song";
+                        styles [
+                          "pill",
+                        ]
+                      }
 
-                      styles [
-                        "pill",
-                      ]
-                    }
+                      Button {
+                        label: _("Add Song");
+                        action-name: "queue.add-song";
+
+                        styles [
+                          "pill",
+                        ]
+                      }
+                    };
                   };
-                };
+                }
               };
             };
           }

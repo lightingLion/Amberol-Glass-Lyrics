@@ -655,7 +655,11 @@ impl Window {
 
             if let Ok(info) = file.query_info(
                 "standard::name,standard::display-name,standard::type,standard::content-type",
-                gio::FileQueryInfoFlags::NOFOLLOW_SYMLINKS,
+                // The user's XDG music folder may itself be a symbolic link
+                // (for example, ~/音乐 -> /mnt/hdd/.../音乐). Follow the
+                // selected root here, then keep Amberol's own recursive
+                // directory traversal and sorting unchanged.
+                gio::FileQueryInfoFlags::NONE,
                 gio::Cancellable::NONE,
             ) {
                 match info.file_type() {
