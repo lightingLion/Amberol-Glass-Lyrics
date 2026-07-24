@@ -158,6 +158,21 @@ volume > scale trough slider { opacity: 0; }
 }
 
 /* Amberol Glass Lyrics */
+.lyrics-split-view {
+  --sidebar-bg-color: rgb(0 0 0 / 0%);
+  --sidebar-backdrop-color: rgb(0 0 0 / 0%);
+  --sidebar-border-color: rgb(0 0 0 / 0%);
+  --sidebar-shade-color: rgb(0 0 0 / 0%);
+}
+
+overlay-split-view.lyrics-split-view > widget.sidebar-pane,
+overlay-split-view.lyrics-split-view > widget.background {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
 lyricspanel {
   padding: 0;
 }

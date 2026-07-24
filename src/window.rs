@@ -72,6 +72,8 @@ mod imp {
         #[template_child]
         pub lyrics_panel: TemplateChild<LyricsPanel>,
         #[template_child]
+        pub lyrics_split_view: TemplateChild<adw::OverlaySplitView>,
+        #[template_child]
         pub split_view: TemplateChild<adw::OverlaySplitView>,
         #[template_child]
         pub playlist_view: TemplateChild<PlaylistView>,
@@ -249,6 +251,7 @@ mod imp {
                 drag_overlay: TemplateChild::default(),
                 playback_control: TemplateChild::default(),
                 lyrics_panel: TemplateChild::default(),
+                lyrics_split_view: TemplateChild::default(),
                 waveform_view: TemplateChild::default(),
                 elapsed_label: TemplateChild::default(),
                 remaining_label: TemplateChild::default(),
@@ -895,6 +898,20 @@ impl Window {
                 self,
                 move |_panel: LyricsPanel| win.on_pattern_ready()
             ),
+        );
+
+        self.imp().lyrics_split_view.connect_notify_local(
+            Some("collapsed"),
+            move |split_view, _| {
+                let split_view = split_view.clone();
+                // AdwOverlaySplitView hides its sidebar while switching
+                // presentation. Restore the permanently visible lyrics card
+                // after the internal state change, matching the playlist's
+                // adaptive overlay behavior without adding a second layout.
+                glib::idle_add_local_once(move || {
+                    split_view.set_show_sidebar(true);
+                });
+            },
         );
 
         self.imp().split_view.connect_notify_local(
